@@ -39,16 +39,16 @@
         },
         {
             "name": "mxc-commons/mxc-servicemanager",
-            "version": "0.7.0",
+            "version": "0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mxc-commons/mxc-servicemanager.git",
-                "reference": "2dd3247e9c06302fc4c27b855f1b174423e315a3"
+                "reference": "77092ee91ec5aaccc41916d37e30167c4fa70c7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mxc-commons/mxc-servicemanager/zipball/2dd3247e9c06302fc4c27b855f1b174423e315a3",
-                "reference": "2dd3247e9c06302fc4c27b855f1b174423e315a3",
+                "url": "https://api.github.com/repos/mxc-commons/mxc-servicemanager/zipball/77092ee91ec5aaccc41916d37e30167c4fa70c7d",
+                "reference": "77092ee91ec5aaccc41916d37e30167c4fa70c7d",
                 "shasum": ""
             },
             "require": {
@@ -61,11 +61,14 @@
                 "container-interop/container-interop-implementation": "^1.2",
                 "psr/container-implementation": "^1.0"
             },
+            "replace": {
+                "zendframework/zend-servicemanager": "3.*"
+            },
             "require-dev": {
-                "mikey179/vfsstream": "^1.6.4",
+                "mikey179/vfsstream": "^1.6.5",
                 "ocramius/proxy-manager": "^2.1.1",
                 "phpbench/phpbench": "dev-master",
-                "phpunit/phpunit": "^6.4.4",
+                "phpunit/phpunit": "^6.5.7",
                 "zendframework/zend-coding-standard": "~1.0.0"
             },
             "suggest": {
@@ -91,7 +94,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "Permanent fork of Zend ServiceManager 3 refactored for performance.",
+            "description": "Permanent fork of Zend ServiceManager 3 refactored for better performance.",
             "keywords": [
                 "PSR-11",
                 "ZendFramework",
@@ -101,10 +104,11 @@
                 "mxc-commons",
                 "service-manager",
                 "servicemanager",
+                "servicemanager-component",
                 "services",
                 "zf"
             ],
-            "time": "2018-03-05T16:04:02+00:00"
+            "time": "2018-03-08T17:54:20+00:00"
         },
         {
             "name": "psr/container",

@@ -10,18 +10,21 @@ use Mxc\Parsec\Qi\Numeric\Detail\BoolPolicy;
 use Mxc\Parsec\Qi\Char\CharClassParser;
 use Mxc\Parsec\Qi\Numeric\Detail\NoCaseBoolPolicy;
 use Mxc\Test\Parsec\Qi\Numeric\Assets\BackwardsBoolPolicy;
-use Zend\ServiceManager\ServiceManager;
+use Mxc\Parsec\Service\ParserManager;
+use Mxc\Parsec\Qi\UnusedAttribute;
 
 class BoolParserTest extends TestCase
 {
     protected $testbed;
     protected $domain;
     protected $skipper;
+    protected $pm;
 
     protected function getSkipper()
     {
         if (! $this->skipper) {
-            $this->skipper = new CharClassParser($this->domain, 'space');
+            $this->skipper = $this->pm->build(CharClassParser::class, [ 'space' ]);
+//                new CharClassParser($this->pm->get(Domain::class), 'space');
         }
         return $this->skipper;
     }
@@ -74,9 +77,9 @@ class BoolParserTest extends TestCase
         if ($attributeType === 'null') {
             $attributeType = null;
         }
-        if ($expectedAttribute === 'unused') {
-            $expectedAttribute = $this->domain->getUnusedAttribute();
-        }
+//         if ($expectedAttribute === 'unused') {
+//             $expectedAttribute = $this->pm->get(UnusedAttribute::class);
+//         }
         $skipper = $skip ? $this->getSkipper() : null;
         $result = $this->testbed->test(
             $input,
@@ -122,36 +125,51 @@ class BoolParserTest extends TestCase
             );
 
             if ($expectedAttribute !== null) {
-                $this->assertSame(
-                    $expectedAttribute,
-                    $result['attribute'],
-                    sprintf(
-                        "Expected attribute does not match received attribute.\n\n%s",
-                        $this->getParserResult(
-                            $input,
-                            $expectedValue,
-                            $attributeType,
-                            $expectedResult,
-                            $expectedAttribute,
-                            $skip,
-                            $policy,
-                            $result
+                if ($expectedAttribute === 'unused') {
+                    $this->assertInstanceOf(
+                        UnusedAttribute::class,
+                        $result['attribute'],
+                        sprintf(
+                            "Expected attribute does not match received attribute.\n\n%s",
+                            $this->getParserResult(
+                                $input,
+                                $expectedValue,
+                                $attributeType,
+                                $expectedResult,
+                                $expectedAttribute,
+                                $skip,
+                                $policy,
+                                $result
+                            )
                         )
-                    )
-                );
+                    );
+                } else {
+                    $this->assertSame(
+                        $expectedAttribute,
+                        $result['attribute'],
+                        sprintf(
+                            "Expected attribute does not match received attribute.\n\n%s",
+                            $this->getParserResult(
+                                $input,
+                                $expectedValue,
+                                $attributeType,
+                                $expectedResult,
+                                $expectedAttribute,
+                                $skip,
+                                $policy,
+                                $result
+                            )
+                        )
+                    );
+                }
             }
         }
     }
 
     public function setUp()
     {
-        $arr = include __DIR__. '/../../../config/config.php';
-
-        $sm = new ServiceManager($arr['parsers']);
-        $this->domain = $sm->build(Domain::class);
-
-        //$this->domain = new Domain();
-        $this->testbed = new TestBed(new BoolParser($this->domain));
+        $this->pm = new ParserManager();
+        $this->testbed = new TestBed($this->pm->get(BoolParser::class));
     }
 
     public function boolParserDataProvider()

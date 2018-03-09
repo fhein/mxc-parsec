@@ -72,7 +72,6 @@ class Utf8Decoder extends Scanner /*implements DecoderInterface */
                 $s = $string->current();
                 $c = $this->current();
             }
-            //print('Hallo. '. $c .'  '. $string->current().PHP_EOL);
             if ($s !== $c) {
                 $attr = null;
                 break;

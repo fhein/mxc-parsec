@@ -8,4 +8,5 @@
     <file>benchmark</file>
 
     <exclude-pattern>test/log/</exclude-pattern>
+    <file>config</file>
 </ruleset>

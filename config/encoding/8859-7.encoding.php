@@ -5,48 +5,48 @@
 //  Date: 2015-12-02 21:47:00 GMT [KW]
 //  © 2015 Unicode®, Inc.
 //  For terms of use, see http://www.unicode.org/terms_of_use.html
-// 
+//
 // 	Name:             ISO 8859-7:2003 to Unicode
 // 	Unicode version:  4.0
 // 	Table version:    3.0
 // 	Table format:     Format A
 // 	Date:             2003-Nov-12 (header updated: 2015 December 02)
 // 	Authors:          Ken Whistler <ken@unicode.org>
-// 
+//
 // 	General notes:
-// 
+//
 // 	This table contains the data the Unicode Consortium has on how
 //        ISO 8859-7:2003 characters map into Unicode.
-// 
+//
 // 	ISO 8859-7:1987 is equivalent to ISO-IR-126, ELOT 928,
-// 	and ECMA 118. ISO 8859-7:2003 adds two currency signs 
+//  and ECMA 118. ISO 8859-7:2003 adds two currency signs
 // 	and one other character not in the earlier standard.
-// 
+//
 // 	Format:  Three tab-separated columns
 // 		 Column #1 is the ISO 8859-7 code (in hex as 0xXX)
 // 		 Column #2 is the Unicode (in hex as 0xXXXX)
 // 		 Column #3 the Unicode name (follows a comment sign, '#')
-// 
+//
 // 	The entries are in ISO 8859-7 order.
-// 
+//
 // 	Version history
 // 	1.0 version updates 0.1 version by adding mappings for all
 // 	control characters.
 // 	Remap 0xA1 to U+2018 (instead of 0x02BD) to match text of 8859-7
 // 	Remap 0xA2 to U+2019 (instead of 0x02BC) to match text of 8859-7
-// 
+//
 // 	2.0 version updates 1.0 version by adding mappings for the
 // 	three newly added characters 0xA4, 0xA5, 0xAA.
-// 
+//
 //    3.0 version: updates to copyright notice and terms of use; no
 //        changes to character mappings
-// 
+//
 // 	Updated versions of this file may be found in:
 // 		http://www.unicode.org/Public/MAPPINGS/
-// 
+//
 // 	Any comments or problems, contact us at:
 //        http://www.unicode.org/reporting.html
-// 
+//
 return [
     "name" => "8859-7",
     "codepage_to_unicode" => [

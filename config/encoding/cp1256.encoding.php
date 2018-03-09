@@ -1,24 +1,24 @@
 <?php
 // Heading notes from source file CP1256.TXT:
 //
-// 
+//
 //     Name:     cp1256 to Unicode table
 //     Unicode version: 2.1
 //     Table version: 2.01
 //     Table format:  Format A
 //     Date:          01/5/99
-// 
+//
 //     Contact:       Shawn.Steele@microsoft.com
-// 
+//
 //     General notes: none
-// 
+//
 //     Format: Three tab-separated columns
 //         Column #1 is the cp1256 code (in hex)
 //         Column #2 is the Unicode (in hex as 0xXXXX)
 //         Column #3 is the Unicode name (follows a comment sign, '#')
-// 
+//
 //     The entries are in cp1256 order
-// 
+//
 return [
     "name" => "CP1256",
     "codepage_to_unicode" => [

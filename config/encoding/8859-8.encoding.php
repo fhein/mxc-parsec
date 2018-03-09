@@ -5,26 +5,26 @@
 //  Date: 2015-12-02 21:50:00 GMT [KW]
 //  © 2015 Unicode®, Inc.
 //  For terms of use, see http://www.unicode.org/terms_of_use.html
-// 
+//
 // 	Name:             ISO/IEC 8859-8:1999 to Unicode
 // 	Unicode version:  3.0
 // 	Table version:    2.0
 // 	Table format:     Format A
 // 	Date:             2000-Jan-03 (header updated: 2015 December 02)
 // 	Authors:          Ken Whistler <ken@unicode.org>
-// 
+//
 // 	General notes:
-// 
+//
 // 	This table contains the data the Unicode Consortium has on how
 //        ISO/IEC 8859-8:1999 characters map into Unicode.
-// 
+//
 // 	Format:  Three tab-separated columns
 // 		 Column #1 is the ISO/IEC 8859-8 code (in hex as 0xXX)
 // 		 Column #2 is the Unicode (in hex as 0xXXXX)
 // 		 Column #3 the Unicode name (follows a comment sign, '#')
-// 
+//
 // 	The entries are in ISO/IEC 8859-8 order.
-// 
+//
 // 	Version history
 // 	1.0 version updates 0.1 version by adding mappings for all
 // 	control characters.
@@ -32,13 +32,13 @@
 //           the mapping of 0xAF and adding mappings for LRM and RLM.
 //    2.0 version: updates to copyright notice and terms of use; no
 //        changes to character mappings
-// 
+//
 // 	Updated versions of this file may be found in:
 // 		http://www.unicode.org/Public/MAPPINGS/
-// 
+//
 // 	Any comments or problems, contact us at:
 //        http://www.unicode.org/reporting.html
-// 
+//
 return [
     "name" => "8859-8",
     "codepage_to_unicode" => [

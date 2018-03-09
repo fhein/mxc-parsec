@@ -1,24 +1,24 @@
 <?php
 // Heading notes from source file CP950.TXT:
 //
-// 
+//
 //     Name:     cp950 to Unicode table
 //     Unicode version: 2.0
 //     Table version: 2.01
 //     Table format:  Format A
 //     Date:          1/7/2000
-// 
+//
 //     Contact:       Shawn.Steele@microsoft.com
-// 
+//
 //     General notes: none
-// 
+//
 //     Format: Three tab-separated columns
 //         Column #1 is the cp950 code (in hex)
 //         Column #2 is the Unicode (in hex as 0xXXXX)
 //         Column #3 is the Unicode name (follows a comment sign, '#')
-// 
+//
 //     The entries are in cp950 order
-// 
+//
 return [
     "name" => "CP950",
     "codepage_to_unicode" => [

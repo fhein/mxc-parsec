@@ -1,24 +1,24 @@
 <?php
 // Heading notes from source file CP874.TXT:
 //
-// 
+//
 //     Name:     cp874 to Unicode table
 //     Unicode version: 2.0
 //     Table version: 2.01
 //     Table format:  Format A
 //     Date:          02/28/98
-// 
+//
 //     Contact:       Shawn.Steele@microsoft.com
-// 
+//
 //     General notes: none
-// 
+//
 //     Format: Three tab-separated columns
 //         Column #1 is the cp874 code (in hex)
 //         Column #2 is the Unicode (in hex as 0xXXXX)
 //         Column #3 is the Unicode name (follows a comment sign, '#')
-// 
+//
 //     The entries are in cp874 order
-// 
+//
 return [
     "name" => "CP874",
     "codepage_to_unicode" => [

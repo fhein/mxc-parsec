@@ -5,40 +5,40 @@
 //  Date: 2015-12-02 21:55:00 GMT [KW]
 //  © 2015 Unicode®, Inc.
 //  For terms of use, see http://www.unicode.org/terms_of_use.html
-// 
+//
 // 	Name:             ISO/IEC 8859-11:2001 to Unicode
 // 	Unicode version:  3.2
 // 	Table version:    2.0
 // 	Table format:     Format A
 // 	Date:             2002 October 7 (header updated: 2015 December 02)
 // 	Authors:          Ken Whistler <ken@unicode.org>
-// 
+//
 // 	General notes:
-// 
+//
 // 	This table contains the data the Unicode Consortium has on how
 //        ISO/IEC 8859-11:2001 characters map into Unicode.
-// 
+//
 // 	ISO/IEC 8859-11:2001 is equivalent to TIS 620-2533 (1990) with
 // 	the addition of 0xA0 NO-BREAK SPACE.
-// 
+//
 // 	Format:  Three tab-separated columns
 // 		 Column #1 is the ISO/IEC 8859-11 code (in hex as 0xXX)
 // 		 Column #2 is the Unicode (in hex as 0xXXXX)
 // 		 Column #3 the Unicode name (follows a comment sign, '#')
-// 
+//
 // 	The entries are in ISO/IEC 8859-11 order.
-// 
+//
 // 	Version history:
 // 		2002 October 7  Created
 //    2.0 version: updates to copyright notice and terms of use; no
 //        changes to character mappings
-// 
+//
 // 	Updated versions of this file may be found in:
 // 		http://www.unicode.org/Public/MAPPINGS/
-// 
+//
 // 	Any comments or problems, contact us at:
 //        http://www.unicode.org/reporting.html
-// 
+//
 return [
     "name" => "8859-11",
     "codepage_to_unicode" => [

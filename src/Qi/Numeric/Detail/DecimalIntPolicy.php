@@ -4,7 +4,8 @@ namespace Mxc\Parsec\Qi\Numeric\Detail;
 
 use Mxc\Parsec\Qi\Numeric\Detail\IntegerPolicy;
 
-class DecimalIntPolicy extends IntegerPolicy {
+class DecimalIntPolicy extends IntegerPolicy
+{
 
     public function __construct(bool $signed = false)
     {
@@ -21,16 +22,17 @@ class DecimalIntPolicy extends IntegerPolicy {
                 '7' => 7,
                 '8' => 8,
                 '9' => 9
-            ], $signed ?
+            ],
+            $signed ?
             [
                 '+' => 1,
                 '-' => -1
             ] :
             [
                 // no signs
-            ]);
+            ]
+        );
         $this->toString = 'strval';
         $this->toDecimal = 'intval';
     }
 }
-

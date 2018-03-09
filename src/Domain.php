@@ -23,11 +23,10 @@ class Domain
 
     protected $noCaseSetting = [];
 
-    public function __construct($encodings, $options)
+    public function __construct($inputEncoding, $internalEncoding)
     {
-        $this->encodings = $encodings;
-        $this->inputEncoding = $options['inputEncoding'];
-        $this->internalEncoding = $options['internalEncoding'];
+        $this->inputEncoding = $inputEncoding;
+        $this->internalEncoding = $internalEncoding;
     }
 
     public function getUnusedAttribute()
@@ -48,30 +47,23 @@ class Domain
 
     public function getInternalIterator(string $arg)
     {
-        $iterator = clone $this->getInternalEncoding()->getIterator();
+        $iterator = clone $this->internalEncoding->getIterator();
         $iterator->setData($arg, 0, strlen($arg), $this->noCaseSetting);
         return $iterator;
     }
 
     public function getInputIterator()
     {
-        return $this->inputIterator = $this->inputIterator?:
-            $this->inputIterator = $this->getInputEncoding()->getIterator();
+        return $this->inputIterator = $this->inputIterator ?? $this->getInputEncoding()->getIterator();
     }
 
     public function getInputEncoding()
     {
-        if (is_string($this->inputEncoding)) {
-            $this->inputEncoding = $this->encodings->get($this->inputEncoding);
-        }
         return $this->inputEncoding;
     }
 
     public function getInternalEncoding()
     {
-        if (is_string($this->internalEncoding)) {
-            $this->internalEncoding = $this->encodings->get($this->internalEncoding);
-        }
         return $this->internalEncoding;
     }
 
@@ -89,13 +81,11 @@ class Domain
 
     public function restoreNoCaseSetting()
     {
-        $ch = count($this->noCaseSetting) > 0 ? array_pop($this->noCaseSetting) : false;
-        $this->inputIterator->setNoCase($ch);
+        $this->inputIterator->setNoCase(array_pop($this->noCaseSetting) ?? false);
     }
 
     public function getNoCaseSetting()
     {
-        $count = count($this->noCaseSetting);
-        return $count > 0 ? $this->noCaseSetting[$count - 1] : false;
+        return end($this->noCaseSetting);
     }
 }
