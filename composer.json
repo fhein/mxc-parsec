@@ -1,0 +1,48 @@
+{
+	"name" : "fhein/mxc-utf8-tools",
+	"description" : "provides facilities to validate and process utf8 strings",
+	"license" : "BSD-3-Clause",
+	"keywords" : [
+		"maxence",
+		"utf8",
+		"codepage",
+		"compiler",
+		"php"
+	],
+	"homepage" : "https://github.com/fhein/mxc-utf8-tools",
+	"autoload" : {
+		"psr-4" : {
+			"Mxc\\Parsec\\" : "src/",
+			"Mxc\\Benchmark\\Parsec\\" : "benchmark/"
+		}
+	},
+	"require" : {
+		"php" : "^7.1",
+		"mxc-commons/mxc-servicemanager" : "~0.7"
+	},
+	"require-dev" : {
+		"ext-phar" : "*",
+		"phpunit/phpunit" : "^6.4.4",
+        "phpbench/phpbench": "dev-master",
+		"zendframework/zend-coding-standard" : "~1.0",
+        "mikey179/vfsStream": "^1.6.4"
+	},
+	"minimum-stability" : "dev",
+	"prefer-stable" : true,
+	"autoload-dev" : {
+		"psr-4" : {
+			"Mxc\\Test\\Parsec\\" : "test/"
+		}
+	},
+	"scripts" : {
+		"check" : [
+			"@cs-check",
+			"@test"
+		],
+		"upload-coverage" : "coveralls -v",
+		"cs-check" : "phpcs",
+		"cs-fix" : "phpcbf",
+		"test" : "phpunit --colors=always",
+		"test-coverage" : "phpunit --colors=always --coverage-clover clover.xml"
+	}
+}
