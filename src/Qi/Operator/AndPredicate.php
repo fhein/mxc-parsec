@@ -15,8 +15,8 @@ class AndPredicate extends PredicateParser
         $this->parser = $parser;
     }
 
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
-        return $this->parser->parseImpl($iterator, $skipper, null);
+        return $this->parser->parse($iterator, $skipper, null);
     }
 }

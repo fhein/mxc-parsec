@@ -6,7 +6,6 @@ use Mxc\Parsec\Qi\Numeric\Detail\IntegerPolicy;
 
 class DecimalIntPolicy extends IntegerPolicy
 {
-
     public function __construct(bool $signed = false)
     {
 

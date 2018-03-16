@@ -6,7 +6,6 @@ use Mxc\Parsec\Domain;
 
 abstract class UnaryParser extends PreSkipper
 {
-
     protected $subject;
 
     public function __construct(Domain $domain, Parser $subject)

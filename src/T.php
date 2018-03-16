@@ -71,7 +71,7 @@ function expandWhat($what)
     return $what;
 }
 
-function parse($parser, $iterator, $expectedValue = null, $skipper = null)
+function doParse($parser, $iterator, $expectedValue = null, $skipper = null)
 {
     $result = [
         true => "Success.",
@@ -83,7 +83,7 @@ function parse($parser, $iterator, $expectedValue = null, $skipper = null)
         $iterator->key(),
         substr($iterator->getData(), $iterator->key())
     );
-    $r = $parser->parse($iterator, $expectedValue, $skipper);
+    $r = $parser->doParse($iterator, $expectedValue, $skipper);
     printf("%s\n", $result[$r]);
     if ($r === true) {
         $a = $parser->getAttribute();
@@ -94,38 +94,38 @@ function parse($parser, $iterator, $expectedValue = null, $skipper = null)
 }
 
 // // $b =  new BigQWordParser($domain);
-// // parse($b, $iterator, $skipper);
+// // doParse($b, $iterator, $skipper);
 
 // $b =  new TypedDelegator(new BinFloatParser($domain), 'float');
-// parse($b, $iterator, $skipper);
+// doParse($b, $iterator, $skipper);
 
 // $b =  new TypedDelegator(new BinDoubleParser($domain), 'float');
-// parse($b, $iterator, $skipper);
+// doParse($b, $iterator, $skipper);
 
 // $b = new TypedDelegator(new BigWordParser($domain), 'boolean');
-// parse($b, $iterator);
+// doParse($b, $iterator);
 // $i = new IntParser($domain, new HexIntPolicy());
 // $i = new TypedDelegator($i, 'integer');
-// parse($i, $iterator, 0x1234, $skipper);
+// doParse($i, $iterator, 0x1234, $skipper);
 
 // $cc = new CharSetParser($domain, '0-9A-Za-t');
-// parse($cc, $iterator, $skipper);
+// doParse($cc, $iterator, $skipper);
 
 
 $b = $sm->get(BoolParser::class);
 $b = new BoolParser($domain);
 $b = new TypedDelegator($b, 'array');
-parse($b, $iterator, true, $skipper);
+doParse($b, $iterator, true, $skipper);
 
 // $b = new NoCaseDirective($domain, new StringParser($domain, 'In'));
-// parse($b, $iterator, $skipper);
+// doParse($b, $iterator, $skipper);
 
 // $alternative = new AlternativeOperator(
 //      $domain,
 //        true,
 //        [ new StringParser($domain, 'Ein'), new StringParser($domain, 'klei')]);
 // $b = new TypedDelegator($alternative, 'unused');
-// parse($b, $iterator, $skipper);
+// doParse($b, $iterator, $skipper);
 
 // $s = new SymbolsParser($domain);
 // $no_case = new NoCaseDirective($domain, $s);
@@ -141,9 +141,9 @@ parse($b, $iterator, true, $skipper);
 
 
 // $cc = new CharRangeParser($domain, 'A', 'B');
-// //var_dump($cc->parse($iterator));
+// //var_dump($cc->doParse($iterator));
 
-// parse($s, $iterator, $skipper);
-// parse($no_case, $iterator, $skipper);
-// parse($no_skip, $iterator, $skipper);
-// parse($sequence, $iterator, $skipper);
+// doParse($s, $iterator, $skipper);
+// doParse($no_case, $iterator, $skipper);
+// doParse($no_skip, $iterator, $skipper);
+// doParse($sequence, $iterator, $skipper);

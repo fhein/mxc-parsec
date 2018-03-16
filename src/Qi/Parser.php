@@ -72,7 +72,7 @@ abstract class Parser
         }
     }
 
-    abstract public function parseImpl($iterator, $expectedValue = null, $attributeType = null, $skipper = null);
+    abstract public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null);
 
     // you can set the input via any parser
     // the new source gets applied to ALL parsers
@@ -116,11 +116,11 @@ abstract class Parser
 
     protected function skipOver($iterator, $skipper = null)
     {
-        if (($skipper === null) || $skipper instanceof UnusedSkipper) {
+        if ((! $this->skip) || ($skipper === null) || $skipper instanceof UnusedSkipper) {
             return;
         }
 
-        while ($iterator->valid() && $skipper->parse($iterator, null, null, null)) {
+        while ($iterator->valid() && $skipper->doParse($iterator, null, null, null)) {
             /***/ ;
         }
     }
@@ -190,7 +190,7 @@ abstract class Parser
             return;
         }
 
-        // @todo: default parameter of parseImpl -> get rid off?
+        // @todo: default parameter of parse -> get rid off?
         if ($attributeType === null) {
             if ($this->defaultType !== null) {
                 $this->assignTo($value, $this->defaultType);

@@ -7,10 +7,10 @@ use Mxc\Parsec\Qi\UnusedSkipper;
 class LexemeDirective extends PassThroughDirective
 {
 
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $this->skipOver($iterator, $skipper);
-        if ($this->subject->parseImpl($iterator, new UnusedSkipper($skipper), $attributeType)) {
+        if ($this->subject->parse($iterator, new UnusedSkipper($skipper), $attributeType)) {
             return true;
         }
         return false;

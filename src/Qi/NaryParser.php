@@ -7,7 +7,7 @@ use Mxc\Parsec\Exception\InvalidArgumentException;
 abstract class NaryParser extends PreSkipper
 {
     protected $subject;
-    protected $flatten;
+    protected $flat;
 
     public function __construct(Domain $domain, array $subject = [], bool $flatten = false)
     {
@@ -21,7 +21,7 @@ abstract class NaryParser extends PreSkipper
                 )
             );
         }
-        $this->flatten = $flatten;
+        $flat = $flatten;
         $this->subject = $flatten ? $this->flatten($subject) : $subject;
         parent::__construct($domain);
     }
@@ -37,7 +37,7 @@ abstract class NaryParser extends PreSkipper
     {
         $sub = [];
         foreach ($subjects as $subject) {
-            if (get_class($this) === get_class($subject) && $subject->flatten) {
+            if (get_class($this) === get_class($subject) && $subject->flat) {
                 $downWeGo = $this->flatten($subject->getSubject());
                 $sub = empty($sub) ? $downWeGo : array_splice($sub, 0, 0, $downWeGo);
             } else {

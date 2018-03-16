@@ -6,20 +6,19 @@ use Mxc\Parsec\Qi\NaryParser;
 
 class DifferenceOperator extends NaryParser
 {
-
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $lhs = $this->subject[0];
         $rhs = $this->subject[1];
 
         $count = count($this->subject);
         for ($idx = 1; $idx < $count; $idx++) {
-            if ($this->subject[$idx]->parseImpl($iterator, $expectedValue, $attributeType. $skipper)) {
+            if ($this->subject[$idx]->parse($iterator, $expectedValue, $attributeType, $skipper)) {
                 return false;
             }
         }
 
-        if (! $lhs->parseImpl($iterator, $expectedValue, $attributeType. $skipper)) {
+        if (! $lhs->parse($iterator, $expectedValue, $attributeType, $skipper)) {
             return false;
         }
 

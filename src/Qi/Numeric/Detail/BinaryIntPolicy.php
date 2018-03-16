@@ -4,7 +4,6 @@ namespace Mxc\Parsec\Qi\Numeric\Detail;
 
 class BinaryIntPolicy extends IntegerPolicy
 {
-
     public function __construct()
     {
         parent::__construct(

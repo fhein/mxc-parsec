@@ -17,7 +17,7 @@ class BinParser extends PrimitiveParser
         $this->value = $value === null ? null : pack($this->endianness, $value);
     }
 
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $iterator->setBinary(true, $this->size);
         if ($iterator->valid()) {

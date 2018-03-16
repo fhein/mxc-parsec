@@ -4,7 +4,7 @@ namespace Mxc\Parsec\Qi\Numeric\Detail;
 
 class BoolPolicy
 {
-    public $symbols;
+    protected $symbols;
 
     public function __construct()
     {
@@ -13,5 +13,10 @@ class BoolPolicy
             'true' => true,
             'false' => false,
         ];
+    }
+
+    public function getSymbols()
+    {
+        return $this->symbols;
     }
 }

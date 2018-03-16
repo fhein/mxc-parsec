@@ -4,9 +4,8 @@ namespace Mxc\Parsec\Qi\Numeric\Detail;
 
 class IntegerPolicy
 {
-
     const CS_DIGITS = 0;
-    const CS_SIGNS = 1;
+    const CS_SIGNS  = 1;
 
     protected $digits;
     protected $signs;

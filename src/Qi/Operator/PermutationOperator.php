@@ -6,8 +6,7 @@ use Mxc\Parsec\Qi\NaryParser;
 
 class PermutationOperator extends NaryParser
 {
-
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $result = false;
         $taken = [];
@@ -17,7 +16,7 @@ class PermutationOperator extends NaryParser
         do {
             cont:
             foreach ($this->subject as $key => $parser) {
-                if (! isset($taken[$key]) && $parser->parseImpl($iterator, $expectedValue, $attributeType. $skipper)) {
+                if (! isset($taken[$key]) && $parser->parse($iterator, $expectedValue, $attributeType, $skipper)) {
                     if ($assignment === null) {
                         $assignment = $this->getAssignment($attributeType);
                     }

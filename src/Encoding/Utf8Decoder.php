@@ -3,95 +3,43 @@
 namespace Mxc\Parsec\Encoding;
 
 use Mxc\Parsec\Exception\InvalidArgumentException;
-use IntlChar;
 
 class Utf8Decoder extends Scanner /*implements DecoderInterface */
 {
+    /**
+     * Check if the substring of beginning at $pos
+     * @param string $s
+     * @param int $pos
+     * @param int $last
+     * @return boolean
+     */
 
-    public function __construct(string $s = '', $first = null, $last = null, bool $noCase = false, $binary = false)
+    public function validate(string $s, int $first = 0, int $len = 0)
     {
-        $this->data = $s;
-
-        $first = $first?: 0;
-        $last = $last?: strlen($s);
-        $this->noCase = $noCase;
-        $this->binary = $binary;
-
-        if (($last > strlen($s)) || ($last < 0) || ($first < 0) || (($first !== 0) && ($first >= $last))) {
-            throw new InvalidArgumentException('Utf8Decoder: Invalid arguments.');
+        if ($first === 0 && $len === 0) {
+            return 1 === preg_match('!!u', $s);
+        } elseif ($first >= 0 && $len > 0) {
+            $s = substr($s, $first, $len);
+            return 1 === preg_match('!!u', $s);
         }
-
-        $this->first = $first;
-        $this->last = $last;
+        throw new InvalidArgumentException('Invalid arguments supplied to validate.');
     }
 
-    public function currentCase()
-    {
-        return $this->noCase ? IntlChar::tolower($this->cache[$this->first]) : $this->cache[$this->first];
-    }
-
-    public function validate(string $s, int $pos = 0, int $last = 0)
-    {
-        if ($last === 0) {
-            $last = strlen($s);
-        } elseif ($last < strlen($s)) {
-            $sub = true;
-        }
-        if ($pos !== 0 && $pos >= $last) {
-            return false;
-        }
-        if ($sub || $pos != 0) {
-            $s = substr($s, $pos, $last);
-        }
-        return 1 === preg_match('!!u', $s);
-    }
-
-    public function valid()
-    {
-        return $this->first < $this->last;
-    }
-
-    public function next()
-    {
-        $this->first += $this->lastSize;
-    }
-
-    public function key()
-    {
-        return $this->first;
-    }
-
-    public function parseString($string, &$attr)
-    {
-        $attr = '';
-        while ($string->valid()) {
-            if ($this->noCase) {
-                $s = IntlChar::tolower($string->current());
-                $c = IntlChar::tolower($this->current());
-            } else {
-                $s = $string->current();
-                $c = $this->current();
-            }
-            if ($s !== $c) {
-                $attr = null;
-                break;
-            }
-            $attr .= $this->current();
-            $string->next();
-            $this->next();
-        }
-        return (! $string->valid());
-    }
-
-    public function currentNoCase()
-    {
-        return $this->noCase ? IntlChar::tolower($this->current()) : $this->current();
-    }
-
-    public function isChar(&$t, &$f)
+    /**
+     * Appends the byte at current buffer position to the current codepoint
+     * evaluation buffer and advances buffer position. If the evaluation buffer
+     * represents a valid codepoint, the size of the codepoint in bytes gets
+     * stored and true gets returned. Otherwise returns false.
+     *
+     *
+     * @param string $t     current codepoint evaluation buffer reference
+     * @param unknown $f    current iterator position
+     * @return boolean
+     */
+    private function isChar(&$t, &$f)
     {
         $t .= $this->data[$f++];
-        $codepoint = IntlChar::ord($t);
+        $codepoint = $this->ord($t);
         if ($codepoint !== null) {
             $this->lastSize = strlen($t);
             return true;

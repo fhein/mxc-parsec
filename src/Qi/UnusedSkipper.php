@@ -15,12 +15,12 @@ class UnusedSkipper extends Parser
         return $this->skipper;
     }
 
-    public function parseImpl($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
     {
         return false;
     }
 
-    public function parse($iterator, $expectedValue = 0, string $attributeType = null, $skipper = null)
+    public function doParse($iterator, $expectedValue = 0, string $attributeType = null, $skipper = null)
     {
         return false;
     }

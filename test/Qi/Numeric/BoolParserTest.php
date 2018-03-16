@@ -77,9 +77,9 @@ class BoolParserTest extends TestCase
         if ($attributeType === 'null') {
             $attributeType = null;
         }
-//         if ($expectedAttribute === 'unused') {
-//             $expectedAttribute = $this->pm->get(UnusedAttribute::class);
-//         }
+        if ($expectedAttribute === 'unused') {
+            $expectedAttribute = $this->pm->get(UnusedAttribute::class);
+        }
         $skipper = $skip ? $this->getSkipper() : null;
         $result = $this->testbed->test(
             $input,
@@ -125,43 +125,23 @@ class BoolParserTest extends TestCase
             );
 
             if ($expectedAttribute !== null) {
-                if ($expectedAttribute === 'unused') {
-                    $this->assertInstanceOf(
-                        UnusedAttribute::class,
-                        $result['attribute'],
-                        sprintf(
-                            "Expected attribute does not match received attribute.\n\n%s",
-                            $this->getParserResult(
-                                $input,
-                                $expectedValue,
-                                $attributeType,
-                                $expectedResult,
-                                $expectedAttribute,
-                                $skip,
-                                $policy,
-                                $result
-                            )
+                $this->assertSame(
+                    $expectedAttribute,
+                    $result['attribute'],
+                    sprintf(
+                        "Expected attribute does not match received attribute.\n\n%s",
+                        $this->getParserResult(
+                            $input,
+                            $expectedValue,
+                            $attributeType,
+                            $expectedResult,
+                            $expectedAttribute,
+                            $skip,
+                            $policy,
+                            $result
                         )
-                    );
-                } else {
-                    $this->assertSame(
-                        $expectedAttribute,
-                        $result['attribute'],
-                        sprintf(
-                            "Expected attribute does not match received attribute.\n\n%s",
-                            $this->getParserResult(
-                                $input,
-                                $expectedValue,
-                                $attributeType,
-                                $expectedResult,
-                                $expectedAttribute,
-                                $skip,
-                                $policy,
-                                $result
-                            )
-                        )
-                    );
-                }
+                    )
+                );
             }
         }
     }
@@ -457,7 +437,7 @@ class BoolParserTest extends TestCase
                     foreach ($tests as $set) {
                         $test[] =
                         [
-                            $input,                     // string to parse
+                            $input,                     // string to doParse
                             $set['value'],              // expected value
                             $type,                      // desired attribute type
                             $set['result'],             // expected parser result (true/false)

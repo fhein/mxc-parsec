@@ -7,7 +7,7 @@ use Mxc\Parsec\Qi\PrimitiveParser;
 class EolParser extends PrimitiveParser
 {
 
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         // @todo: Parsec assumes that eol is
         // 0x0A or 0x0D 0x0A

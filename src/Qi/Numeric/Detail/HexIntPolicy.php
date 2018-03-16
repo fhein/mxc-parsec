@@ -4,7 +4,6 @@ namespace Mxc\Parsec\Qi\Numeric\Detail;
 
 class HexIntPolicy extends IntegerPolicy
 {
-
     public function __construct()
     {
         parent::__construct(
@@ -36,9 +35,9 @@ class HexIntPolicy extends IntegerPolicy
             // no signs
             ]
         );
-            // override wrong radix
-            $this->radix = 16;
-            $this->toString = 'dechex';
-            $this->toDecimal = 'hexdec';
+        // override wrong radix
+        $this->radix = 16;
+        $this->toString = 'dechex';
+        $this->toDecimal = 'hexdec';
     }
 }

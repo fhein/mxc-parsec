@@ -4,6 +4,7 @@ namespace Mxc\Parsec\Qi\Numeric\Detail;
 
 class NoCaseBoolPolicy extends BoolPolicy
 {
+    protected $symbols;
 
     public function __construct()
     {
@@ -14,5 +15,10 @@ class NoCaseBoolPolicy extends BoolPolicy
             'false' => false,
             'FALSE' => false,
         ];
+    }
+
+    public function getSymbols()
+    {
+        return $this->symbols;
     }
 }

@@ -37,7 +37,7 @@ class FreeIntParser extends PreSkipper
         $this->policy = $policy;
     }
 
-    protected function parse($iterator, $expectedValue = null, string $attributeType = 'integer', $skipper = null)
+    protected function doParse($iterator, $expectedValue = null, string $attributeType = 'integer', $skipper = null)
     {
         $got = 0;
         $min = &$this->minDigits;
@@ -47,36 +47,32 @@ class FreeIntParser extends PreSkipper
         } : function ($i) use ($max) {
             return $i <= $max;
         };
-        $signsParser = &$this->signsParser;
-        $digitsParser = &$this->digitsParser;
-        $policy = &$this->policy;
-        $radix = &$this->radix;
         $result = '';
         $mul = 1;
 
-        if ($signsParser !== null && $signsParser->parse($iterator)) {
-            $sign = $signsParser->getAttribute();
+        if ($this->signsParser !== null && $this->signsParser->doParse($iterator)) {
+            $sign = $this->signsParser->getAttribute();
         }
 
         if (! $iterator->valid()) {
             return false;
         }
 
-        while ($got < $min) {
-            if (! $digitsParser->parse($iterator)) {
+        while ($got < $this->minDigits) {
+            if (! $this->digitsParser->doParse($iterator)) {
                 print("Dying.\n");
                 return false;
             }
-            $policy->accumulate($digitsParser->getAttribute());
+            $this->policy->accumulate($this->digitsParser->getAttribute());
             $got++;
         }
 
-        while ($notmax($got) && $digitsParser->parse($iterator)) {
-            $policy->accumulate($digitsParser->getAttribute());
+        while ($notmax($got) && $this->digitsParser->doParse($iterator)) {
+            $this->policy->accumulate($this->digitsParser->getAttribute());
             $got++;
         }
         if ($notmax($got)) {
-            $this->assignTo($sign.$digitsParser->getAttribute(), $attributeType);
+            $this->assignTo($sign . $this->digitsParser->getAttribute(), $attributeType);
             return true;
         }
         return false;

@@ -14,7 +14,7 @@ class RuleParser extends Parser
         $this->expression = $expression;
     }
 
-    public function parseImpl($iterator, $expectedValue, $attributeType, $skipper)
+    public function parse($iterator, $expectedValue, $attributeType, $skipper)
     {
     }
 }

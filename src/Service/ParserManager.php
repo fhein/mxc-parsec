@@ -207,13 +207,14 @@ class ParserManager extends ServiceManager
     ];
 
     protected $abstractFactories = [
-        EncodingFactory::class
+        IteratorFactory::class
     ];
 
     protected $sharedByDefault = false;
 
     protected $shared =
     [
+        UnusedAttribute::class => true,
         CharacterClassifier::class => true,
     ];
 

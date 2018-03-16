@@ -10,7 +10,7 @@ class CharRangeParser extends Char
 
     public function __construct(Domain $domain, string $min, string $max)
     {
-        $cc = $domain->getInputClassifier();
+        $cc = $domain->getCharacterClassifier();
 
         if (! ($cc->isvalid($min) && $cc->isValid($max))) {
             throw new InvalidArgumentException('Invalid character range.');

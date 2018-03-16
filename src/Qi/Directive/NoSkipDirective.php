@@ -6,10 +6,9 @@ use Mxc\Parsec\Qi\UnusedSkipper;
 
 class NoSkipDirective extends PassThroughDirective
 {
-
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $subject = $this->subject;
-        return $subject->parseImpl($iterator, new UnusedSkipper($skipper), $attributeType);
+        return $subject->parse($iterator, new UnusedSkipper($skipper), $attributeType);
     }
 }

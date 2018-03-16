@@ -2,6 +2,8 @@
 
 namespace Mxc\Parsec\Encoding;
 
+use Mxc\Parsec\Exception\InvalidArgumentException;
+
 class Scanner extends CharacterClassifier
 {
     protected $data;
@@ -11,8 +13,63 @@ class Scanner extends CharacterClassifier
     protected $binary;
     protected $cache;
     protected $invalidCache;
+    protected $lastSize;
 
     protected $rew = [];
+
+    public function __construct(string $s = '', $first = null, $last = null, bool $noCase = false, $binary = false)
+    {
+        $this->data = $s;
+
+        $first = $first?: 0;
+        $last = $last?: strlen($s);
+        $this->noCase = $noCase;
+        $this->binary = $binary;
+
+        if (($last > strlen($s)) || ($last < 0) || ($first < 0) || (($first !== 0) && ($first >= $last))) {
+            throw new InvalidArgumentException('Scanner: Invalid arguments.');
+        }
+
+        $this->first = $first;
+        $this->last = $last;
+    }
+
+    public function parseString($string, &$attr)
+    {
+        $attr = '';
+        while ($string->valid()) {
+            if ($this->noCase) {
+                $s = $this->tolower($string->current());
+                $c = $this->tolower($this->current());
+            } else {
+                $s = $string->current();
+                $c = $this->current();
+            }
+            if ($s !== $c) {
+                $attr = null;
+                break;
+            }
+            $attr .= $this->current();
+            $string->next();
+            $this->next();
+        }
+        return (! $string->valid());
+    }
+
+    public function valid()
+    {
+        return $this->first < $this->last;
+    }
+
+    public function next()
+    {
+        $this->first += $this->lastSize;
+    }
+
+    public function key()
+    {
+        return $this->first;
+    }
 
     public function &getData()
     {
@@ -83,6 +140,17 @@ class Scanner extends CharacterClassifier
     public function isNoCase()
     {
         return $this->noCase;
+    }
+
+    /**
+     * Convert current character to lower case if noCase setting
+     * is active.
+     *
+     * @return string current character with noCase setting applied
+     */
+    public function currentNoCase()
+    {
+        return $this->noCase ? $this->tolower($this->current()) : $this->current();
     }
 
     public function setBinary(bool $binary, int $size = 1)

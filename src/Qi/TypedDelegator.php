@@ -12,14 +12,14 @@ class TypedDelegator extends Parser
         $this->type = $type;
     }
 
-    public function parseImpl($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
     {
-        return $this->parser->parseImpl($iterator, $expectedValue, $attributeType, $skipper);
+        return $this->parser->parse($iterator, $expectedValue, $attributeType, $skipper);
     }
 
-    public function parse($iterator, $expectedValue, $skipper)
+    public function doParse($iterator, $expectedValue, $skipper)
     {
-        return $this->parser->parseImpl($iterator, $expectedValue, $this->type, $skipper);
+        return $this->parser->doParse($iterator, $expectedValue, $this->type, $skipper);
     }
 
     public function what()

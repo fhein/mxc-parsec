@@ -8,12 +8,12 @@ use Mxc\Parsec\Qi\NaryParser;
 class AlternativeOperator extends NaryParser
 {
 
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         // return on first match
         $assignment = null;
         foreach ($this->subject as $parser) {
-            if ($parser->parseImpl($iterator, $expectedValue, $attributeType, $skipper)) {
+            if ($parser->parse($iterator, $expectedValue, $attributeType, $skipper)) {
                 if ($assignment === null) {
                     $assignment = $this->getAssignment($attributeType);
                 }

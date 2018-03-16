@@ -5,7 +5,7 @@ namespace Mxc\Parsec\Qi;
 abstract class PrimitiveParser extends Parser
 {
 
-    public function parseImpl($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
     {
 
         if (! $iterator->valid()) {
@@ -14,13 +14,9 @@ abstract class PrimitiveParser extends Parser
 
         $iterator->try();
 
-        // to avoid code duplication between skipping
-        // and non-skipping parsers
-        if ($this->skip) {
-            $this->skipOver($iterator, $skipper);
-        }
+        $this->skipOver($iterator, $skipper);
 
-        if ($this->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+        if ($this->doParse($iterator, $expectedValue, $attributeType, $skipper)) {
             // if the parser is successful and not particular value
             // was asked for (e.g. bool_, int_) we accept result
             if ($expectedValue === null) {

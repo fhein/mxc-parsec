@@ -43,20 +43,20 @@ class RepeatDirective extends Directive
         }
     }
 
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $attr = null;
         $assignment = null;
         $subject = $this->subject;
         for ($i = 0; ! $this->gotMin($i); $i++) {
-            if (! $subject->parseImpl($iterator, $expectedValue, $attributeType. $skipper)) {
+            if (! $subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
                 return false;
             }
             $this->assignTo($subject->getAttribute(), $attributeType);
         }
         $save = $iterator->getPos();
         for ($i = 0; ! $this->gotMax($i); $i++) {
-            if (! $this->subject->parseImpl($iterator, $expectedValue, $attributeType. $skipper)) {
+            if (! $this->subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
                 break;
                 $save = $iterator->key();
             }

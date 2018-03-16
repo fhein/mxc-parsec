@@ -11,13 +11,13 @@ abstract class ParserDelegator extends Parser
 
     protected $delegate = null;
 
-    public function parseImpl($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
     {
         if ($this->delegate === null) {
             throw new BadMethodCallException(sprintf(self::MSG, $this->what()));
         }
         $iterator->try();
-        return $iterator->done($this->delegate->parseImpl($iterator, $expectedValue, $attributeType, $skipper));
+        return $iterator->done($this->delegate->parse($iterator, $expectedValue, $attributeType, $skipper));
     }
 
     public function getAttribute()

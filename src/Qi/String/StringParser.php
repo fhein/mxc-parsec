@@ -14,7 +14,7 @@ class StringParser extends PreSkipper
         $this->string = $string;
     }
 
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $i = 0;
         $attr = null;

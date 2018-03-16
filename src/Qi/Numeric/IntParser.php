@@ -45,7 +45,7 @@ class IntParser extends PreSkipper
         $this->tolower = $this->toString === 'dechex';
     }
 
-    protected function parse($iterator, $expectedValue = null, string $attributeType = 'integer', $skipper = null)
+    protected function doParse($iterator, $expectedValue = null, string $attributeType = 'integer', $skipper = null)
     {
         $got = 0;
         $min = &$this->minDigits;
@@ -58,7 +58,7 @@ class IntParser extends PreSkipper
         $signsParser = &$this->signsParser;
         $digitsParser = &$this->digitsParser;
 
-        if ($signsParser->parse($iterator)) {
+        if ($signsParser->doParse($iterator)) {
             $sign = $signsParser->getAttribute();
         }
 
@@ -66,17 +66,17 @@ class IntParser extends PreSkipper
             return false;
         }
 
-        // by calling $digitsParser->parse we
+        // by calling $digitsParser->doParse we
         // prevent both preskipping to occur
         // and digitsParser attribute reset
         while ($got < $min) {
-            if (! $digitsParser->parse($iterator)) {
+            if (! $digitsParser->doParse($iterator)) {
                 return false;
             }
             $got++;
         }
 
-        while ($notmax($got) && $digitsParser->parse($iterator)) {
+        while ($notmax($got) && $digitsParser->doParse($iterator)) {
             $got++;
         }
 

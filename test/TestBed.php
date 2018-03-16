@@ -4,7 +4,6 @@ namespace Mxc\Test\Parsec;
 
 use Mxc\Parsec\Qi\Parser;
 use Mxc\Parsec\Qi\UnusedSkipper;
-use Mxc\Parsec\Domain;
 
 class TestBed
 {
@@ -35,10 +34,10 @@ class TestBed
         $expectedResult = null,
         $policy = null
     ) {
-        $skipper = $skipper?: $this->skipper;
+        $skipper = $skipper ?? $this->skipper;
 
         $iterator = $this->parser->setSource($input);
-        $result['result']  = $this->parser->parseImpl($iterator, $expectedValue, $attributeType, $skipper);
+        $result['result']  = $this->parser->parse($iterator, $expectedValue, $attributeType, $skipper);
         if ($result['result'] === true) {
             $result['attribute'] = $this->parser->getAttribute();
             $result['attribute_type'] = $this->parser->getAttributeType();

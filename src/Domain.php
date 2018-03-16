@@ -12,7 +12,7 @@ class Domain
     protected $inputEncoding;
     protected $internalEncoding;
 
-    protected $internalClassifier;
+    protected $characterClassifier;
     protected $inputClassifier;
 
     protected $unusedAttribute;
@@ -23,48 +23,37 @@ class Domain
 
     protected $noCaseSetting = [];
 
-    public function __construct($inputEncoding, $internalEncoding)
+    protected $parserManager;
+
+    public function __construct($parserManager, $inputEncoding = 'UTF-8', $internalEncoding = 'UTF-8')
     {
         $this->inputEncoding = $inputEncoding;
         $this->internalEncoding = $internalEncoding;
+        $this->inputIterator = $parserManager->get($inputEncoding);
+        $this->parserManager = $parserManager;
     }
 
     public function getUnusedAttribute()
     {
-        return ($this->unusedAttribute = $this->unusedAttribute ?? new UnusedAttribute());
+        return $this->unusedAttribute ?? $this->unusedAttribute = $this->parserManager->get(UnusedAttribute::class);
     }
 
-    public function getinternalClassifier()
+    public function getCharacterClassifier()
     {
-        return ($this->internalClassifier !== null) ?:
-            $this->internalClassifier = $this->getInternalEncoding()->getClassifier();
-    }
-
-    public function getinputClassifier()
-    {
-        return ($this->inputClassifier !== null) ?: $this->inputClassifier = $this->getInputEncoding()->getClassifier();
+        return $this->characterClassifier ??
+            $this->characterClassifier = $this->parserManager->get(CharacterClassifier::class);
     }
 
     public function getInternalIterator(string $arg)
     {
-        $iterator = clone $this->internalEncoding->getIterator();
+        $iterator = $this->parserManager->build($this->internalEncoding);
         $iterator->setData($arg, 0, strlen($arg), $this->noCaseSetting);
         return $iterator;
     }
 
     public function getInputIterator()
     {
-        return $this->inputIterator = $this->inputIterator ?? $this->getInputEncoding()->getIterator();
-    }
-
-    public function getInputEncoding()
-    {
-        return $this->inputEncoding;
-    }
-
-    public function getInternalEncoding()
-    {
-        return $this->internalEncoding;
+        return $this->inputIterator;
     }
 
     public function setSource(string $source)

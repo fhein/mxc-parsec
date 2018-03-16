@@ -10,7 +10,7 @@ class Char extends PreSkipper
     protected $classifier;
     protected $defaultType = 'string';
 
-    public function parse($iterator, $expectedValue = null, $attributeType = 'string', $skipper = null)
+    public function doParse($iterator, $expectedValue = null, $attributeType = 'string', $skipper = null)
     {
         if (! $iterator->valid()) {
             return false;

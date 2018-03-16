@@ -6,8 +6,7 @@ use Mxc\Parsec\Qi\NaryParser;
 
 class SequenceOperator extends NaryParser
 {
-
-    protected function parse($iterator, $expectedValue, $attributeType, $skipper)
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $subtype = $this->isScalar($attributeType) ? 'string' : $attributeType;
         // @todo: Not quite sure about this one
@@ -17,7 +16,7 @@ class SequenceOperator extends NaryParser
         $result = true;
         $i = 0;
         foreach ($this->subject as $parser) {
-            $result &= $parser->parseImpl($iterator, $expectedValue ? $expectedValue[$i++] : null, $subtype, $skipper);
+            $result &= $parser->parse($iterator, $expectedValue ? $expectedValue[$i++] : null, $subtype, $skipper);
             if ($result === false) {
                 return false;
             }
