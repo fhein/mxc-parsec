@@ -6,9 +6,8 @@ use Mxc\Parsec\Qi\Numeric\Detail\IntegerPolicy;
 
 class DecimalIntPolicy extends IntegerPolicy
 {
-    public function __construct(bool $signed = false)
+    public function __construct()
     {
-
         parent::__construct(
             [
                 '0' => 0,
@@ -22,13 +21,9 @@ class DecimalIntPolicy extends IntegerPolicy
                 '8' => 8,
                 '9' => 9
             ],
-            $signed ?
             [
                 '+' => 1,
                 '-' => -1
-            ] :
-            [
-                // no signs
             ]
         );
         $this->toString = 'strval';

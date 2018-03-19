@@ -38,8 +38,7 @@ class IntParser extends PreSkipper
         $this->maxDigits = $maxDigits;
         $this->noThrow = $noThrow;
 
-        // default policy is signed decimal int with '+' and '-' signs
-        $this->setPolicy($policy ?? new DecimalIntPolicy(true));
+        $this->setPolicy($policy ?? new DecimalIntPolicy());
     }
 
     public function setPolicy(IntegerPolicy $policy)
@@ -53,7 +52,6 @@ class IntParser extends PreSkipper
 
     protected function doParse($iterator, $expectedValue = null, string $attributeType = null, $skipper = null)
     {
-        $attributeType = $attributeType ?? 'integer';
         $got = 0;
         $min = $this->minDigits;
         $max = $this->maxDigits;
@@ -90,6 +88,7 @@ class IntParser extends PreSkipper
             $this->attribute = $str;
             return true;
         }
+
         return false;
     }
 
@@ -122,5 +121,4 @@ class IntParser extends PreSkipper
 //     }
 
 //     throw new OverflowException(sprintf('Integer overflow on %s. Try \'string\' attribute type.', $str));
-
 }

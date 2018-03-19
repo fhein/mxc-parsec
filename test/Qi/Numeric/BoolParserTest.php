@@ -151,7 +151,8 @@ class BoolParserTest extends TestCase
     public function setUp()
     {
         $this->pm = new ParserManager();
-        $this->testbed = new TestBed($this->pm->get(BoolParser::class));
+        $this->testbed = new TestBed();
+        $this->testbed->setParser($this->pm->get(BoolParser::class));
     }
 
     public function boolParserDataProvider()
@@ -178,70 +179,70 @@ class BoolParserTest extends TestCase
             [
                 'false' =>
                 [
-                    ['value' => false,  'result' => true],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => true],
+                    ['expectedValue' => false,  'expectedResult' => true],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true],
 
                 ],
                 'true'  =>
                 [
-                    ['value' => true,   'result' => true],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => true]
+                    ['expectedValue' => true,   'expectedResult' => true],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true]
 
                 ],
                 't' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'f' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 '' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
                 ],
                 ' ' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
                 ],
                 'FALSE' =>
                 [
-                    ['value' => false,  'result' => false],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false],
 
                 ],
                 'TRUE'  =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'T' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'F' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
             ],
@@ -251,84 +252,84 @@ class BoolParserTest extends TestCase
             [
                 'false' =>
                 [
-                    ['value' => false,  'result' => true],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => true],
+                    ['expectedValue' => false,  'expectedResult' => true],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true],
 
                 ],
                 'true'  =>
                 [
-                    ['value' => true,   'result' => true],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => true]
+                    ['expectedValue' => true,   'expectedResult' => true],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true]
 
                 ],
                 't' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'f' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 '' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
                 ],
                 ' ' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
                 ],
                 'FALSE' =>
                 [
-                    ['value' => false,  'result' => true],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => true],
+                    ['expectedValue' => false,  'expectedResult' => true],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true],
 
                 ],
                 'TRUE'  =>
                 [
-                    ['value' => true,   'result' => true],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => true]
+                    ['expectedValue' => true,   'expectedResult' => true],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true]
 
                 ],
                 'FaLsE' =>
                 [
-                    ['value' => false,  'result' => false],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false],
 
                 ],
                 'TrUe'  =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'T' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'F' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
             ],
@@ -337,137 +338,139 @@ class BoolParserTest extends TestCase
             [
                 'false' =>
                 [
-                    ['value' => false,  'result' => false],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false],
 
                 ],
                 'true'  =>
                 [
-                    ['value' => true,   'result' => true],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => true]
+                    ['expectedValue' => true,   'expectedResult' => true],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true]
 
                 ],
                 't' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'f' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 '' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
                 ],
                 ' ' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
                 ],
                 'FALSE' =>
                 [
-                    ['value' => false,  'result' => false],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false],
 
                 ],
                 'TRUE'  =>
                 [
-                    ['value' => true,   'result' => true],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => true]
+                    ['expectedValue' => true,   'expectedResult' => true],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true]
 
                 ],
                 'T' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'F' =>
                 [
-                    ['value' => true,   'result' => false],
-                    ['value' => false,  'result' => false],
-                    ['value' => null,   'result' => false]
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false]
 
                 ],
                 'EURT' =>
                 [
-                    ['value' => false,  'result' => true],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => true],
+                    ['expectedValue' => false,  'expectedResult' => true],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => true],
 
                 ],
                 'EuRt' =>
                 [
-                    ['value' => false,  'result' => false],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false],
 
                 ],
                 'eUrT' =>
                 [
-                    ['value' => false,  'result' => false],
-                    ['value' => true,   'result' => false],
-                    ['value' => null,   'result' => false],
+                    ['expectedValue' => false,  'expectedResult' => false],
+                    ['expectedValue' => true,   'expectedResult' => false],
+                    ['expectedValue' => null,   'expectedResult' => false],
 
                 ],
             ],
         ];
 
-
-        // @todo: codepage support
-
         foreach ($typedResults as $type => $value) {
             foreach ($inputsAndResults as $policy => $i) {
-                foreach ($i as $input => $tests) {
-                    foreach ($tests as $set) {
-                        $test[] =
+                foreach ($i as $input => $test) {
+                    foreach ($test as $set) {
+                        $expectedValue = $set['expectedValue'];
+                        $expectedResult = $set['expectedResult'];
+                        $tests[] =
                         [
-                            $input,                     // string to doParse
-                            $set['value'],              // expected value
-                            $type,                      // desired attribute type
-                            $set['result'],             // expected parser result (true/false)
-                            $value[$set['value']],      // expected typed attribute
-                            false,                      // use skipper?
-                            $policy,                    // boolean policy
+                            $input,                  // string to parse
+                            $expectedValue,          // expected value
+                            $type,                   // desired attribute type
+                            $expectedResult,         // expected parser result (true/false)
+                            $value[$expectedValue],  // expected typed attribute
+                            false,                   // do not use skipper
+                            $policy,                 // boolean policy
                         ];
-                        $test[] =
+                        // test pre-skipping
+                        $tests[] =
                         [
-                            ' ' . $input,
-                            $set['value'],
-                            $type,
-                            $set['result'],
-                            $value[$set['value']],
-                            true,
-                            $policy,
+                            ' ' . $input,            // string to parse
+                            $expectedValue,          // expected value
+                            $type,                   // desired attribute type
+                            $expectedResult,         // expected parser result (true/false)
+                            $value[$expectedValue],  // expected typed attribute
+                            true,                    // use skipper
+                            $policy,                 // boolean policy
                         ];
-                        $test[] =
+                        // all tests should return false if pre-skipping is required
+                        // but no skipper is defined
+                        $tests[] =
                         [
-                            $input . ' ',
-                            $set['value'],
-                            $type,
-                            $set['result'],
-                            $value[$set['value']],
-                            false,
-                            $policy,
+                            ' ' . $input,            // string to parse
+                            $expectedValue,          // expected value
+                            $type,                   // desired attribute type
+                            false,                   // expected parser result (true/false)
+                            $value[$expectedValue],  // expected typed attribute
+                            false,                   // use skipper
+                            $policy,                 // boolean policy
                         ];
                     }
                 }
             }
         }
-        return $test;
+        return $tests;
     }
 }

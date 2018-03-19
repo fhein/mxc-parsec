@@ -15,7 +15,7 @@ abstract class PrimitiveParser extends Parser
         $this->skipOver($iterator, $skipper);
 
         if ($this->doParse($iterator, $expectedValue, $attributeType, $skipper)) {
-            return $iterator->done($this->checkResult($expectedValue, $this->attribute, $attributeType));
+            return $iterator->done($this->matchesExpected($expectedValue, $this->attribute, $attributeType));
         }
 
         $iterator->reject();

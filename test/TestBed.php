@@ -10,10 +10,14 @@ class TestBed
     protected $parser;
     protected $skipper;
 
-    public function __construct(Parser $parser, ... $args)
+    public function __construct()
+    {
+        $this->skipper = new UnusedSkipper();
+    }
+
+    public function setParser(Parser $parser)
     {
         $this->parser = $parser;
-        $this->skipper = new UnusedSkipper();
     }
 
     // we forward all unknown members to our parser

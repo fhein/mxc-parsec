@@ -10,6 +10,7 @@ use Mxc\Parsec\Qi\Char\CharClassParser;
 use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Qi\UnusedAttribute;
 use Mxc\Parsec\Qi\Numeric\Detail\DecimalIntPolicy;
+use Mxc\Parsec\Qi\Numeric\Detail\DecimalUIntPolicy;
 
 class IntParserTest extends TestCase
 {
@@ -149,8 +150,8 @@ class IntParserTest extends TestCase
     public function setUp()
     {
         $this->pm = new ParserManager();
-        $p = $this->pm->get(IntParser::class);
-        $this->testbed = new TestBed($this->pm->get(IntParser::class));
+        $this->testbed = new TestBed();
+        $this->testbed->setParser($this->pm->get(IntParser::class));
     }
 
     public function intParserDataProvider()
@@ -161,196 +162,806 @@ class IntParserTest extends TestCase
 
         $policies = [
             DecimalIntPolicy::class => [
-                'input' => '123',
-                'expectedValues' => [
+                '' => [
+                    // accept any integer ($expectedValue = 0)
                     [
-                        'value' => null,
-                        'types' => [
-                            'boolean' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => true,
-                            ],
-                            'integer' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => 123,
-                            ],
-                            'double' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => (double)123,
-                            ],
-                            'NULL' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => null,
-                            ],
-                            'string' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => '123',
-                            ],
-                            'array' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => [123],
-                            ],
-                            'unused' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => 'unused',
-                            ],
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
                         ],
                     ],
+                    // accept 123 ($expectedValue = 123)
                     [
-                        'value' => 123,
-                        'types' => [
-                            'boolean' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => true,
-                            ],
-                            'integer' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => 123,
-                            ],
-                            'double' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => (double)123,
-                            ],
-                            'NULL' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => null,
-                            ],
-                            'string' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => '123',
-                            ],
-                            'array' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => [123],
-                            ],
-                            'unused' => [
-                                'expectedResult' => true,
-                                'expectedAttribute' => 'unused',
-                            ],
+                        'expectedValue' => 123,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
                         ],
                     ],
+                    // accept 456 ($expectedValue = 456)
                     [
-                        'value' => 456,
-                        'types' => [
-                            'boolean' => [
-                                'expectedResult' => false,
-                                'expectedAttribute' => null,
-                            ],
-                            'integer' => [
-                                'expectedResult' => false,
-                                'expectedAttribute' => 123,
-                            ],
-                            'double' => [
-                                'expectedResult' => false,
-                                'expectedAttribute' => (double)123,
-                            ],
-                            'NULL' => [
-                                'expectedResult' => false,
-                                'expectedAttribute' => null,
-                            ],
-                            'string' => [
-                                'expectedResult' => false,
-                                'expectedAttribute' => '123',
-                            ],
-                            'array' => [
-                                'expectedResult' => false,
-                                'expectedAttribute' => [123],
-                            ],
-                            'unused' => [
-                                'expectedResult' => false,
-                                'expectedAttribute' => 'unused',
-                            ],
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
                         ],
                     ],
-                ]
-            ]
+                ],
+                ' ' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '123' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '+123' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '12 3' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 12,
+                            'double' => (double)12,
+                            'NULL' => null,
+                            'string' => '12',
+                            'array' => [12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 12 ($expectedValue = 12)
+                    [
+                        'expectedValue' => 12,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 12,
+                            'double' => (double)12,
+                            'NULL' => null,
+                            'string' => '12',
+                            'array' => [12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 12,
+                            'double' => (double)12,
+                            'NULL' => null,
+                            'string' => '12',
+                            'array' => [12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '-123' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -123,
+                            'double' => (double)(-123),
+                            'NULL' => null,
+                            'string' => '-123',
+                            'array' => [-123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept -123 ($expectedValue = -123)
+                    [
+                        'expectedValue' => -123,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -123,
+                            'double' => (double)(-123),
+                            'NULL' => null,
+                            'string' => '-123',
+                            'array' => [-123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => -123,
+                            'double' => (double)(-123),
+                            'NULL' => null,
+                            'string' => '-123',
+                            'array' => [-123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '-12 3' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -12,
+                            'double' => (double)(-12),
+                            'NULL' => null,
+                            'string' => '-12',
+                            'array' => [-12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept -12 ($expectedValue = -12)
+                    [
+                        'expectedValue' => -12,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -12,
+                            'double' => (double)(-12),
+                            'NULL' => null,
+                            'string' => '-12',
+                            'array' => [-12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 456,
+                            'double' => (double)456,
+                            'NULL' => null,
+                            'string' => '456',
+                            'array' => [456],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '- 123' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -123,
+                            'double' => (double)(-123),
+                            'NULL' => null,
+                            'string' => '-123',
+                            'array' => [-123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept -123 ($expectedValue = -123)
+                    [
+                        'expectedValue' => -123,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -123,
+                            'double' => (double)(-123),
+                            'NULL' => null,
+                            'string' => '-123',
+                            'array' => [-123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 456,
+                            'double' => (double)456,
+                            'NULL' => null,
+                            'string' => '456',
+                            'array' => [456],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '+ 123' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)(123),
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)(123),
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 456,
+                            'double' => (double)456,
+                            'NULL' => null,
+                            'string' => '456',
+                            'array' => [456],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+            ],
+            DecimalUIntPolicy::class => [
+                '' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                ' ' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '123' => [
+                    // accept any unsigned integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '-123' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -123,
+                            'double' => (double)(-123),
+                            'NULL' => null,
+                            'string' => '-123',
+                            'array' => [-123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept -123 ($expectedValue = -123)
+                    [
+                        'expectedValue' => -123,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -123,
+                            'double' => (double)(-123),
+                            'NULL' => null,
+                            'string' => '-123',
+                            'array' => [-123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => -123,
+                            'double' => (double)(-123),
+                            'NULL' => null,
+                            'string' => '-123',
+                            'array' => [-123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '-12 3' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -12,
+                            'double' => (double)(-12),
+                            'NULL' => null,
+                            'string' => '-12',
+                            'array' => [-12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept -12 ($expectedValue = -12)
+                    [
+                        'expectedValue' => -12,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => -12,
+                            'double' => (double)(-12),
+                            'NULL' => null,
+                            'string' => '-12',
+                            'array' => [-12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 456,
+                            'double' => (double)456,
+                            'NULL' => null,
+                            'string' => '456',
+                            'array' => [456],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+                '+123' => [
+                    // accept any unsigned integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)123,
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)(123),
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 456,
+                            'double' => (double)456,
+                            'NULL' => null,
+                            'string' => '456',
+                            'array' => [456],
+                            'unused' => 'unused',
+                        ],
+                    ],
+
+                ],
+                // end parsing at delimiter
+                '+12 3' => [
+                    // accept any unsigned integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 12,
+                            'double' => (double)12,
+                            'NULL' => null,
+                            'string' => '12',
+                            'array' => [12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 12 ($expectedValue = 12)
+                    [
+                        'expectedValue' => 12,
+                        'expectedResult' => true,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 12,
+                            'double' => (double)(12),
+                            'NULL' => null,
+                            'string' => '12',
+                            'array' => [12],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 456,
+                            'double' => (double)456,
+                            'NULL' => null,
+                            'string' => '456',
+                            'array' => [456],
+                            'unused' => 'unused',
+                        ],
+                    ],
+
+                ],
+                // do not accept input with delimiters between
+                // sign and digits
+                '+ 123' => [
+                    // accept any integer ($expectedValue = 0)
+                    [
+                        'expectedValue' => null,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)(123),
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 123 ($expectedValue = 123)
+                    [
+                        'expectedValue' => 123,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => true,
+                            'integer' => 123,
+                            'double' => (double)(123),
+                            'NULL' => null,
+                            'string' => '123',
+                            'array' => [123],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                    // accept 456 ($expectedValue = 456)
+                    [
+                        'expectedValue' => 456,
+                        'expectedResult' => false,
+                        'expectedAttributes' => [
+                            'boolean' => null,
+                            'integer' => 456,
+                            'double' => (double)456,
+                            'NULL' => null,
+                            'string' => '456',
+                            'array' => [456],
+                            'unused' => 'unused',
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         foreach ($policies as $policy => $setup) {
-            $input = $setup['input'];
-            foreach ($setup['expectedValues'] as $test) {
-                $expectedValue = $test['value'];
-                foreach ($test['types'] as $type => $results) {
-                    $expectedResult = $results['expectedResult'];
-                    $expectedAttribute = $results['expectedAttribute'];
-
-                    $tests[] = [
-                        $input,
-                        $expectedValue,
-                        $type,
-                        $expectedResult,
-                        $expectedAttribute,
-                        false,
-                        $policy
-                    ];
-                }
-            }
-        }
-
-        return $tests;
-        $tests = [
-            // parser should return true
-            ['123', null,   'boolean',  true,   true,           false, DecimalIntPolicy::class],
-            ['123', null,   'integer',  true,   123,            false, DecimalIntPolicy::class],
-            ['123', null,   'double',   true,   (double)123,    false, DecimalIntPolicy::class],
-            ['123', null,   'NULL',     true,   null,           false, DecimalIntPolicy::class],
-            ['123', null,   'string',   true,   '123',          false, DecimalIntPolicy::class],
-            ['123', null,   'array',    true,   [123],          false, DecimalIntPolicy::class],
-            ['123', null,   'unused',   true,   'unused',       false, DecimalIntPolicy::class],
-            // parser should return true (success) and attribute false ( because (bool)0 === false)
-            ['0',   null,   'boolean',  true,   false,          false, DecimalIntPolicy::class],
-            // parser should return false because 456 !== 123
-            ['123', 456,    'integer',  false,  null,           false, DecimalIntPolicy::class],
-            ['123', 456,    'boolean',  false,  null,           false, DecimalIntPolicy::class],
-            ['123', 456,    'double',   false,  null,           false, DecimalIntPolicy::class],
-            ['123', 456,    'NULL',     false,  null,           false, DecimalIntPolicy::class],
-            ['123', 456,    'string',   false,  null,           false, DecimalIntPolicy::class],
-            ['123', 456,    'array',    false,  null,           false, DecimalIntPolicy::class],
-            ['123', 456,    'unused',   false,  null,           false, DecimalIntPolicy::class],
-        ];
-
-        return $tests;
-
-        // @todo: codepage support
-
-        foreach ($typedResults as $type => $value) {
-            foreach ($inputsAndResults as $policy => $i) {
-                foreach ($i as $input => $tests) {
-                    foreach ($tests as $set) {
-                        $test[] =
-                        [
-                            $input,                     // string to doParse
-                            $set['value'],              // expected value
-                            $type,                      // desired attribute type
-                            $set['result'],             // expected parser result (true/false)
-                            $value[$set['value']],      // expected typed attribute
-                            false,                      // use skipper?
-                            $policy,                    // boolean policy
+            foreach ($setup as $input => $scenario) {
+                foreach ($scenario as $test) {
+                    $expectedValue = $test['expectedValue'];
+                    $expectedResult = $test['expectedResult'];
+                    foreach ($test['expectedAttributes'] as $type => $expectedAttribute) {
+                        $tests[] = [
+                            $input,                 // string to parse
+                            $expectedValue,         // acceptable value or null for any
+                            $type,                  // requested attribute type
+                            $expectedResult,        // expected result of parse (true/false)
+                            $expectedAttribute,     // expected typed attribute
+                            false,                  // do not use skipper
+                            $policy                 // integer policy to use
                         ];
-                        $test[] =
-                        [
-                            ' ' . $input,
-                            $set['value'],
-                            $type,
-                            $set['result'],
-                            $value[$set['value']],
-                            true,
-                            $policy,
+                        // test pre-skipping
+                        $tests[] = [
+                            ' ' . $input,           // string to parse
+                            $expectedValue,         // acceptable value or null for any
+                            $type,                  // requested attribute type
+                            $expectedResult,        // expected result of parse (true/false)
+                            $expectedAttribute,     // expected typed attribute
+                            true,                   // use skipper
+                            $policy                 // integer policy to use
                         ];
-                        $test[] =
+                        // all tests should return false if pre-skipping is required
+                        // without a skipper being defined
+                        $tests[] =
                         [
-                            $input . ' ',
-                            $set['value'],
-                            $type,
-                            $set['result'],
-                            $value[$set['value']],
-                            false,
-                            $policy,
+                            ' ' . $input,            // string to parse
+                            $expectedValue,          // expected value
+                            $type,                   // requested attribute type
+                            false,                   // expected parser result (true/false)
+                            $value[$expectedValue],  // expected typed attribute
+                            false,                   // do not use skipper
+                            $policy,                 // boolean policy
                         ];
                     }
                 }
             }
         }
-        return $test;
+
+        return $tests;
     }
 }

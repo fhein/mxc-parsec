@@ -251,7 +251,7 @@ abstract class Parser
         );
     }
 
-    public function checkResult($expectedValue, $value, $type)
+    public function matchesExpected($expectedValue, $value, $type)
     {
         $value = $this->castTo($this->defaultType, $value);
         if ($expectedValue === null) {
