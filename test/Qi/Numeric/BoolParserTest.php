@@ -42,6 +42,7 @@ class BoolParserTest extends TestCase
             return sprintf(
                 "Test Set:\n"
                 . "Input: %s\n"
+                . "Policy: %s\n"
                 . "Expected value: %s\n"
                 . "Attribute type: %s\n"
                 . "Expected result: %s\n"
@@ -51,6 +52,7 @@ class BoolParserTest extends TestCase
                 . "Attribute: %s\n"
                 . "Attribute Type: %s",
                 $input,
+                $policy,
                 var_export($expectedValue, true),
                 $attributeType,
                 var_export($expectedResult, true),
@@ -330,10 +332,7 @@ class BoolParserTest extends TestCase
 
                 ],
             ],
-            // This policy is an example for a custom BoolPolicy
-            //
-            // This policy accepts true, TRUE as true,
-            // eurt, EURT as false
+
             BackwardsBoolPolicy::class =>
             [
                 'false' =>

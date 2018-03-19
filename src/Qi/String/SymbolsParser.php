@@ -54,7 +54,8 @@ class SymbolsParser extends PreSkipper
             $iterator->next();
         };
         if (isset($m['accept'])) {
-            $this->assignTo($this->symbols[$symbol], $attributeType);
+            $this->attribute = $this->symbols[$symbol];
+            //$this->assignTo($this->symbols[$symbol], $attributeType);
             return true;
         }
         return false;

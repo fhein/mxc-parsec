@@ -8,7 +8,9 @@ class PredicateParser extends UnaryParser
     {
         // predicate parser do not consume any input
         $iterator->try();
-        $result = $this->doParse($iterator, $expectedValue, $attributeType, $skipper);
+        if ($result = $this->doParse($iterator, $expectedValue, $attributeType, $skipper)) {
+            $result = $this->checkResult($expectedValue, $this->attribute, $attributeType);
+        }
         // restore position
         $iterator->reject();
         return $result;
