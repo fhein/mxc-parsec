@@ -15,6 +15,7 @@ use Mxc\Parsec\Qi\UnusedAttribute;
 
 class BoolParserTest extends TestCase
 {
+
     protected $testbed;
     protected $domain;
     protected $skipper;
@@ -24,7 +25,6 @@ class BoolParserTest extends TestCase
     {
         if (! $this->skipper) {
             $this->skipper = $this->pm->build(CharClassParser::class, [ 'space' ]);
-//                new CharClassParser($this->pm->get(Domain::class), 'space');
         }
         return $this->skipper;
     }
@@ -39,40 +39,39 @@ class BoolParserTest extends TestCase
         $policy,
         $result
     ) {
-            return sprintf(
-                "Test Set:\n"
-                . "Input: %s\n"
-                . "Policy: %s\n"
-                . "Expected value: %s\n"
-                . "Attribute type: %s\n"
-                . "Expected result: %s\n"
-                . "Expected Attribute: %s\n\n"
-                . "Results:\n"
-                . "Parsing result: %s\n"
-                . "Attribute: %s\n"
-                . "Attribute Type: %s",
-                $input,
-                $policy,
-                var_export($expectedValue, true),
-                $attributeType,
-                var_export($expectedResult, true),
-                gettype($expectedAttribute) === 'object' ? get_class($expectedAttribute) : $expectedAttribute,
-                var_export($result['result'], true),
-                var_export($result['attribute'], true),
-                $result['attribute_type']
-            );
+        return sprintf(
+            "Test Set:\n"
+            . "Input: %s\n"
+            . "Policy: %s\n"
+            . "Expected value: %s\n"
+            . "Attribute type: %s\n"
+            . "Expected result: %s\n"
+            . "Expected Attribute: %s\n\n"
+            . "Results:\n"
+            . "Parsing result: %s\n"
+            . "Attribute: %s\n"
+            . "Attribute Type: %s",
+            $input,
+            $policy,
+            var_export($expectedValue, true),
+            $attributeType,
+            var_export($expectedResult, true),
+            gettype($expectedAttribute) === 'object' ? get_class($expectedAttribute) : $expectedAttribute,
+            var_export($result['result'], true),
+            var_export($result['attribute'], true),
+            $result['attribute_type']
+        );
     }
-
 
     /** @dataProvider boolParserDataProvider */
     public function testBoolParser(
+        $policy,
         $input,
         $expectedValue,
-        $attributeType,
         $expectedResult,
+        $attributeType,
         $expectedAttribute,
-        $skip,
-        $policy
+        $skip
     ) {
 
         $this->testbed->setPolicy(new $policy());
@@ -155,318 +154,180 @@ class BoolParserTest extends TestCase
         $this->testbed->setParser($this->pm->get(BoolParser::class));
     }
 
+    protected function getTypedAttributes(bool $i)
+    {
+        return [
+            'boolean' => $i,
+            'integer' => (int)$i,
+            'double'  => (double) $i,
+            'array'   => [ $i ],
+            'string'  => strval($i),
+            'NULL'    => null,
+            'unused'  => 'unused',
+        ];
+    }
+
     public function boolParserDataProvider()
     {
-
-        // array of attribute types as returned by $parser->getType
-        // with true and false values associated with each type
-        $typedResults = [
-            'boolean'   => [true => true,     false => false],
-            'integer'   => [true => 1,        false => 0 ],
-            'double'    => [true => 1.0,      false => 0.0 ],
-            'NULL'      => [true => null,     false => null],
-            'string'    => [true => "1",      false => "" ],
-            'array'     => [true => [ true ], false => [ false ]],
-            'null'      => [true => true,     false => false],
-            'unused'    => [true => 'unused', false => 'unused'],
-        ];
-
-        $inputsAndResults =
-        [
-            // this policy accepts 'true' as true
-            // 'false' as false
-            BoolPolicy::class =>
+        $scenarios = [
             [
-                'false' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => true],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true],
-
+                'policies' => [
+                    BoolPolicy::class,
+                    NoCaseBoolPolicy::class,
+                    BackwardsBoolPolicy::class,
                 ],
-                'true'  =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => true],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true]
-
+                'input' => [
+                    'FaLsE',
+                    'tRuE',
+                    'T',
+                    'F',
+                    't',
+                    'f',
+                    '',
+                    ' ',
+                    'eUrT',
+                    'eSlAf'
                 ],
-                't' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
-                'f' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
-                '' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-                ],
-                ' ' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-                ],
-                'FALSE' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false],
-
-                ],
-                'TRUE'  =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
-                'T' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
-                'F' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
+                'expectedValue' => [ true, false ],
+                'expectedResult' => false,
             ],
-            // this policy accepts 'true', 'TRUE' as true,
-            // 'false', 'FALSE' as false
-            NoCaseBoolPolicy::class =>
             [
-                'false' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => true],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true],
-
+                'policies' => [
+                    BoolPolicy::class,
+                    NoCaseBoolPolicy::class,
+                    BackwardsBoolPolicy::class,
                 ],
-                'true'  =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => true],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true]
-
+                'input' => [
+                    'true',
                 ],
-                't' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
-                'f' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
-                '' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-                ],
-                ' ' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-                ],
-                'FALSE' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => true],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true],
-
-                ],
-                'TRUE'  =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => true],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true]
-
-                ],
-                'FaLsE' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false],
-
-                ],
-                'TrUe'  =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
-                'T' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
-                'F' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
-                ],
+                'expectedValue' => [ null, true ],
+                'expectedResult' => true,
+                'expectedAttribute' => true,
             ],
-
-            BackwardsBoolPolicy::class =>
             [
-                'false' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false],
-
+                'policies' => [
+                    NoCaseBoolPolicy::class,
+                    BackwardsBoolPolicy::class
                 ],
-                'true'  =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => true],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true]
-
+                'input' => [
+                    'TRUE',
                 ],
-                't' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
+                'expectedValue' => [ null, true ],
+                'expectedResult' => true,
+                'expectedAttribute' => true,
+            ],
+            [
+                'policies' => [
+                    BoolPolicy::class,
+                    NoCaseBoolPolicy::class,
                 ],
-                'f' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
+                'input' => [
+                    'false',
                 ],
-                '' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
+                'expectedValue' => [ null, false ],
+                'expectedResult' => true,
+                'expectedAttribute' => false,
+            ],
+            [
+                'policies' => [
+                    BackwardsBoolPolicy::class,
                 ],
-                ' ' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
+                'input' => [
+                    'false',
+                    'FALSE'
                 ],
-                'FALSE' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false],
-
+                'expectedValue' => [ null, false, true ],
+                'expectedResult' => false,
+            ],
+            [
+                'policies' => [
+                    NoCaseBoolPolicy::class,
                 ],
-                'TRUE'  =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => true],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true]
-
+                'input' => [
+                    'FALSE',
                 ],
-                'T' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
+                'expectedValue' => [ null, false ],
+                'expectedResult' => true,
+                'expectedAttribute' => false,
+            ],
+            [
+                'policies' => [
+                    BackwardsBoolPolicy::class,
                 ],
-                'F' =>
-                [
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false]
-
+                'input' => [
+                    'eurt',
+                    'EURT'
                 ],
-                'EURT' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => true],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => true],
-
-                ],
-                'EuRt' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false],
-
-                ],
-                'eUrT' =>
-                [
-                    ['expectedValue' => false,  'expectedResult' => false],
-                    ['expectedValue' => true,   'expectedResult' => false],
-                    ['expectedValue' => null,   'expectedResult' => false],
-
-                ],
+                'expectedValue' => [ null, false ],
+                'expectedResult' => true,
+                'expectedAttribute' => false,
             ],
         ];
 
-        foreach ($typedResults as $type => $value) {
-            foreach ($inputsAndResults as $policy => $i) {
-                foreach ($i as $input => $test) {
-                    foreach ($test as $set) {
-                        $expectedValue = $set['expectedValue'];
-                        $expectedResult = $set['expectedResult'];
-                        $tests[] =
-                        [
-                            $input,                  // string to parse
-                            $expectedValue,          // expected value
-                            $type,                   // desired attribute type
-                            $expectedResult,         // expected parser result (true/false)
-                            $value[$expectedValue],  // expected typed attribute
-                            false,                   // do not use skipper
-                            $policy,                 // boolean policy
+        foreach ($scenarios as $scenario) {
+            $inputs = $scenario['input'];
+            $policies = $scenario['policies'];
+            $expectedValues = $scenario['expectedValue'];
+            $expectedResult = $scenario['expectedResult'];
+            foreach ($policies as $policy) {
+                foreach ($inputs as $input) {
+                    foreach ($expectedValues as $expectedValue) {
+                        if ($expectedResult === false) {
+                            $tests[] = [
+                                $policy,                // boolean policy to use
+                                $input,                 // string to parse
+                                $expectedValue,         // acceptable value or null for any
+                                $expectedResult,        // expected result of parse (true/false)
+                                null,                   // requested attribute type
+                                null,                   // expected typed attribute
+                                false,                  // do not use skipper
+                            ];
+                            continue;
+                        }
+                        // parsing should fail if no skipper defined
+                        // and skippable content is prepended to input
+                        $tests[] = [
+                            $policy,                // integer policy to use
+                            ' '. $input,            // string to parse
+                            $expectedValue,         // acceptable value or null for any
+                            false,                  // expected result of parse (true/false)
+                            null,                   // requested attribute type
+                            null,                   // expected typed attribute
+                            false,                  // do not use skipper
                         ];
-                        // test pre-skipping
-                        $tests[] =
-                        [
-                            ' ' . $input,            // string to parse
-                            $expectedValue,          // expected value
-                            $type,                   // desired attribute type
-                            $expectedResult,         // expected parser result (true/false)
-                            $value[$expectedValue],  // expected typed attribute
-                            true,                    // use skipper
-                            $policy,                 // boolean policy
-                        ];
-                        // all tests should return false if pre-skipping is required
-                        // but no skipper is defined
-                        $tests[] =
-                        [
-                            ' ' . $input,            // string to parse
-                            $expectedValue,          // expected value
-                            $type,                   // desired attribute type
-                            false,                   // expected parser result (true/false)
-                            $value[$expectedValue],  // expected typed attribute
-                            false,                   // use skipper
-                            $policy,                 // boolean policy
-                        ];
+                        $typedAttributes = $this->getTypedAttributes($scenario['expectedAttribute']);
+                        foreach ($typedAttributes as $type => $value) {
+                            $tests[] = [
+                                $policy,                // integer policy to use
+                                $input,                 // string to parse
+                                $expectedValue,         // acceptable value or null for any
+                                $expectedResult,        // expected result of parse (true/false)
+                                $type,                  // requested attribute type
+                                $value,                 // expected typed attribute
+                                false,                  // do not use skipper
+                            ];
+                            // succeeding tests should also succeed if skipper is available
+                            $tests[] = [
+                                $policy,                // integer policy to use
+                                $input,                 // string to parse
+                                $expectedValue,         // acceptable value or null for any
+                                $expectedResult,        // expected result of parse (true/false)
+                                $type,                  // requested attribute type
+                                $value,                 // expected typed attribute
+                                true,                   // do use skipper
+                            ];
+                            // succeeding tests should also succeed if skipper is available
+                            // and skippable content is prepended to input
+                            $tests[] = [
+                                $policy,                // integer policy to use
+                                ' '. $input,            // string to parse
+                                $expectedValue,         // acceptable value or null for any
+                                $expectedResult,        // expected result of parse (true/false)
+                                $type,                  // requested attribute type
+                                $value,                 // expected typed attribute
+                                true,                   // do use skipper
+                            ];
+                        }
                     }
                 }
             }

@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi\Numeric\Detail;
 
-class OctalIntPolicy extends IntegerPolicy
+class OctIntPolicy extends IntegerPolicy
 {
     public function __construct()
     {

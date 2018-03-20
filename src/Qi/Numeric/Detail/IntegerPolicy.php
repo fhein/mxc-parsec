@@ -9,9 +9,6 @@ class IntegerPolicy
 
     protected $digits;
     protected $signs;
-    protected $radix;
-    protected $sign;
-    protected $value;
     protected $toDecimal;
     protected $toString;
 
@@ -19,31 +16,6 @@ class IntegerPolicy
     {
         $this->signs = $signs;
         $this->digits = $digits;
-        $this->radix = count($digits);
-        $this->sign = 1;
-        $this->value = 0;
-    }
-
-    public function getRadix()
-    {
-        return $this->radix;
-    }
-
-    public function setSign($c)
-    {
-        $this->sign = $this->signs[$c];
-        print($this->sign."\n");
-    }
-
-    public function accumulate($digit)
-    {
-        print('Hallo'. $digit."   ". $this->digits[$digit]."\n");
-        $this->value = (($this->value * $this->radix) + ($this->sign * $this->digits[$digit]));
-    }
-
-    public function getValue()
-    {
-        return $this->value;
     }
 
     public function getSigns()

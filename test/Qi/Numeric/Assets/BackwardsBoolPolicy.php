@@ -6,7 +6,6 @@ use Mxc\Parsec\Qi\Numeric\Detail\BoolPolicy;
 
 class BackwardsBoolPolicy extends BoolPolicy
 {
-
     public function __construct()
     {
         $this->symbols =

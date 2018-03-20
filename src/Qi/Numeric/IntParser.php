@@ -23,8 +23,7 @@ class IntParser extends PreSkipper
         Domain $domain,
         IntegerPolicy $policy = null,
         int $minDigits = 1,
-        $maxDigits = -1,
-        bool $noThrow = false
+        $maxDigits = -1
     ) {
         if (($minDigits < 1) || (($maxDigits > 0) && ($minDigits > $maxDigits))) {
             throw new InvalidArgumentException($this->what() . ": Invalid arguments.");
@@ -36,13 +35,13 @@ class IntParser extends PreSkipper
 
         $this->minDigits = $minDigits;
         $this->maxDigits = $maxDigits;
-        $this->noThrow = $noThrow;
 
         $this->setPolicy($policy ?? new DecimalIntPolicy());
     }
 
     public function setPolicy(IntegerPolicy $policy)
     {
+        $this->policy = $policy;
         $this->digitsParser = new CharsetParser($this->domain, $policy->getDigits());
         $this->signsParser = new CharsetParser($this->domain, $policy->getSigns());
         $this->toString = $policy->getToString();
@@ -85,7 +84,7 @@ class IntParser extends PreSkipper
             if ($this->toLower) {
                 $str = strtolower($str);
             }
-            $this->attribute = $str;
+            $this->attribute = strval(($this->toDecimal)($str));
             return true;
         }
 
