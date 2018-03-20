@@ -10,7 +10,6 @@ class IntegerPolicy
     protected $digits;
     protected $signs;
     protected $toDecimal;
-    protected $toString;
 
     public function __construct(array $digits, array $signs = null)
     {
@@ -26,11 +25,6 @@ class IntegerPolicy
     public function getDigits()
     {
         return $this->digits;
-    }
-
-    public function getToString()
-    {
-        return $this->toString;
     }
 
     public function getToDecimal()

@@ -35,9 +35,6 @@ class HexIntPolicy extends IntegerPolicy
             // no signs
             ]
         );
-        // override wrong radix
-        $this->radix = 16;
-        $this->toString = 'dechex';
         $this->toDecimal = 'hexdec';
     }
 }

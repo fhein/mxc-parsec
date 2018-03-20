@@ -13,7 +13,11 @@ use Mxc\Parsec\Qi\Numeric\Detail\DecimalIntPolicy;
 use Mxc\Parsec\Qi\Numeric\Detail\DecimalUIntPolicy;
 use Mxc\Parsec\Qi\Numeric\Detail\HexIntPolicy;
 use Mxc\Parsec\Qi\Numeric\Detail\OctIntPolicy;
-use Mxc\Parsec\Qi\Numeric\Detail\BinaryIntPolicy;
+use Mxc\Parsec\Qi\Numeric\Detail\BinIntPolicy;
+use Mxc\Parsec\Qi\Numeric\UIntParser;
+use Mxc\Parsec\Qi\Numeric\BinaryParser;
+use Mxc\Parsec\Qi\Numeric\HexParser;
+use Mxc\Parsec\Qi\Numeric\OctParser;
 
 class IntParserTest extends TestCase
 {
@@ -32,28 +36,34 @@ class IntParserTest extends TestCase
 
     protected function getParserResult(
         $input,
+        $minDigits,
+        $maxDigits,
         $expectedValue,
         $attributeType,
         $expectedResult,
         $expectedAttribute,
         $skip,
-        $policy,
+        $parser,
         $result
     ) {
         return sprintf(
             "Test Set:\n"
-            . "Input: %s\n"
-            . "Policy: %s\n"
-            . "Expected value: %s\n"
-            . "Attribute type: %s\n"
-            . "Expected result: %s\n"
-            . "Expected Attribute: %s\n\n"
-            . "Results:\n"
-            . "Parsing result: %s\n"
-            . "Attribute: %s\n"
-            . "Attribute Type: %s",
+            . "  Parser: %s\n"
+            . "  Input: %s\n"
+            . "  Min digits: %d\n"
+            . "  Max digits: %d\n"
+            . "  Expected value: %s\n"
+            . "  Attribute type: %s\n"
+            . "  Expected result: %s\n"
+            . "  Expected Attribute: %s\n\n"
+            . "  Results:\n"
+            . "  Parsing result: %s\n"
+            . "  Attribute: %s\n"
+            . "  Attribute Type: %s",
+            $parser,
             $input,
-            $policy,
+            $minDigits,
+            $maxDigits,
             var_export($expectedValue, true),
             $attributeType,
             var_export($expectedResult, true),
@@ -66,16 +76,17 @@ class IntParserTest extends TestCase
 
     /** @dataProvider intParserDataProvider */
     public function testIntParser(
-        $policy,
+        $parser,
         $input,
         $expectedValue,
         $expectedResult,
         $attributeType,
         $expectedAttribute,
-        $skip
+        $skip,
+        $minDigits = 1,
+        $maxDigits = -1
     ) {
-
-        $this->testbed->setPolicy(new $policy());
+        $this->testbed->setParser($this->pm->build($parser, [ $minDigits, $maxDigits]));
         if ($attributeType === 'null') {
             $attributeType = 'NULL';
         }
@@ -90,7 +101,7 @@ class IntParserTest extends TestCase
             $skipper,
             $expectedAttribute,
             $expectedResult,
-            $policy
+            $parser
         );
         $this->assertSame(
             $expectedResult,
@@ -101,12 +112,14 @@ class IntParserTest extends TestCase
                 . '(' . var_export($expectedResult, true). ")\n\n%s\n",
                 $this->getParserResult(
                     $input,
+                    $minDigits,
+                    $maxDigits,
                     $expectedValue,
                     $attributeType,
                     $expectedResult,
                     $expectedAttribute,
                     $skip,
-                    $policy,
+                    $parser,
                     $result
                 )
             )
@@ -114,7 +127,7 @@ class IntParserTest extends TestCase
 
         if ($result['result']) {
             if ($attributeType === null) {
-                $attributeType = 'boolean';
+                $attributeType = 'integer';
             }
             $this->assertSame(
                 $attributeType,
@@ -134,12 +147,14 @@ class IntParserTest extends TestCase
                         "Expected attribute does not match received attribute.\n\n%s",
                         $this->getParserResult(
                             $input,
+                            $minDigits,
+                            $maxDigits,
                             $expectedValue,
                             $attributeType,
                             $expectedResult,
                             $expectedAttribute,
                             $skip,
-                            $policy,
+                            $parser,
                             $result
                         )
                     )
@@ -152,11 +167,15 @@ class IntParserTest extends TestCase
     {
         $this->pm = new ParserManager();
         $this->testbed = new TestBed();
-        $this->testbed->setParser($this->pm->get(IntParser::class));
     }
 
-    protected function getTypedAttributes(int $i)
+    protected function getTypedAttributes(int $i = null)
     {
+        // if test should ignore the returned attribute value
+        // consider only the 'unused' case
+        if ($i === null) {
+            return ['unused' => 'unused'];
+        }
         return [
             'boolean' => (bool) $i,
             'integer' => $i,
@@ -173,12 +192,12 @@ class IntParserTest extends TestCase
         $scenarios = [
             [
                 // policies for which this scenario applies
-                'policies' => [
-                    DecimalIntPolicy::class,
-                    DecimalUIntPolicy::class,
-                    HexIntPolicy::class,
-                    OctIntPolicy::class,
-                    BinaryIntPolicy::class,
+                'parsers' => [
+                    IntParser::class,
+                    UIntParser::class,
+                    BinaryParser::class,
+                    HexParser::class,
+                    OctParser::class,
                 ],
                 // strings to parse in this scenario
                 'input' => [
@@ -197,9 +216,9 @@ class IntParserTest extends TestCase
                 'expectedResult' => false,
             ],
             [
-                'policies' => [
-                    DecimalIntPolicy::class,
-                    DecimalUIntPolicy::class,
+                'parsers' => [
+                    IntParser::class,
+                    UIntParser::class,
                 ],
                 'input' => [
                     '+123',
@@ -218,9 +237,9 @@ class IntParserTest extends TestCase
                 'expectedAttribute' => 123,
             ],
             [
-                'policies' => [
-                    DecimalIntPolicy::class,
-                    DecimalUIntPolicy::class,
+                'parsers' => [
+                    IntParser::class,
+                    UIntParser::class,
                 ],
                 'input' => [
                     '+12 3',
@@ -234,8 +253,8 @@ class IntParserTest extends TestCase
                 'expectedAttribute' => 12,
             ],
             [
-                'policies' => [
-                    DecimalIntPolicy::class,
+                'parsers' => [
+                    IntParser::class,
                 ],
                 'input' => [
                     '-12 3',
@@ -248,8 +267,8 @@ class IntParserTest extends TestCase
                 'expectedAttribute' => -12,
             ],
             [
-                'policies' => [
-                    DecimalIntPolicy::class,
+                'parsers' => [
+                    IntParser::class,
                 ],
                 'input' => [
                     '-123',
@@ -262,12 +281,12 @@ class IntParserTest extends TestCase
                 'expectedAttribute' => -123,
             ],
             [
-                'policies' => [
-                    DecimalIntPolicy::class,
-                    DecimalUIntPolicy::class,
-                    HexIntPolicy::class,
-                    OctIntPolicy::class,
-                    BinaryIntPolicy::class,
+                'parsers' => [
+                    IntParser::class,
+                    UIntParser::class,
+                    BinaryParser::class,
+                    HexParser::class,
+                    OctParser::class,
                 ],
                 'input' => [
                     '123',
@@ -282,11 +301,11 @@ class IntParserTest extends TestCase
                 'expectedResult' => false,
             ],
             [
-                'policies' => [
-                    DecimalUIntPolicy::class,
-                    HexIntPolicy::class,
-                    OctIntPolicy::class,
-                    BinaryIntPolicy::class,
+                'parsers' => [
+                    UIntParser::class,
+                    BinaryParser::class,
+                    HexParser::class,
+                    OctParser::class,
                 ],
                 'input' => [
                     '-123',
@@ -300,10 +319,10 @@ class IntParserTest extends TestCase
                 'expectedResult' => false,
             ],
             [
-                'policies' => [
-                    HexIntPolicy::class,
-                    OctIntPolicy::class,
-                    BinaryIntPolicy::class,
+                'parsers' => [
+                    BinaryParser::class,
+                    HexParser::class,
+                    OctParser::class,
                 ],
                 'input' => [
                     '+123',
@@ -317,8 +336,8 @@ class IntParserTest extends TestCase
                 'expectedResult' => false,
             ],
             [
-                'policies' => [
-                    HexIntPolicy::class,
+                'parsers' => [
+                    HexParser::class,
                 ],
                 'input' => [
                     '1a2b',
@@ -331,8 +350,8 @@ class IntParserTest extends TestCase
                 'expectedAttribute' => hexdec('1a2b')
             ],
             [
-                'policies' => [
-                    OctIntPolicy::class,
+                'parsers' => [
+                    OctParser::class,
                 ],
                 'input' => [
                     '123',
@@ -345,8 +364,8 @@ class IntParserTest extends TestCase
                 'expectedAttribute' => octdec('123')
             ],
             [
-                'policies' => [
-                    BinaryIntPolicy::class,
+                'parsers' => [
+                    BinaryParser::class,
                 ],
                 'input' => [
                     '110110110',
@@ -358,70 +377,206 @@ class IntParserTest extends TestCase
                 'expectedResult' => true,
                 'expectedAttribute' => bindec('110110110')
             ],
+            [
+                'parsers' => [
+                    UIntParser::class,
+                ],
+                'input' => [
+                    '+123',
+                    '+1234',
+                    '+12345',
+                ],
+                'expectedValue' => [
+                    null,
+                ],
+                'minDigits' => 3,
+                'maxDigits' => 5,
+                'expectedResult' => true,
+                'expectedAttribute' => null
+            ],
+            [
+                'parsers' => [
+                    UIntParser::class,
+                ],
+                'input' => [
+                    '+12',
+                    '+123456'
+                ],
+                'expectedValue' => [
+                    null,
+                ],
+                'minDigits' => 3,
+                'maxDigits' => 5,
+                'expectedResult' => false,
+            ],
+            [
+                'parsers' => [
+                    IntParser::class,
+                ],
+                'input' => [
+                    '-123',
+                    '-1234',
+                    '-12345',
+                    '+12345',
+                    '+1234',
+                    '+123'
+                ],
+                'expectedValue' => [
+                    null,
+                ],
+                'minDigits' => 3,
+                'maxDigits' => 5,
+                'expectedResult' => true,
+                'expectedAttribute' => null
+            ],
+            [
+                'parsers' => [
+                    IntParser::class,
+                ],
+                'input' => [
+                    '-12',
+                    '-123456',
+                    '+123456',
+                    '+12'
+                ],
+                'expectedValue' => [
+                    null,
+                ],
+                'minDigits' => 3,
+                'maxDigits' => 5,
+                'expectedResult' => false,
+            ],
+            [
+                'parsers' => [
+                    IntParser::class,
+                    UIntParser::class,
+                    BinaryParser::class,
+                    HexParser::class,
+                    OctParser::class,
+                ],
+                'input' => [
+                    '11011',
+                    '1101',
+                    '110',
+                ],
+                'expectedValue' => [
+                    null,
+                ],
+                'minDigits' => 3,
+                'maxDigits' => 5,
+                'expectedResult' => true,
+                'expectedAttribute' => null
+            ],
+            [
+                'parsers' => [
+                    IntParser::class,
+                    UIntParser::class,
+                    BinaryParser::class,
+                    HexParser::class,
+                    OctParser::class,
+                ],
+                'input' => [
+                    '11',
+                    '111111'
+                ],
+                'expectedValue' => [
+                    null,
+                ],
+                'minDigits' => 3,
+                'maxDigits' => 5,
+                'expectedResult' => false,
+            ],
         ];
 
         foreach ($scenarios as $scenario) {
             $inputs = $scenario['input'];
-            $policies = $scenario['policies'];
+            $parsers = $scenario['parsers'];
             $expectedValues = $scenario['expectedValue'];
             $expectedResult = $scenario['expectedResult'];
-            foreach ($policies as $policy) {
+            $minDigits = $scenario['minDigits'] ?? 1;
+            $maxDigits = $scenario['maxDigits'] ?? -1;
+            foreach ($parsers as $parser) {
                 foreach ($inputs as $input) {
                     foreach ($expectedValues as $expectedValue) {
                         if ($expectedResult === false) {
                             $tests[] = [
-                                $policy,                // integer policy to use
+                                $parser,                // integer parser to use
                                 $input,                 // string to parse
                                 $expectedValue,         // acceptable value or null for any
                                 $expectedResult,        // expected result of parse (true/false)
                                 null,                   // requested attribute type
                                 null,                   // expected typed attribute
                                 false,                  // do not use skipper
+                                $minDigits,             // minimum # of digits
+                                $maxDigits,             // maximum # of digits
                             ];
                             continue;
                         }
                         // parsing should fail if no skipper defined
                         // and skippable content is prepended to input
                         $tests[] = [
-                            $policy,                // integer policy to use
+                            $parser,                // integer parser to use
                             ' '. $input,            // string to parse
                             $expectedValue,         // acceptable value or null for any
                             false,                  // expected result of parse (true/false)
                             null,                   // requested attribute type
                             null,                   // expected typed attribute
                             false,                  // do not use skipper
+                            $minDigits,             // minimum # of digits
+                            $maxDigits,             // maximum # of digits
                         ];
+
+                        // if no attribute type is requested the returned attribute
+                        // should be of the default type of the according parser
+                        $tests[] = [
+                            $parser,                // integer parser to use
+                            $input,                 // string to parse
+                            $expectedValue,         // acceptable value or null for any
+                            $expectedResult,        // expected result of parse (true/false)
+                            null,                   // requested attribute type (null: default)
+                            null,                   // expected typed attribute
+                            false,                  // do not use skipper
+                            $minDigits,             // minimum # of digits
+                            $maxDigits,             // maximum # of digits
+                        ];
+
                         $typedAttributes = $this->getTypedAttributes($scenario['expectedAttribute']);
                         foreach ($typedAttributes as $type => $value) {
                             $tests[] = [
-                                $policy,                // integer policy to use
+                                $parser,                // integer parser to use
                                 $input,                 // string to parse
                                 $expectedValue,         // acceptable value or null for any
                                 $expectedResult,        // expected result of parse (true/false)
                                 $type,                  // requested attribute type
                                 $value,                 // expected typed attribute
                                 false,                  // do not use skipper
+                                $minDigits,             // minimum # of digits
+                                $maxDigits,             // maximum # of digits
                             ];
                             // succeeding tests should also succeed if skipper is available
                             $tests[] = [
-                                $policy,                // integer policy to use
+                                $parser,                // integer parser to use
                                 $input,                 // string to parse
                                 $expectedValue,         // acceptable value or null for any
                                 $expectedResult,        // expected result of parse (true/false)
                                 $type,                  // requested attribute type
                                 $value,                 // expected typed attribute
                                 true,                   // do use skipper
+                                $minDigits,             // minimum # of digits
+                                $maxDigits,             // maximum # of digits
                             ];
                             // succeeding tests should also succeed if skipper is available
                             // and skippable content is prepended to input
                             $tests[] = [
-                                $policy,                // integer policy to use
+                                $parser,                // integer parser to use
                                 ' '. $input,            // string to parse
                                 $expectedValue,         // acceptable value or null for any
                                 $expectedResult,        // expected result of parse (true/false)
                                 $type,                  // requested attribute type
                                 $value,                 // expected typed attribute
                                 true,                   // do use skipper
+                                $minDigits,             // minimum # of digits
+                                $maxDigits,             // maximum # of digits
                             ];
                         }
                     }

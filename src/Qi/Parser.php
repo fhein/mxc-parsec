@@ -254,11 +254,7 @@ abstract class Parser
     public function matchesExpected($expectedValue, $value, $type)
     {
         $value = $this->castTo($this->defaultType, $value);
-        if ($expectedValue === null) {
-            $this->assignTo($value, $type);
-            return true;
-        }
-        if ($this->castTo($this->defaultType, $expectedValue) === $value) {
+        if ($expectedValue === null || $expectedValue === $value) {
             $this->assignTo($value, $type);
             return true;
         }

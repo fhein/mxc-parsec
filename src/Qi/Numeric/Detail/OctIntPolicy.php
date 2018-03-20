@@ -21,7 +21,6 @@ class OctIntPolicy extends IntegerPolicy
                 // no signs
             ]
         );
-        $this->toString = 'decoct';
         $this->toDecimal = 'octdec';
     }
 }

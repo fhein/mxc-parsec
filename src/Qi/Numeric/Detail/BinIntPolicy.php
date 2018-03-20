@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi\Numeric\Detail;
 
-class BinaryIntPolicy extends IntegerPolicy
+class BinIntPolicy extends IntegerPolicy
 {
     public function __construct()
     {

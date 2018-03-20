@@ -5,10 +5,10 @@ namespace Mxc\Parsec\Qi\Numeric;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Qi\Numeric\Detail\DecimalUIntPolicy;
 
-class UIntParser extends IntParser
+class UIntParser extends IntegerParser
 {
     public function __construct(Domain $domain, $minDigits = 1, int $maxDigits = -1)
     {
-        parent::construct($domain, new DecimalUIntPolicy(), $minDigits, $maxDigits);
+        parent::__construct($domain, new DecimalUIntPolicy(), $minDigits, $maxDigits);
     }
 }

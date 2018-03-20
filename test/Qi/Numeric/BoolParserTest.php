@@ -73,8 +73,8 @@ class BoolParserTest extends TestCase
         $expectedAttribute,
         $skip
     ) {
+        $this->testbed->setParser($this->pm->build(BoolParser::class, [ new $policy() ]));
 
-        $this->testbed->setPolicy(new $policy());
         if ($attributeType === 'null') {
             $attributeType = null;
         }
@@ -151,7 +151,6 @@ class BoolParserTest extends TestCase
     {
         $this->pm = new ParserManager();
         $this->testbed = new TestBed();
-        $this->testbed->setParser($this->pm->get(BoolParser::class));
     }
 
     protected function getTypedAttributes(bool $i)
@@ -273,6 +272,7 @@ class BoolParserTest extends TestCase
                 foreach ($inputs as $input) {
                     foreach ($expectedValues as $expectedValue) {
                         if ($expectedResult === false) {
+                            // verify that parser fails
                             $tests[] = [
                                 $policy,                // boolean policy to use
                                 $input,                 // string to parse
@@ -293,6 +293,17 @@ class BoolParserTest extends TestCase
                             false,                  // expected result of parse (true/false)
                             null,                   // requested attribute type
                             null,                   // expected typed attribute
+                            false,                  // do not use skipper
+                        ];
+                        // if no attribute type is requested the returned attribute
+                        // should be of the default type of the according parser
+                        $tests[] = [
+                            $policy,                // integer policy to use
+                            $input,                 // string to parse
+                            $expectedValue,         // acceptable value or null for any
+                            $expectedResult,        // expected result of parse (true/false)
+                            null,                   // requested attribute type (null: default)
+                            $expectedAttribute,     // expected typed attribute
                             false,                  // do not use skipper
                         ];
                         $typedAttributes = $this->getTypedAttributes($scenario['expectedAttribute']);

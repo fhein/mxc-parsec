@@ -25,7 +25,6 @@ class DecimalUIntPolicy extends IntegerPolicy
                 '+' => 1
             ]
         );
-        $this->toString = 'strval';
         $this->toDecimal = 'intval';
     }
 }
