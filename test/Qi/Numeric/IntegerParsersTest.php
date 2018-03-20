@@ -19,7 +19,7 @@ use Mxc\Parsec\Qi\Numeric\BinaryParser;
 use Mxc\Parsec\Qi\Numeric\HexParser;
 use Mxc\Parsec\Qi\Numeric\OctParser;
 
-class IntParserTest extends TestCase
+class IntegerParsersTest extends TestCase
 {
     protected $testbed;
     protected $domain;
