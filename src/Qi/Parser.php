@@ -72,6 +72,15 @@ abstract class Parser
         }
     }
 
+    protected function validate($expectedValue, $value, $attributeType)
+    {
+        if ($expectedValue === null || $expectedValue === $value) {
+            $this->assignTo($value, $attributeType);
+            return true;
+        }
+        return false;
+    }
+
     abstract public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null);
 
     // you can set the input via any parser
@@ -79,28 +88,29 @@ abstract class Parser
     public function setSource($source)
     {
         $this->domain->setSource($source);
+        $this->attribute = null;
         return $this->domain->getInputIterator();
     }
 
     public function getAttribute()
     {
         if (! isset($this->typeTag)) {
-            return $this->attribute;
+            $result = $this->attribute;
+            $this->attribute = null;
+            return $result;
         }
+
         if ($this->typeTag === self::TT_UNUSED) {
+            unset($this->typeTag);
+            $this->attribute = null;
             return $this->domain->getUnusedAttribute();
         }
+
         if ($this->typeTag === self::TT_NULL) {
+            unset($this->typeTag);
+            $this->attribute = null;
             return null;
         }
-    }
-
-    public function getAttributeType()
-    {
-        if (isset($this->typeTag)) {
-            return self::TYPE_TAG[$this->typeTag];
-        }
-        return $this->getType($this->attribute);
     }
 
     // return simple class name w/o namespace
@@ -116,10 +126,12 @@ abstract class Parser
 
     protected function skipOver($iterator, $skipper = null)
     {
+        // do not skip if we are not allowed to, or have no skipper, or have UnusedSkipper
         if ((! $this->skip) || ($skipper === null) || $skipper instanceof UnusedSkipper) {
             return;
         }
 
+        // let skipper parse as long as it succeeds
         while ($iterator->valid() && $skipper->doParse($iterator, null, null, null)) {
             /***/ ;
         }
@@ -137,11 +149,6 @@ abstract class Parser
         return $result;
     }
 
-    public function getRawAttribute()
-    {
-        return $this->attribute;
-    }
-
     protected function castTo($targetType, $value)
     {
         if ($targetType === null
@@ -153,7 +160,7 @@ abstract class Parser
             return (self::NUMBER_CAST[$targetType])($value);
         }
         if ($targetType === 'array') {
-            return (is_array($value) ? $value : [ $value ]);
+            return [ $value ];
         } elseif ($targetType === 'string') {
             if (is_null($value)
                 || is_scalar($value)
@@ -216,7 +223,7 @@ abstract class Parser
         }
 
         // string type
-        // assigning means appending
+        // assigning means appending to string
         if ($attributeType === 'string') {
             // currently NULL or unused
             if (isset($this->typeTag)) {
@@ -228,7 +235,7 @@ abstract class Parser
         }
 
         // array type
-        // assigning means appending
+        // assigning means appending to array
         if ($attributeType === 'array') {
             // currently NULL or unused
             if (isset($this->typeTag)) {
@@ -238,6 +245,7 @@ abstract class Parser
             $this->attribute [] = $value;
             return;
         }
+
         // arbitrary class which is $attributeType
         // constructable
         if (class_exists($attributeType)) {
@@ -249,15 +257,5 @@ abstract class Parser
         throw new InvalidArgumentException(
             sprintf('%s: Unknown attribute type %s', $this->what(), $attributeType)
         );
-    }
-
-    public function matchesExpected($expectedValue, $value, $type)
-    {
-        $value = $this->castTo($this->defaultType, $value);
-        if ($expectedValue === null || $expectedValue === $value) {
-            $this->assignTo($value, $type);
-            return true;
-        }
-        return false;
     }
 }

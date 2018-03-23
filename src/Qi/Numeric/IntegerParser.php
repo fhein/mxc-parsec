@@ -17,17 +17,23 @@ use Mxc\Parsec\Qi\PreSkipper;
 class IntegerParser extends PreSkipper
 {
     protected $minDigits;
-    protected $maxDigits;
     protected $toDecimal;
+    protected $notmax;
 
     public function __construct(
         Domain $domain,
         IntegerPolicy $policy,
         int $minDigits = 1,
-        $maxDigits = -1
+        int $maxDigits = 0
     ) {
         if (($minDigits < 1) || (($maxDigits > 0) && ($minDigits > $maxDigits))) {
-            throw new InvalidArgumentException($this->what() . ": Invalid arguments.");
+            $msg = sprintf(
+                '%s: Invalid arguments: minDigits: %d , maxDigits: %d',
+                $this->what(),
+                $minDigits,
+                $maxDigits
+            );
+            throw new InvalidArgumentException($msg);
         }
 
         parent::__construct($domain);
@@ -35,7 +41,12 @@ class IntegerParser extends PreSkipper
         $this->defaultType = 'integer';
 
         $this->minDigits = $minDigits;
-        $this->maxDigits = $maxDigits;
+        $this->notmax = $maxDigits < $minDigits ? function ($i) {
+            return true;
+        } : function ($i) use ($maxDigits) {
+            return $i <= $maxDigits;
+        };
+
         $this->policy = $policy;
         $this->digitsParser = new CharsetParser($this->domain, $policy->getDigits());
         $this->signsParser = new CharsetParser($this->domain, $policy->getSigns());
@@ -45,69 +56,35 @@ class IntegerParser extends PreSkipper
     protected function doParse($iterator, $expectedValue = null, string $attributeType = null, $skipper = null)
     {
         $got = 0;
-        $min = $this->minDigits;
-        $max = $this->maxDigits;
-        $notmax = $max === -1 ? function ($i) {
-            return true;
-        } : function ($i) use ($max) {
-            return $i <= $max;
-        };
 
         if ($this->signsParser->doParse($iterator)) {
             $sign = $this->signsParser->getAttribute();
         }
 
-        if (! $iterator->valid()) {
-            return false;
-        }
-
-        while ($got < $min) {
+        while ($got < $this->minDigits) {
             if (! $this->digitsParser->doParse($iterator)) {
                 return false;
             }
             $got++;
         }
 
-        while ($notmax($got) && $this->digitsParser->doParse($iterator)) {
+        while (($this->notmax)($got) && $this->digitsParser->doParse($iterator)) {
             $got++;
         }
 
-        if ($notmax($got)) {
-            $str = $sign.$this->digitsParser->getAttribute();
-            $this->attribute = strval(($this->toDecimal)($str));
-            return true;
-        }
+        // @todo: integer overflow
+        //     // check overflow condition
+        //     if ($str === ($sgn.($this->toString)($this->castTo('integer', ($this->toDecimal)($str))))) {
+        //     throw new OverflowException(sprintf('Integer overflow on %s. Try \'string\' attribute type.', $str));
 
-        return false;
+        return
+            // got no more than max digits
+            ($this->notmax)($got)
+            // and got value matches expected value ($expectedValue === 0 => any value)
+            && $this->validate(
+                $expectedValue,
+                ($this->toDecimal)($sign . $this->digitsParser->getAttribute()),
+                $attributeType
+            );
     }
-
-//     // if attributetype is string or null there are no bounds
-//     // such as PHP_INT_MIN or PHP_INT_MAX
-//     if ($attributeType === 'string' || $attributeType === 'NULL') {
-//         $this->attribute = $str;
-//         //$this->assignTo($str, $attributeType);
-//         return true;
-//     }
-
-//     // strtolower ok here, because all characters are ascii
-//     if ($this->tolower) {
-//         $str = strtolower($str);
-//     }
-
-//     $sgn = $sign === '-' ? '' : $sign;
-
-//     // check overflow condition
-//     if ($str === ($sgn.($this->toString)($this->castTo('integer', ($this->toDecimal)($str))))) {
-//         //$this->assignTo(($this->toDecimal)($str), $attributeType);
-//         $this->attribute = $str;
-//         return true;
-//     }
-
-//     if ($this->noThrow) {
-//         $this->attribute = $sign.$this->digitsParser->getAttribute();
-//         //$this->assignTo($sign.$this->digitsParser->getAttribute(), 'string');
-//         return true;
-//     }
-
-//     throw new OverflowException(sprintf('Integer overflow on %s. Try \'string\' attribute type.', $str));
 }

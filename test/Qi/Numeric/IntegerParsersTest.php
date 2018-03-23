@@ -2,189 +2,57 @@
 
 namespace Mxc\Test\Parsec\Qi\Numeric;
 
-use PHPUnit\Framework\TestCase;
-use Mxc\Test\Parsec\TestBed;
-use Mxc\Parsec\Domain;
-use Mxc\Parsec\Qi\Numeric\IntParser;
-use Mxc\Parsec\Qi\Char\CharClassParser;
-use Mxc\Parsec\Service\ParserManager;
-use Mxc\Parsec\Qi\UnusedAttribute;
-use Mxc\Parsec\Qi\Numeric\Detail\DecimalIntPolicy;
-use Mxc\Parsec\Qi\Numeric\Detail\DecimalUIntPolicy;
-use Mxc\Parsec\Qi\Numeric\Detail\HexIntPolicy;
-use Mxc\Parsec\Qi\Numeric\Detail\OctIntPolicy;
-use Mxc\Parsec\Qi\Numeric\Detail\BinIntPolicy;
-use Mxc\Parsec\Qi\Numeric\UIntParser;
 use Mxc\Parsec\Qi\Numeric\BinaryParser;
 use Mxc\Parsec\Qi\Numeric\HexParser;
+use Mxc\Parsec\Qi\Numeric\IntParser;
 use Mxc\Parsec\Qi\Numeric\OctParser;
+use Mxc\Parsec\Qi\Numeric\UIntParser;
+use Mxc\Test\Parsec\ParserTestBed;
 
-class IntegerParsersTest extends TestCase
+class IntegerParsersTest extends ParserTestBed
 {
-    protected $testbed;
-    protected $domain;
-    protected $skipper;
-    protected $pm;
-
-    protected function getSkipper()
+    protected function getParserConfig(string $parser, int $minDigits, $maxDigits)
     {
-        if (! $this->skipper) {
-            $this->skipper = $this->pm->build(CharClassParser::class, [ 'space' ]);
-        }
-        return $this->skipper;
-    }
-
-    protected function getParserResult(
-        $input,
-        $minDigits,
-        $maxDigits,
-        $expectedValue,
-        $attributeType,
-        $expectedResult,
-        $expectedAttribute,
-        $skip,
-        $parser,
-        $result
-    ) {
         return sprintf(
-            "Test Set:\n"
-            . "  Parser: %s\n"
-            . "  Input: %s\n"
-            . "  Min digits: %d\n"
-            . "  Max digits: %d\n"
-            . "  Expected value: %s\n"
-            . "  Attribute type: %s\n"
-            . "  Expected result: %s\n"
-            . "  Expected Attribute: %s\n\n"
-            . "  Results:\n"
-            . "  Parsing result: %s\n"
-            . "  Attribute: %s\n"
-            . "  Attribute Type: %s",
+            "Test of %s:\n"
+            . "  Setup:\n"
+            . "    Min Digits: %d\n"
+            . "    Max Digits: %d\n",
             $parser,
-            $input,
             $minDigits,
-            $maxDigits,
-            var_export($expectedValue, true),
-            $attributeType,
-            var_export($expectedResult, true),
-            gettype($expectedAttribute) === 'object' ? get_class($expectedAttribute) : $expectedAttribute,
-            var_export($result['result'], true),
-            var_export($result['attribute'], true),
-            $result['attribute_type']
+            $maxDigits
         );
     }
 
     /** @dataProvider intParserDataProvider */
     public function testIntParser(
-        $parser,
+        $cParser,
         $input,
         $expectedValue,
         $expectedResult,
-        $attributeType,
+        $expectedAttributeType,
         $expectedAttribute,
-        $skip,
         $minDigits = 1,
         $maxDigits = -1
     ) {
-        $this->testbed->setParser($this->pm->build($parser, [ $minDigits, $maxDigits]));
-        if ($attributeType === 'null') {
-            $attributeType = 'NULL';
+        $cfg = $this->getParserConfig($cParser, $minDigits, $maxDigits);
+        $parser = $this->pm->build($cParser, [ $minDigits, $maxDigits]);
+        self::assertInstanceOf($cParser, $parser);
+
+        $expectedAttributeType = $expectedAttributeType ?? 'integer';
+        if ($expectedValue !== null) {
+            $expectedAttribute = $this->getTypedExpectedValue($expectedAttributeType, $expectedValue);
         }
-        if ($expectedAttribute === 'unused') {
-            $expectedAttribute = $this->pm->get(UnusedAttribute::class);
-        }
-        $skipper = $skip ? $this->getSkipper() : null;
-        $result = $this->testbed->test(
+
+        $this->doTest(
+            $cfg,
+            $parser,
             $input,
+            $expectedResult,
             $expectedValue,
-            $attributeType,
-            $skipper,
             $expectedAttribute,
-            $expectedResult,
-            $parser
+            $expectedAttributeType
         );
-        $this->assertSame(
-            $expectedResult,
-            $result['result'],
-            sprintf(
-                "\nResult (". var_export($result['result'], true). ')'
-                . ' is different from expected result '
-                . '(' . var_export($expectedResult, true). ")\n\n%s\n",
-                $this->getParserResult(
-                    $input,
-                    $minDigits,
-                    $maxDigits,
-                    $expectedValue,
-                    $attributeType,
-                    $expectedResult,
-                    $expectedAttribute,
-                    $skip,
-                    $parser,
-                    $result
-                )
-            )
-        );
-
-        if ($result['result']) {
-            if ($attributeType === null) {
-                $attributeType = 'integer';
-            }
-            $this->assertSame(
-                $attributeType,
-                $result['attribute_type'],
-                sprintf(
-                    "Target attribute type (%s) and received attribute type (%s) are different.",
-                    $attributeType,
-                    $result['attribute_type']
-                )
-            );
-
-            if ($expectedAttribute !== null) {
-                $this->assertSame(
-                    $expectedAttribute,
-                    $result['attribute'],
-                    sprintf(
-                        "Expected attribute does not match received attribute.\n\n%s",
-                        $this->getParserResult(
-                            $input,
-                            $minDigits,
-                            $maxDigits,
-                            $expectedValue,
-                            $attributeType,
-                            $expectedResult,
-                            $expectedAttribute,
-                            $skip,
-                            $parser,
-                            $result
-                        )
-                    )
-                );
-            }
-        }
-    }
-
-    public function setUp()
-    {
-        $this->pm = new ParserManager();
-        $this->testbed = new TestBed();
-    }
-
-    protected function getTypedAttributes(int $i = null)
-    {
-        // if test should ignore the returned attribute value
-        // consider only the 'unused' case
-        if ($i === null) {
-            return ['unused' => 'unused'];
-        }
-        return [
-            'boolean' => (bool) $i,
-            'integer' => $i,
-            'double'  => (double) $i,
-            'array'   => [ $i ],
-            'string'  => strval($i),
-            'NULL'    => null,
-            'unused'  => 'unused',
-        ];
     }
 
     public function intParserDataProvider()
@@ -494,91 +362,20 @@ class IntegerParsersTest extends TestCase
             $expectedValues = $scenario['expectedValue'];
             $expectedResult = $scenario['expectedResult'];
             $minDigits = $scenario['minDigits'] ?? 1;
-            $maxDigits = $scenario['maxDigits'] ?? -1;
+            $maxDigits = $scenario['maxDigits'] ?? 0;
             foreach ($parsers as $parser) {
                 foreach ($inputs as $input) {
                     foreach ($expectedValues as $expectedValue) {
-                        if ($expectedResult === false) {
-                            $tests[] = [
-                                $parser,                // integer parser to use
-                                $input,                 // string to parse
-                                $expectedValue,         // acceptable value or null for any
-                                $expectedResult,        // expected result of parse (true/false)
-                                null,                   // requested attribute type
-                                null,                   // expected typed attribute
-                                false,                  // do not use skipper
-                                $minDigits,             // minimum # of digits
-                                $maxDigits,             // maximum # of digits
-                            ];
-                            continue;
-                        }
-                        // parsing should fail if no skipper defined
-                        // and skippable content is prepended to input
-                        $tests[] = [
-                            $parser,                // integer parser to use
-                            ' '. $input,            // string to parse
-                            $expectedValue,         // acceptable value or null for any
-                            false,                  // expected result of parse (true/false)
-                            null,                   // requested attribute type
-                            null,                   // expected typed attribute
-                            false,                  // do not use skipper
-                            $minDigits,             // minimum # of digits
-                            $maxDigits,             // maximum # of digits
-                        ];
-
-                        // if no attribute type is requested the returned attribute
-                        // should be of the default type of the according parser
                         $tests[] = [
                             $parser,                // integer parser to use
                             $input,                 // string to parse
                             $expectedValue,         // acceptable value or null for any
                             $expectedResult,        // expected result of parse (true/false)
-                            null,                   // requested attribute type (null: default)
+                            null,                   // requested attribute type
                             null,                   // expected typed attribute
-                            false,                  // do not use skipper
                             $minDigits,             // minimum # of digits
                             $maxDigits,             // maximum # of digits
                         ];
-
-                        $typedAttributes = $this->getTypedAttributes($scenario['expectedAttribute']);
-                        foreach ($typedAttributes as $type => $value) {
-                            $tests[] = [
-                                $parser,                // integer parser to use
-                                $input,                 // string to parse
-                                $expectedValue,         // acceptable value or null for any
-                                $expectedResult,        // expected result of parse (true/false)
-                                $type,                  // requested attribute type
-                                $value,                 // expected typed attribute
-                                false,                  // do not use skipper
-                                $minDigits,             // minimum # of digits
-                                $maxDigits,             // maximum # of digits
-                            ];
-                            // succeeding tests should also succeed if skipper is available
-                            $tests[] = [
-                                $parser,                // integer parser to use
-                                $input,                 // string to parse
-                                $expectedValue,         // acceptable value or null for any
-                                $expectedResult,        // expected result of parse (true/false)
-                                $type,                  // requested attribute type
-                                $value,                 // expected typed attribute
-                                true,                   // do use skipper
-                                $minDigits,             // minimum # of digits
-                                $maxDigits,             // maximum # of digits
-                            ];
-                            // succeeding tests should also succeed if skipper is available
-                            // and skippable content is prepended to input
-                            $tests[] = [
-                                $parser,                // integer parser to use
-                                ' '. $input,            // string to parse
-                                $expectedValue,         // acceptable value or null for any
-                                $expectedResult,        // expected result of parse (true/false)
-                                $type,                  // requested attribute type
-                                $value,                 // expected typed attribute
-                                true,                   // do use skipper
-                                $minDigits,             // minimum # of digits
-                                $maxDigits,             // maximum # of digits
-                            ];
-                        }
                     }
                 }
             }

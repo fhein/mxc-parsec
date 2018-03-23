@@ -37,7 +37,7 @@ class Scanner extends CharacterClassifier
     public function parseString($string, &$attr)
     {
         $attr = '';
-        while ($string->valid()) {
+        while ($string->valid() && $this->valid()) {
             if ($this->noCase) {
                 $s = $this->tolower($string->current());
                 $c = $this->tolower($this->current());
@@ -82,6 +82,11 @@ class Scanner extends CharacterClassifier
         $this->invalidCache = $first;
     }
 
+    public function getPos()
+    {
+        return $this->first;
+    }
+
     public function setData(string $data)
     {
         $this->data = $data;
@@ -97,6 +102,7 @@ class Scanner extends CharacterClassifier
     public function try()
     {
         $this->rew[] = $this->first;
+        return $this;
     }
 
     public function done(bool $accept)

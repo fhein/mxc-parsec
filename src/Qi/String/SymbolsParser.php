@@ -18,7 +18,6 @@ class SymbolsParser extends PreSkipper
         foreach ($symbols as $symbol => $value) {
             $this->add($symbol, $value);
         }
-        //$this->defaultType = 'immediate';
     }
 
     public function add($symbol, $value)
@@ -53,9 +52,7 @@ class SymbolsParser extends PreSkipper
             $symbol .= $c;
             $iterator->next();
         };
-        if (isset($m['accept'])) {
-            $this->attribute = $this->symbols[$symbol];
-            //$this->assignTo($this->symbols[$symbol], $attributeType);
+        if (isset($m['accept']) && $this->validate($expectedValue, $this->symbols[$symbol], $attributeType)) {
             return true;
         }
         return false;

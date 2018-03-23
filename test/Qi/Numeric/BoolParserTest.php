@@ -3,7 +3,7 @@
 namespace Mxc\Test\Parsec\Qi\Numeric;
 
 use PHPUnit\Framework\TestCase;
-use Mxc\Test\Parsec\TestBed;
+use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Qi\Numeric\BoolParser;
 use Mxc\Parsec\Qi\Numeric\Detail\BoolPolicy;
@@ -13,13 +13,12 @@ use Mxc\Test\Parsec\Qi\Numeric\Assets\BackwardsBoolPolicy;
 use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Qi\UnusedAttribute;
 
-class BoolParserTest extends TestCase
+class BoolParserTest extends ParserTestBed
 {
 
     protected $testbed;
     protected $domain;
     protected $skipper;
-    protected $pm;
 
     protected function getSkipper()
     {
@@ -73,7 +72,7 @@ class BoolParserTest extends TestCase
         $expectedAttribute,
         $skip
     ) {
-        $this->testbed->setParser($this->pm->build(BoolParser::class, [ new $policy() ]));
+        $parser = $this->pm->build(BoolParser::class, [ new $policy() ]);
 
         if ($attributeType === 'null') {
             $attributeType = null;
@@ -82,14 +81,14 @@ class BoolParserTest extends TestCase
             $expectedAttribute = $this->pm->get(UnusedAttribute::class);
         }
         $skipper = $skip ? $this->getSkipper() : null;
-        $result = $this->testbed->test(
+        $result = $this->xTest(
+            $parser,
             $input,
             $expectedValue,
             $attributeType,
             $skipper,
             $expectedAttribute,
-            $expectedResult,
-            $policy
+            $expectedResult
         );
         $this->assertSame(
             $expectedResult,
@@ -145,12 +144,6 @@ class BoolParserTest extends TestCase
                 );
             }
         }
-    }
-
-    public function setUp()
-    {
-        $this->pm = new ParserManager();
-        $this->testbed = new TestBed();
     }
 
     protected function getTypedAttributes(bool $i)

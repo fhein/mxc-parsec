@@ -7,6 +7,7 @@ use Mxc\Parsec\Qi\PreSkipper;
 
 class StringParser extends PreSkipper
 {
+    protected $string;
 
     public function __construct(Domain $domain, string $string)
     {
@@ -16,7 +17,6 @@ class StringParser extends PreSkipper
 
     protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
-        $i = 0;
         $attr = null;
         $string = $this->domain->getInternalIterator($this->string);
         if ($iterator->parseString($string, $attr)) {

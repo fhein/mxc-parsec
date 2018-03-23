@@ -16,8 +16,7 @@ abstract class ParserDelegator extends Parser
         if ($this->delegate === null) {
             throw new BadMethodCallException(sprintf(self::MSG, $this->what()));
         }
-        $iterator->try();
-        return $iterator->done($this->delegate->parse($iterator, $expectedValue, $attributeType, $skipper));
+        return $iterator->try()->done($this->delegate->parse($iterator, $expectedValue, $attributeType, $skipper));
     }
 
     public function getAttribute()
@@ -26,22 +25,6 @@ abstract class ParserDelegator extends Parser
             throw new BadMethodCallException(sprintf(self::MSG, $this->what()));
         }
         return $this->delegate->getAttribute();
-    }
-
-    public function getAttributeType()
-    {
-        if ($this->delegate === null) {
-            throw new BadMethodCallException(sprintf(self::MSG, $this->what()));
-        }
-        return $this->delegate->getAttributeType();
-    }
-
-    public function getRawAttribute()
-    {
-        if ($this->delegate === null) {
-            throw new BadMethodCallException(sprintf(self::MSG, $this->what()));
-        }
-        return $this->delegate->getRawAttribute();
     }
 
     public function what()
