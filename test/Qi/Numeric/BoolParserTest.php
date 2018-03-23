@@ -2,7 +2,6 @@
 
 namespace Mxc\Test\Parsec\Qi\Numeric;
 
-use PHPUnit\Framework\TestCase;
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Qi\Numeric\BoolParser;
@@ -10,8 +9,7 @@ use Mxc\Parsec\Qi\Numeric\Detail\BoolPolicy;
 use Mxc\Parsec\Qi\Char\CharClassParser;
 use Mxc\Parsec\Qi\Numeric\Detail\NoCaseBoolPolicy;
 use Mxc\Test\Parsec\Qi\Numeric\Assets\BackwardsBoolPolicy;
-use Mxc\Parsec\Service\ParserManager;
-use Mxc\Parsec\Qi\UnusedAttribute;
+use Mxc\Parsec\Qi\Unused;
 
 class BoolParserTest extends ParserTestBed
 {
@@ -78,7 +76,7 @@ class BoolParserTest extends ParserTestBed
             $attributeType = null;
         }
         if ($expectedAttribute === 'unused') {
-            $expectedAttribute = $this->pm->get(UnusedAttribute::class);
+            $expectedAttribute = $this->pm->get(Unused::class);
         }
         $skipper = $skip ? $this->getSkipper() : null;
         $result = $this->xTest(

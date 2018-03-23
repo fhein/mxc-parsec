@@ -103,7 +103,7 @@ abstract class Parser
         if ($this->typeTag === self::TT_UNUSED) {
             unset($this->typeTag);
             $this->attribute = null;
-            return $this->domain->getUnusedAttribute();
+            return $this->domain->getUnused();
         }
 
         if ($this->typeTag === self::TT_NULL) {
@@ -139,14 +139,7 @@ abstract class Parser
 
     protected function getType($value)
     {
-        $result = gettype($value);
-        if ($result === 'object') {
-            $result = get_class($value);
-            if ($result === UnusedAttribute::class) {
-                return 'unused';
-            }
-        }
-        return $result;
+        return is_object($value) ? get_class($value) : gettype($value);
     }
 
     protected function castTo($targetType, $value)

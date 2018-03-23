@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi;
 
-class UnusedAttribute
+class Unused
 {
 
 }

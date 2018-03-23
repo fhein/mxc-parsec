@@ -3,12 +3,12 @@
 namespace Mxc\Test\Parsec;
 
 use Mxc\Parsec\Qi\Parser;
-use Mxc\Parsec\Qi\UnusedAttribute;
 use Mxc\Parsec\Qi\Char\CharClassParser;
 use Mxc\Parsec\Qi\PreSkipper;
 use PHPUnit\Framework\TestCase;
 use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Exception\UnknownCastException;
+use Mxc\Parsec\Qi\Unused;
 
 /**
  * Base class of all parser tests.
@@ -45,14 +45,7 @@ class ParserTestBed extends TestCase
      */
     protected function getType($value)
     {
-        $result = gettype($value);
-        if ($result === 'object') {
-            $result = get_class($value);
-            if ($result === UnusedAttribute::class) {
-                return 'unused';
-            }
-        }
-        return $result;
+        return is_object($value) ? get_class($value) : gettype($value);
     }
 
     /**
@@ -104,7 +97,7 @@ class ParserTestBed extends TestCase
             case 'NULL':
                 return null;
             case 'unused':
-                return $this->pm->get(UnusedAttribute::class);
+                return $this->pm->get(Unused::class);
             default:
                 if (class_exists($type)) {
                     return new $type($value);

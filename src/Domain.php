@@ -4,7 +4,7 @@ namespace Mxc\Parsec;
 
 use Mxc\Parsec\Encoding\CharacterClassifier;
 use Mxc\Parsec\Encoding\Utf8Decoder;
-use Mxc\Parsec\Qi\UnusedAttribute;
+use Mxc\Parsec\Qi\Unused;
 
 class Domain
 {
@@ -15,8 +15,6 @@ class Domain
     protected $characterClassifier;
     protected $inputClassifier;
 
-    protected $unusedAttribute;
-
     protected $inputIterator;
 
     protected $services;
@@ -25,17 +23,20 @@ class Domain
 
     protected $parserManager;
 
+    protected $unused;
+
     public function __construct($parserManager, $inputEncoding = 'UTF-8', $internalEncoding = 'UTF-8')
     {
         $this->inputEncoding = $inputEncoding;
         $this->internalEncoding = $internalEncoding;
         $this->inputIterator = $parserManager->get($inputEncoding);
         $this->parserManager = $parserManager;
+        $this->unused = $this->parserManager->get(Unused::class);
     }
 
-    public function getUnusedAttribute()
+    public function getUnused()
     {
-        return $this->unusedAttribute ?? $this->unusedAttribute = $this->parserManager->get(UnusedAttribute::class);
+        return $this->unused;
     }
 
     public function getCharacterClassifier()

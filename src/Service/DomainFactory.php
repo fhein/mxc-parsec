@@ -4,7 +4,6 @@ namespace Mxc\Parsec\Service;
 
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Mxc\Parsec\Domain;
-use Mxc\Parsec\Qi\UnusedAttribute;
 
 class DomainFactory implements FactoryInterface
 {

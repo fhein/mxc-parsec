@@ -58,7 +58,7 @@ use Mxc\Parsec\Qi\String\StringParser;
 use Mxc\Parsec\Qi\String\SymbolsParser;
 use Mxc\Parsec\Service\ParserFactory;
 use Zend\ServiceManager\ServiceManager;
-use Mxc\Parsec\Qi\UnusedAttribute;
+use Mxc\Parsec\Qi\Unused;
 
 class ParserManager extends ServiceManager
 {
@@ -141,7 +141,7 @@ class ParserManager extends ServiceManager
 
     protected $invokables = [
         CharacterClassifier::class  => CharacterClassifier::class,
-        UnusedAttribute::class => UnusedAttribute::class,
+        Unused::class => Unused::class,
     ];
 
     protected $aliases =
@@ -214,7 +214,7 @@ class ParserManager extends ServiceManager
 
     protected $shared =
     [
-        UnusedAttribute::class => true,
+        Unused::class => true,
         CharacterClassifier::class => true,
     ];
 
