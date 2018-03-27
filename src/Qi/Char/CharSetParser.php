@@ -7,12 +7,10 @@ use Mxc\Parsec\Exception\InvalidArgumentException;
 
 class CharSetParser extends Char
 {
-
     public function __construct(Domain $domain, $charset)
     {
         if (is_string($charset)) {
-            $iterator = $domain->getInternalIterator($charset);
-            $charset = $this->parseCharset($iterator);
+            $charset = $this->parseCharset($domain->getInternalIterator($charset));
         }
         $this->classifier = function (string $c) use ($charset) {
             return isset($charset[$c]);
@@ -21,7 +19,6 @@ class CharSetParser extends Char
 
     protected function parseCharset($iterator)
     {
-
         $cs = [];
         while ($iterator->valid()) {
             $c = $iterator->current();

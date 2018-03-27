@@ -7,10 +7,10 @@ use Mxc\Parsec\Domain;
 class LittleDWordParser extends BinParser
 {
 
-    public function __construct(Domain $domain, int $value = null)
+    public function __construct(Domain $domain)
     {
         $this->endianness = 'V';
         $this->size = 4;
-        parent::construct($domain, $value);
+        parent::__construct($domain);
     }
 }

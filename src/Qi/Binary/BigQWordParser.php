@@ -8,7 +8,7 @@ use Mxc\Parsec\Exception\NotSupported32Exception;
 class BigQWordParser extends BinParser
 {
 
-    public function __construct(Domain $domain, int $value = null)
+    public function __construct(Domain $domain)
     {
         $this->endianness = 'J';
         $this->size = 8;
@@ -17,6 +17,6 @@ class BigQWordParser extends BinParser
                 sprintf("%s not supported in 32-bit PHP builds.", $this->what())
             );
         }
-        parent::__construct($domain, $value);
+        parent::__construct($domain);
     }
 }

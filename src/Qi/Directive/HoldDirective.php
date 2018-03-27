@@ -13,6 +13,6 @@ class HoldDirective extends PassthroughDirective
             // reasons
 
             // sub parsers do not modify the outer attribute
-            // so ther is no need for a rollback
+            // so there is no need for a rollback
     }
 }

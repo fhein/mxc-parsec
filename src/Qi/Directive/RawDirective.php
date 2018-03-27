@@ -4,7 +4,6 @@ namespace Mxc\Parsec\Qi\Directive;
 
 class RawDirective extends Directive
 {
-
     protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $first = $iterator->getPos();

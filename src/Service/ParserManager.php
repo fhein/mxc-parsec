@@ -9,16 +9,22 @@ use Mxc\Parsec\Exception\InvalidArgumentException;
 use Mxc\Parsec\Qi\Auxiliary\AttrParser;
 use Mxc\Parsec\Qi\Auxiliary\EoiParser;
 use Mxc\Parsec\Qi\Auxiliary\EolParser;
-use Mxc\Parsec\Qi\Auxiliary\EpsilonParser;
+use Mxc\Parsec\Qi\Auxiliary\EpsParser;
 use Mxc\Parsec\Qi\Auxiliary\LazyParser;
+use Mxc\Parsec\Qi\Binary\BigBinDoubleParser;
+use Mxc\Parsec\Qi\Binary\BigBinFloatParser;
 use Mxc\Parsec\Qi\Binary\BigDWordParser;
 use Mxc\Parsec\Qi\Binary\BigQWordParser;
+use Mxc\Parsec\Qi\Binary\BigWordParser;
 use Mxc\Parsec\Qi\Binary\BinDoubleParser;
 use Mxc\Parsec\Qi\Binary\BinFloatParser;
 use Mxc\Parsec\Qi\Binary\ByteParser;
 use Mxc\Parsec\Qi\Binary\DWordParser;
+use Mxc\Parsec\Qi\Binary\LittleBinDoubleParser;
+use Mxc\Parsec\Qi\Binary\LittleBinFloatParser;
 use Mxc\Parsec\Qi\Binary\LittleDWordParser;
 use Mxc\Parsec\Qi\Binary\LittleQWordParser;
+use Mxc\Parsec\Qi\Binary\LittleWordParser;
 use Mxc\Parsec\Qi\Binary\QWordParser;
 use Mxc\Parsec\Qi\Binary\WordParser;
 use Mxc\Parsec\Qi\Char\CharClassParser;
@@ -56,9 +62,9 @@ use Mxc\Parsec\Qi\Operator\PlusOperator;
 use Mxc\Parsec\Qi\Operator\SequenceOperator;
 use Mxc\Parsec\Qi\String\StringParser;
 use Mxc\Parsec\Qi\String\SymbolsParser;
+use Mxc\Parsec\Qi\Unused;
 use Mxc\Parsec\Service\ParserFactory;
 use Zend\ServiceManager\ServiceManager;
-use Mxc\Parsec\Qi\Unused;
 
 class ParserManager extends ServiceManager
 {
@@ -78,65 +84,71 @@ class ParserManager extends ServiceManager
     protected $factories =
     [
         // auxiliary
-        EolParser::class            => ParserFactory::class,
-        AttrParser::class           => ParserFactory::class,
-        EoiParser::class            => ParserFactory::class,
-        EpsilonParser::class        => ParserFactory::class,
-        LazyParser::class           => ParserFactory::class,
+        EolParser::class                => ParserFactory::class,
+        AttrParser::class               => ParserFactory::class,
+        EoiParser::class                => ParserFactory::class,
+        EpsParser::class                => ParserFactory::class,
+        LazyParser::class               => ParserFactory::class,
         // binary
-        BigDWordParser::class       => ParserFactory::class,
-        BigQWordParser::class       => ParserFactory::class,
-        BinDoubleParser::class      => ParserFactory::class,
-        BinFloatParser::class       => ParserFactory::class,
-        ByteParser::class           => ParserFactory::class,
-        DWordParser::class          => ParserFactory::class,
-        LittleDWordParser::class    => ParserFactory::class,
-        LittleQWordParser::class    => ParserFactory::class,
-        QWordParser::class          => ParserFactory::class,
-        WordParser::class           => ParserFactory::class,
+        ByteParser::class               => ParserFactory::class,
+        WordParser::class               => ParserFactory::class,
+        DWordParser::class              => ParserFactory::class,
+        QWordParser::class              => ParserFactory::class,
+        BigWordParser::class            => ParserFactory::class,
+        BigDWordParser::class           => ParserFactory::class,
+        BigQWordParser::class           => ParserFactory::class,
+        LittleWordParser::class         => ParserFactory::class,
+        LittleDWordParser::class        => ParserFactory::class,
+        LittleQWordParser::class        => ParserFactory::class,
+        BinDoubleParser::class          => ParserFactory::class,
+        BigBinDoubleParser::class       => ParserFactory::class,
+        LittleBinDoubleParser::class    => ParserFactory::class,
+        BinFloatParser::class           => ParserFactory::class,
+        BigBinFloatParser::class        => ParserFactory::class,
+        LittleBinFloatParser::class     => ParserFactory::class,
         // char
-        CharClassParser::class      => ParserFactory::class,
-        CharParser::class           => ParserFactory::class,
-        CharRangeParser::class      => ParserFactory::class,
-        CharSetParser::class        => ParserFactory::class,
+        CharClassParser::class          => ParserFactory::class,
+        CharParser::class               => ParserFactory::class,
+        CharRangeParser::class          => ParserFactory::class,
+        CharSetParser::class            => ParserFactory::class,
         // directive
-        ExpectDirective::class      => ParserFactory::class,
-        HoldDirective::class        => ParserFactory::class,
-        LexemeDirective::class      => ParserFactory::class,
-        MatchesDirective::class     => ParserFactory::class,
-        NoCaseDirective::class      => ParserFactory::class,
-        NoSkipDirective::class      => ParserFactory::class,
-        OmitDirective::class        => ParserFactory::class,
-        PassThroughDirective::class => ParserFactory::class,
-        RawDirective::class         => ParserFactory::class,
-        RepeatDirective::class      => ParserFactory::class,
-        SkipDirective::class        => ParserFactory::class,
+        ExpectDirective::class          => ParserFactory::class,
+        HoldDirective::class            => ParserFactory::class,
+        LexemeDirective::class          => ParserFactory::class,
+        MatchesDirective::class         => ParserFactory::class,
+        NoCaseDirective::class          => ParserFactory::class,
+        NoSkipDirective::class          => ParserFactory::class,
+        OmitDirective::class            => ParserFactory::class,
+        PassThroughDirective::class     => ParserFactory::class,
+        RawDirective::class             => ParserFactory::class,
+        RepeatDirective::class          => ParserFactory::class,
+        SkipDirective::class            => ParserFactory::class,
         // nonterminal
-        RuleParser::class           => ParserFactory::class,
+        RuleParser::class               => ParserFactory::class,
         // numeric
-        BinaryParser::class         => ParserFactory::class,
-        BoolParser::class           => ParserFactory::class,
-        HexParser::class            => ParserFactory::class,
-        IntParser::class            => ParserFactory::class,
-        OctParser::class            => ParserFactory::class,
-        UIntParser::class           => ParserFactory::class,
+        BinaryParser::class             => ParserFactory::class,
+        BoolParser::class               => ParserFactory::class,
+        HexParser::class                => ParserFactory::class,
+        IntParser::class                => ParserFactory::class,
+        OctParser::class                => ParserFactory::class,
+        UIntParser::class               => ParserFactory::class,
         //operator
-        AlternativeOperator::class  => ParserFactory::class,
-        AndPredicate::class         => ParserFactory::class,
-        DifferenceOperator::class   => ParserFactory::class,
-        ExpectOperator::class       => ParserFactory::class,
-        KleeneOperator::class       => ParserFactory::class,
-        ListOperator::class         => ParserFactory::class,
-        NotPredicate::class         => ParserFactory::class,
-        OptionalOperator::class     => ParserFactory::class,
-        PermutationOperator::class  => ParserFactory::class,
-        PlusOperator::class         => ParserFactory::class,
-        SequenceOperator::class     => ParserFactory::class,
+        AlternativeOperator::class      => ParserFactory::class,
+        AndPredicate::class             => ParserFactory::class,
+        DifferenceOperator::class       => ParserFactory::class,
+        ExpectOperator::class           => ParserFactory::class,
+        KleeneOperator::class           => ParserFactory::class,
+        ListOperator::class             => ParserFactory::class,
+        NotPredicate::class             => ParserFactory::class,
+        OptionalOperator::class         => ParserFactory::class,
+        PermutationOperator::class      => ParserFactory::class,
+        PlusOperator::class             => ParserFactory::class,
+        SequenceOperator::class         => ParserFactory::class,
         // string
-        StringParser::class         => ParserFactory::class,
-        SymbolsParser::class        => ParserFactory::class,
+        StringParser::class             => ParserFactory::class,
+        SymbolsParser::class            => ParserFactory::class,
         // non parsers
-        Domain::class               => DomainFactory::class,
+        Domain::class                   => DomainFactory::class,
     ];
 
     protected $invokables = [
@@ -147,63 +159,70 @@ class ParserManager extends ServiceManager
     protected $aliases =
     [
         // auxiliary
-        'eol'           => EolParser::class,
-        'attr'          => AttrParser::class,
-        'eoi'           => EoiParser::class,
-        'eps'           => EpsilonParser::class,
-        'lazy'          => LazyParser::class,
+        'eol'               => EolParser::class,
+        'attr'              => AttrParser::class,
+        'eoi'               => EoiParser::class,
+        'eps'               => EpsParser::class,
+        'lazy'              => LazyParser::class,
         // binary
-        'big_dword'     => BigDWordParser::class,
-        'big_qword'     => BigQWordParser::class,
-        'bin_double'    => BinDoubleParser::class,
-        'bin_float'     => BinFloatParser::class,
-        'byte'          => ByteParser::class,
-        'dword'         => DWordParser::class,
-        'little_dword'  => LittleDWordParser::class,
-        'little_qword'  => LittleQWordParser::class,
-        'qword'         => QWordParser::class,
-        'word'          => WordParser::class,
+        'byte'              => ByteParser::class,
+        'word'              => WordParser::class,
+        'dword'             => DWordParser::class,
+        'qword'             => QWordParser::class,
+        'big_word'          => BigWordParser::class,
+        'big_dword'         => BigDWordParser::class,
+        'big_qword'         => BigQWordParser::class,
+        'little_word'       => LittleWordParser::class,
+        'little_dword'      => LittleDWordParser::class,
+        'little_qword'      => LittleQWordParser::class,
+        'bin_double'        => BinDoubleParser::class,
+        'bin_float'         => BinFloatParser::class,
+        'big_bin_double'    => BigBinDoubleParser::class,
+        'big_bin_float'     => BigBinFloatParser::class,
+        'little_bin_double' => LittleBinDoubleParser::class,
+        'little_bin_float'  => LittleBinFloatParser::class,
+
         // char
-        'char_class'    => CharClassParser::class,
-        'char'          => CharParser::class,
-        'char_range'    => CharRangeParser::class,
-        'char_set'      => CharSetParser::class,
+        'char_class'        => CharClassParser::class,
+        'char'              => CharParser::class,
+        'char_range'        => CharRangeParser::class,
+        'char_set'          => CharSetParser::class,
         // directive
-        'expect'        => ExpectDirective::class,
-        'hold'          => HoldDirective::class,
-        'lexeme'        => LexemeDirective::class,
-        'matches'       => MatchesDirective::class,
-        'no_case'       => NoCaseDirective::class,
-        'no_skip'       => NoSkipDirective::class,
-        'omit'          => OmitDirective::class,
-        'passthrough'   => PassThroughDirective::class,
-        'raw'           => RawDirective::class,
-        'repeat'        => RepeatDirective::class,
-        'skip'          => SkipDirective::class,
+        'expect'            => ExpectDirective::class,
+        'hold'              => HoldDirective::class,
+        'lexeme'            => LexemeDirective::class,
+        'matches'           => MatchesDirective::class,
+        'no_case'           => NoCaseDirective::class,
+        'no_skip'           => NoSkipDirective::class,
+        'omit'              => OmitDirective::class,
+        'passthrough'       => PassThroughDirective::class,
+        'raw'               => RawDirective::class,
+        'repeat'            => RepeatDirective::class,
+        'skip'              => SkipDirective::class,
         // nonterminal
-        'rule'          => RuleParser::class,
+        'rule'              => RuleParser::class,
         // numeric
-        'binary'        => BinaryParser::class,
-        'bool'          => BoolParser::class,
-        'hex'           => HexParser::class,
-        'int'           => IntParser::class,
-        'oct'           => OctParser::class,
-        'uint'          => UIntParser::class,
+        'binary'            => BinaryParser::class,
+        'bool'              => BoolParser::class,
+        'hex'               => HexParser::class,
+        'int'               => IntParser::class,
+        'oct'               => OctParser::class,
+        'uint'              => UIntParser::class,
         //operator
-        '|'             => AlternativeOperator::class,
-        '&'             => AndPredicate::class,
-        '-'             => DifferenceOperator::class,
-        '>'             => ExpectOperator::class,
-        '*'             => KleeneOperator::class,
-        '%'             => ListOperator::class,
-        '!'             => NotPredicate::class,
-        '-1'            => OptionalOperator::class,
-        '^'             => PermutationOperator::class,
-        '+'             => PlusOperator::class,
-        '>>'            => SequenceOperator::class,
+        '|'                 => AlternativeOperator::class,
+        '&'                 => AndPredicate::class,
+        '-'                 => DifferenceOperator::class,
+        '>'                 => ExpectOperator::class,
+        '*'                 => KleeneOperator::class,
+        '%'                 => ListOperator::class,
+        '!'                 => NotPredicate::class,
+        '-1'                => OptionalOperator::class,
+        '^'                 => PermutationOperator::class,
+        '+'                 => PlusOperator::class,
+        '>>'                => SequenceOperator::class,
         // string
-        'string'        => StringParser::class,
-        'symbols'       => SymbolsParser::class,
+        'string'            => StringParser::class,
+        'symbols'           => SymbolsParser::class,
     ];
 
     protected $abstractFactories = [
@@ -237,7 +256,5 @@ class ParserManager extends ServiceManager
 
         $this->services['input_encoding'] = $this->get($config['input_encoding']);
         $this->services['internal_encoding'] = $this->get($config['internal_encoding']);
-//         $this->services['input_encoding'] = $this->get($inputEncoding);
-//         $this->services['internal_encoding'] = $this->get($internalEncoding);
     }
 }

@@ -4,23 +4,23 @@ namespace Mxc\Parsec\Encoding;
 
 class CharacterClassifier
 {
-        /**
-         * Test characters for specified conditions (using \IntlChar)
-         *
-         * @method isvalid
-         * @method isalnum
-         * @method isalpha
-         * @method isdigit
-         * @method isxdigit
-         * @method isupper
-         * @method islower
-         * @method isspace
-         * @method isblank
-         * @method isprint
-         * @method isgraph
-         * @method ispunct
-         * @method iscntrl
-         */
+    /**
+     * Test characters for specified conditions (using \IntlChar)
+     *
+     * @method isvalid
+     * @method isalnum
+     * @method isalpha
+     * @method isdigit
+     * @method isxdigit
+     * @method isupper
+     * @method islower
+     * @method isspace
+     * @method isblank
+     * @method isprint
+     * @method isgraph
+     * @method ispunct
+     * @method iscntrl
+     */
     public function isvalid($codepoint)
     {
         return (null != \IntlChar::chr($codepoint));
@@ -86,14 +86,14 @@ class CharacterClassifier
         return \IntlChar::isblank($codepoint);
     }
 
-        /**
-         * Simple character conversions
-         *
-         * @method tolower
-         * @method toupper
-         * @method toUcs4
-         * @method fromUcs4
-         */
+    /**
+     * Simple character conversions
+     *
+     * @method tolower
+     * @method toupper
+     * @method toUcs4
+     * @method fromUcs4
+     */
     public function toUcs4(int $codepoint)
     {
         return $this->isvalid($codepoint) ? $codepoint : null;

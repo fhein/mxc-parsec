@@ -82,9 +82,9 @@ class Scanner extends CharacterClassifier
         $this->invalidCache = $first;
     }
 
-    public function getPos()
+    public function getInputSize()
     {
-        return $this->first;
+        return $this->last - $this->first;
     }
 
     public function setData(string $data)

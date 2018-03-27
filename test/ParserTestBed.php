@@ -132,8 +132,8 @@ class ParserTestBed extends TestCase
         $input,
         bool $expectedResult,
         $expectedValue = null,
-        string $expectedAttributeType = null,
         $expectedAttribute = null,
+        string $expectedAttributeType = null,
         Parser $skipper = null
     ) {
         $iterator = $parser->setSource($input);
@@ -153,14 +153,14 @@ class ParserTestBed extends TestCase
                     $expectedAttribute,
                     $result,
                     $skipper,
-                    $iterator->getPos()
+                    $iterator->key()
                 ),
                 var_export($result, true),
                 var_export($expectedResult, true)
             )
         );
+        $attribute = $parser->getAttribute();
         if ($expectedResult === true && $expectedValue !== null) {
-            $attribute = $parser->getAttribute();
             $attributeType = $this->getType($attribute);
             if ($expectedAttributeType !== null) {
                 self::assertSame(
@@ -177,7 +177,7 @@ class ParserTestBed extends TestCase
                             $expectedAttribute,
                             $result,
                             $skipper,
-                            $iterator->getPos(),
+                            $iterator->key(),
                             $attribute,
                             $attributeType
                         ),
@@ -201,7 +201,7 @@ class ParserTestBed extends TestCase
                         $expectedAttribute,
                         $result,
                         $skipper,
-                        $iterator->getPos(),
+                        $iterator->key(),
                         $attribute,
                         $attributeType
                     ),
@@ -250,8 +250,8 @@ class ParserTestBed extends TestCase
             $input,
             $expectedResult,
             $expectedValue,
-            $expectedAttributeType,
-            $expectedAttribute
+            $expectedAttribute,
+            $expectedAttributeType
         );
 
         // if the parser does not require pre-skipping
@@ -268,8 +268,8 @@ class ParserTestBed extends TestCase
             $input,
             $expectedResult,
             $expectedValue,
-            $expectedAttributeType,
             $expectedAttribute,
+            $expectedAttributeType,
             $this->getSkipper()
         );
 
@@ -281,8 +281,8 @@ class ParserTestBed extends TestCase
             ' ' . $input,
             $expectedResult,
             $expectedValue,
-            $expectedAttributeType,
             $expectedAttribute,
+            $expectedAttributeType,
             $this->getSkipper()
         );
 

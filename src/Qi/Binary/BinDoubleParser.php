@@ -7,10 +7,10 @@ use Mxc\Parsec\Domain;
 class BinDoubleParser extends BinParser
 {
 
-    public function __construct(Domain $domain, int $value = null)
+    public function __construct(Domain $domain)
     {
         $this->endianness = 'd';
         $this->size = 8;
-        parent::__construct($domain, $value);
+        parent::__construct($domain);
     }
 }

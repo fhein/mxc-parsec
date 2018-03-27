@@ -10,6 +10,7 @@ class AttrParser extends PrimitiveParser
 
     public function __construct(Domain $domain, $attribute)
     {
+        parent::__construct($domain);
         $this->attribute = $attribute;
     }
 
@@ -20,6 +21,7 @@ class AttrParser extends PrimitiveParser
 
     protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
+        $this->assignTo($expectedValue, $attributeType);
         return true;
     }
 }

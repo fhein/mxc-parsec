@@ -10,33 +10,29 @@ abstract class Parser
 {
 
     const TT_UNUSED     = 0x0001;
-    const TT_NULL       = 0x0002;
-    const TT_BOOLEAN    = 0x0004;
-    const TT_INGEGER    = 0x0008;
-    const TT_FLOAT      = 0x0010;
-    const TT_DOUBLE     = 0x0020;
-    const TT_STRING     = 0x0040;
-    const TT_ARRAY      = 0x0080;
-    const TT_OBJECT     = 0x0100;
-    const TT_UNKNOWN    = 0x0200;
-    const TT_DEFAULT    = 0x0400;
-    const TT_RESOURCE   = 0x0800;   // just to be complete, not used
+    const TT_BOOLEAN    = 0x0002;
+    const TT_INGEGER    = 0x0004;
+    const TT_FLOAT      = 0x0008;
+    const TT_DOUBLE     = 0x0010;
+    const TT_STRING     = 0x0020;
+    const TT_ARRAY      = 0x0040;
+    const TT_OBJECT     = 0x0080;
+    const TT_UNKNOWN    = 0x0100;
+    const TT_DEFAULT    = 0x0200;
+    const TT_RESOURCE   = 0x0400;   // just to be complete, not used
 
     const TYPE_TAG =
     [
         self::TT_UNUSED => 'unused',
-        self::TT_NULL   => 'NULL',
     ];
 
     const NO_CAST =
     [
         'unused' => 1,
-        'NULL'   => 1,
     ];
 
     const TYPES = [
         'unused'        => self::TT_UNUSED,
-        'NULL'          => self::TT_NULL,
         'boolean'       => self::TT_BOOLEAN,
         'integer'       => self::TT_INGEGER,
         'float'         => self::TT_FLOAT,
@@ -44,7 +40,7 @@ abstract class Parser
         'string'        => self::TT_STRING,
         'array'         => self::TT_ARRAY,
         'object'        => self::TT_OBJECT,
-        'unknown type'  => self::TT_UNKNOWN,
+        'unknown'       => self::TT_UNKNOWN,
         'default'       => self::TT_DEFAULT,
     ];
 
@@ -104,12 +100,6 @@ abstract class Parser
             unset($this->typeTag);
             $this->attribute = null;
             return $this->domain->getUnused();
-        }
-
-        if ($this->typeTag === self::TT_NULL) {
-            unset($this->typeTag);
-            $this->attribute = null;
-            return null;
         }
     }
 
@@ -201,13 +191,6 @@ abstract class Parser
             return;
         }
 
-        // NULL type
-        if ($attributeType === 'NULL') {
-            $this->typeTag = self::TT_NULL;
-            $this->attribute = $value;
-            return;
-        }
-
         // unused type
         if ($attributeType === 'unused') {
             $this->typeTag = self::TT_UNUSED;
@@ -242,7 +225,7 @@ abstract class Parser
         // arbitrary class which is $attributeType
         // constructable
         if (class_exists($attributeType)) {
-            $this->attribute = new $attributeType($this->attribute);
+            $this->attribute = new $attributeType($value);
             unset($this->typeTag);
             return;
         }

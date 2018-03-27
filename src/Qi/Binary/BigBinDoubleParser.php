@@ -4,13 +4,13 @@ namespace Mxc\Parsec\Qi\Binary;
 
 use Mxc\Parsec\Domain;
 
-class BinFloatParser extends BinParser
+class BigBinDoubleParser extends BinParser
 {
 
     public function __construct(Domain $domain)
     {
-        $this->endianness = 'f';
-        $this->size = 4;
+        $this->endianness = 'E';
+        $this->size = 8;
         parent::__construct($domain);
     }
 }
