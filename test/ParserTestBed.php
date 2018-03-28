@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Exception\UnknownCastException;
 use Mxc\Parsec\Qi\Unused;
+use Mxc\Parsec\Qi\Char\Char;
 
 /**
  * Base class of all parser tests.
@@ -160,9 +161,9 @@ class ParserTestBed extends TestCase
             )
         );
         $attribute = $parser->getAttribute();
-        if ($expectedResult === true && $expectedValue !== null) {
-            $attributeType = $this->getType($attribute);
+        if ($result === true) {
             if ($expectedAttributeType !== null) {
+                $attributeType = $this->getType($attribute);
                 self::assertSame(
                     $expectedAttributeType,
                     $attributeType,
@@ -186,29 +187,54 @@ class ParserTestBed extends TestCase
                     )
                 );
             }
-
-            self::assertSame(
-                $this->getTypedExpectedValue($expectedAttributeType, $expectedValue),
-                $attribute,
-                sprintf(
-                    "%s\n%s\n\n  Attribute mismatch: %s. Expected: %s\n",
-                    $cfg,
-                    $this->getTestDescription(
-                        $input,
-                        $expectedValue,
-                        $expectedAttributeType,
-                        $expectedResult,
-                        $expectedAttribute,
-                        $result,
-                        $skipper,
-                        $iterator->key(),
-                        $attribute,
-                        $attributeType
-                    ),
-                    var_export($attribute, true),
-                    var_export($expectedAttribute, true)
-                )
-            );
+            if ($expectedAttribute !== null) {
+                self::assertSame(
+                    $expectedAttribute,
+                    $attribute,
+                    sprintf(
+                        "%s\n%s\n\n  Unexpected attribute: %s. Expected: %s\n",
+                        $cfg,
+                        $this->getTestDescription(
+                            $input,
+                            $expectedValue,
+                            $expectedAttributeType,
+                            $expectedResult,
+                            $expectedAttribute,
+                            $result,
+                            $skipper,
+                            $iterator->key(),
+                            $attribute,
+                            $attributeType
+                        ),
+                        $attributeType,
+                        $expectedAttributeType
+                    )
+                );
+            }
+            if ($expectedValue !== null) {
+                self::assertSame(
+                    $this->getTypedExpectedValue($expectedAttributeType, $expectedValue),
+                    $attribute,
+                    sprintf(
+                        "%s\n%s\n\n  Attribute mismatch: %s. Expected: %s\n",
+                        $cfg,
+                        $this->getTestDescription(
+                            $input,
+                            $expectedValue,
+                            $expectedAttributeType,
+                            $expectedResult,
+                            $expectedAttribute,
+                            $result,
+                            $skipper,
+                            $iterator->key(),
+                            $attribute,
+                            $attributeType
+                        ),
+                        var_export($attribute, true),
+                        var_export($expectedAttribute, true)
+                    )
+                );
+            }
         }
     }
 
@@ -260,6 +286,7 @@ class ParserTestBed extends TestCase
             return;
         }
 
+
         // succeeding tests should also succeed on same input
         // if skipper is supplied
         $this->parserTest(
@@ -285,6 +312,12 @@ class ParserTestBed extends TestCase
             $expectedAttributeType,
             $this->getSkipper()
         );
+
+        // if the parser does not require pre-skipping
+        // we are done here
+        if ($parser instanceof Char) {
+            return;
+        }
 
         // parsing should fail if no skipper defined
         // and skippable content is prepended to input
@@ -328,21 +361,21 @@ class ParserTestBed extends TestCase
             "  Test Set:\n"
             . "    Input: %s\n"
             . "    Skipper: %s\n"
-            . "    Expected value: %s\n"
-            . "    Expected attribute type: %s\n"
-            . "    Expected result: %s\n"
+            . "    Expected Value: %s\n"
+            . "    Expected Result: %s\n"
             . "    Expected Attribute: %s\n\n"
+            . "    Expected Attribute Type: %s\n"
             . "  Results:\n"
-            . "    Parsing result: %s\n"
+            . "    Parser Result: %s\n"
             . "    Attribute: %s\n"
-            . "    Attribute type: %s\n"
-            . "    Iterator position: %d",
+            . "    Attribute Type: %s\n"
+            . "    Iterator Position: %d",
             var_export($input, true),
             is_object($skipper) ? get_class($skipper) : 'none',
             var_export($expectedValue, true),
-            $expectedAttributeType,
             var_export($expectedResult, true),
             gettype($expectedAttribute) === 'object' ? get_class($expectedAttribute) : $expectedAttribute,
+            $expectedAttributeType,
             var_export($result, true),
             is_string($attribute) ? $attribute : var_export($attribute, true),
             $attributeType,

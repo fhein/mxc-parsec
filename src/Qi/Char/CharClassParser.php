@@ -7,7 +7,7 @@ use Mxc\Parsec\Exception\InvalidArgumentException;
 
 class CharClassParser extends Char
 {
-    public function __construct(Domain $domain, string $class)
+    public function __construct(Domain $domain, string $class, bool $negate = false)
     {
         $classifier = $domain->getCharacterClassifier();
         $method = 'is' . $class;

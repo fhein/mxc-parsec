@@ -7,7 +7,8 @@ use Mxc\Parsec\Exception\InvalidArgumentException;
 class Utf8Decoder extends Scanner /*implements DecoderInterface */
 {
     /**
-     * Check if the substring of beginning at $pos
+     * Check if a (sub)string is valid UTF-8
+     *
      * @param string $s
      * @param int $pos
      * @param int $last
@@ -30,7 +31,6 @@ class Utf8Decoder extends Scanner /*implements DecoderInterface */
      * evaluation buffer and advances buffer position. If the evaluation buffer
      * represents a valid codepoint, the size of the codepoint in bytes gets
      * stored and true gets returned. Otherwise returns false.
-     *
      *
      * @param string $t     current codepoint evaluation buffer reference
      * @param unknown $f    current iterator position

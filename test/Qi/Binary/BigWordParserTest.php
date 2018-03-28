@@ -37,7 +37,8 @@ class BigWordParserTest extends ParserTestBed
         return [
             [ '', false ],
             [ "\x01", false],
-            [ "\x01\x02", true, 258]
+            [ "\x01\x02", true, 258],
+            [ "\x01\x02", true, null, 258],
         ];
     }
 }

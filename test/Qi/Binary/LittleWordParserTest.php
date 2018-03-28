@@ -37,7 +37,8 @@ class LittleWordParserTest extends ParserTestBed
         return [
             [ '', false ],
             [ "\x01", false ],
-            [ "\x01\x02", true, unpack('v', "\x01\x02")[1] ]
+            [ "\x01\x02", true, unpack('v', "\x01\x02")[1] ],
+            [ "\x01\x02", true, null, unpack('v', "\x01\x02")[1] ],
         ];
     }
 }

@@ -11,7 +11,7 @@ class BinParser extends PrimitiveParser
 
     protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
-        if ($iterator->valid() && $iterator->getInputSize() >= $this->size) {
+        if ($iterator->getInputSize() >= $this->size) {
             $iterator->setBinary(true, $this->size);
             $value = unpack($this->endianness, $iterator->current())[1];
             if ($expectedValue === null || ($expectedValue === $value)) {

@@ -37,7 +37,8 @@ class WordParserTest extends ParserTestBed
         return [
             [ '', false ],
             [ "\x01", false ],
-            [ "\x01\x02", true, unpack('S', "\x01\x02")[1] ]
+            [ "\x01\x02", true, unpack('S', "\x01\x02")[1] ],
+            [ "\x01\x02", true, null, unpack('S', "\x01\x02")[1] ],
         ];
     }
 }

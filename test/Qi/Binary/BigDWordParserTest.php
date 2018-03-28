@@ -40,6 +40,7 @@ class BigDWordParserTest extends ParserTestBed
             [ "\x01\x02", false ],
             [ "\x01\x02\x03", false ],
             [ "\x01\x02\x03\x04", true, unpack("N", "\x01\x02\x03\x04")[1] ],
+            [ "\x01\x02\x03\x04", true, null, unpack("N", "\x01\x02\x03\x04")[1] ],
         ];
     }
 }

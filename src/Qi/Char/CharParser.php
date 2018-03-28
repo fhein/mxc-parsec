@@ -3,20 +3,16 @@
 namespace Mxc\Parsec\Qi\Char;
 
 use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\PreSkipper;
 
-class CharParser extends Char
+class CharParser extends PreSkipper
 {
-
-    public function __construct(Domain $domain, string $c = null, bool $negate = false)
+    public function __construct(Domain $domain, bool $negate = false)
     {
-        $cc = $domain->getCharacterClassifier();
-        $this->classifier = ($c === null)
-            ? function (string $c) use ($negate) {
-                return ! $negate;
-            }
-            : function (string $ch) use ($c, $cc, $negate) {
-                $res = ($cc->ord($ch) === ($cc->ord($c)));
-                return $negate ? ! $res : $res;
-            };
+        parent::__construct($domain, $negate);
+
+        $this->classifier = function (string $c) {
+            return true;
+        };
     }
 }
