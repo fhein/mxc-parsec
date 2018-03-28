@@ -13,23 +13,35 @@ class CharRangeParser extends Char
 
         $cc = $domain->getCharacterClassifier();
 
+        // @todo: CodePage support for min and max
+
         if (! ($cc->isvalid($min) && $cc->isValid($max))) {
-            throw new InvalidArgumentException('Invalid character range.');
+            throw new InvalidArgumentException(
+                sprintf(
+                    '%s: Invalid character range.',
+                    $this->what()
+                )
+            );
         }
 
         if ($cc->ord($min) > $cc->ord($max)) {
-            $x = $min;
-            $min = $max;
-            $max = $x;
+            throw new InvalidArgumentException(
+                sprintf(
+                    '%s: Ordinal of min (%s) is bigger than ordinal of max (%s)',
+                    $this->what(),
+                    $min,
+                    $max
+                )
+            );
         }
 
         $this->classifier = ($min === $max) ?
-        function (string $ch) use ($min, $cc) {
-            return ($cc->ord($ch) === ($cc->ord($min)));
-        } :
-        function (string $ch) use ($min, $max, $cc, $negate) {
-            $ord = $cc->ord($ch);
-            return (($ord >= $cc->ord($min)) && ($ord <= $cc->ord($max)));
-        };
+            function (string $ch) use ($min, $cc) {
+                return ($cc->ord($ch) === ($cc->ord($min)));
+            } :
+            function (string $ch) use ($min, $max, $cc, $negate) {
+                $ord = $cc->ord($ch);
+                return (($ord >= $cc->ord($min)) && ($ord <= $cc->ord($max)));
+            };
     }
 }

@@ -10,6 +10,7 @@ class CharSetParser extends Char
     public function __construct(Domain $domain, $charset, bool $negate = false)
     {
         parent::__construct($domain, $negate);
+
         if (is_string($charset)) {
             $charset = $this->parseCharset($domain->getInternalIterator($charset));
         }

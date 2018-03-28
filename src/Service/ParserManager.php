@@ -111,6 +111,11 @@ class ParserManager extends ServiceManager
         CharParser::class               => ParserFactory::class,
         CharRangeParser::class          => ParserFactory::class,
         CharSetParser::class            => ParserFactory::class,
+        '~' . CharClassParser::class    => NegatedCharParserFactory::class,
+        '~' . CharParser::class         => NegatedCharParserFactory::class,
+        '~' . CharRangeParser::class    => NegatedCharParserFactory::class,
+        '~' . CharSetParser::class      => NegatedCharParserFactory::class,
+
         // directive
         ExpectDirective::class          => ParserFactory::class,
         HoldDirective::class            => ParserFactory::class,
@@ -187,6 +192,10 @@ class ParserManager extends ServiceManager
         'char'              => CharParser::class,
         'char_range'        => CharRangeParser::class,
         'char_set'          => CharSetParser::class,
+        '~char_class'       => '~' . CharClassParser::class,
+        '~char'             => '~' . CharParser::class,
+        '~char_range'       => '~' . CharRangeParser::class,
+        '~char_set'         => '~' . CharSetParser::class,
         // directive
         'expect'            => ExpectDirective::class,
         'hold'              => HoldDirective::class,
@@ -235,6 +244,7 @@ class ParserManager extends ServiceManager
     [
         Unused::class => true,
         CharacterClassifier::class => true,
+        Domain::class => true,
     ];
 
     public function __construct(array $options = [])
