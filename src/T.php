@@ -2,17 +2,40 @@
 
 namespace Mxc\Parsec;
 
+use IntlChar;
 use Mxc\Parsec\Service\ParserManager;
-use Mxc\Parsec\Qi\Numeric\IntParser;
-use Mxc\Parsec\Qi\Char\CharClassParser;
+use Mxc\Parsec\Encoding\CharacterClassifier;
 
 include __DIR__.'/../autoload.php';
 
 $pm = new ParserManager();
-$parser = $pm->build(IntParser::class);
-$iterator = $parser->setSource('123');
-$skipper = $pm->build(CharClassParser::class, [ 'space' ]);
 
-$result = $parser->parse($iterator, 123, 'array', $skipper);
+$cp = $pm->get(CharacterClassifier::class);
 
-print($result ? "success" : "failure");
+$charClasses =
+[
+    'alnum',
+    'alpha',
+    'digit',
+    'xdigit',
+    'cntrl',
+    'graph',
+    'lower',
+    'upper',
+    'print',
+    'punct',
+    'space',
+    'blank',
+];
+
+for ($i = 0; $i < 256; $i++) {
+    if ($cp->isvalid($i)) {
+        foreach ($charClasses as $cc) {
+            $method = 'is'.$cc;
+            if (IntlChar::$method($i)) {
+                $$cc[] = $i;
+            }
+        }
+    }
+}
+var_export($space);

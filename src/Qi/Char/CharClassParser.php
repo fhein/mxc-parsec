@@ -9,6 +9,7 @@ class CharClassParser extends Char
 {
     public function __construct(Domain $domain, string $class, bool $negate = false)
     {
+        parent::__construct($domain, $negate);
         $classifier = $domain->getCharacterClassifier();
         $method = 'is' . $class;
         if (! method_exists($classifier, $method)) {

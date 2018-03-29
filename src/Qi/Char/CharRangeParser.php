@@ -9,7 +9,7 @@ class CharRangeParser extends Char
 {
     public function __construct(Domain $domain, string $min, string $max, bool $negate = false)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $negate);
 
         $cc = $domain->getCharacterClassifier();
 
@@ -39,7 +39,7 @@ class CharRangeParser extends Char
             function (string $ch) use ($min, $cc) {
                 return ($cc->ord($ch) === ($cc->ord($min)));
             } :
-            function (string $ch) use ($min, $max, $cc, $negate) {
+            function (string $ch) use ($min, $max, $cc) {
                 $ord = $cc->ord($ch);
                 return (($ord >= $cc->ord($min)) && ($ord <= $cc->ord($max)));
             };
