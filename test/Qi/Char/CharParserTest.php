@@ -2,10 +2,8 @@
 
 namespace Mxc\Test\Parsec\Qi\Char;
 
-use IntlChar;
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Parsec\Qi\Char\CharParser;
-use Mxc\Parsec\Encoding\CharacterClassifier;
 
 class CharParserTest extends ParserTestBed
 {

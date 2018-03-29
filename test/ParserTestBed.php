@@ -10,6 +10,7 @@ use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Exception\UnknownCastException;
 use Mxc\Parsec\Qi\Unused;
 use Mxc\Parsec\Qi\Char\Char;
+use Mxc\Parsec\Qi\Directive\Directive;
 
 /**
  * Base class of all parser tests.
@@ -282,10 +283,9 @@ class ParserTestBed extends TestCase
 
         // if the parser does not require pre-skipping
         // we are done here
-        if (! $parser instanceof PreSkipper) {
+        if (! $parser instanceof PreSkipper || $parser instanceof Directive) {
             return;
         }
-
 
         // succeeding tests should also succeed on same input
         // if skipper is supplied
@@ -312,6 +312,7 @@ class ParserTestBed extends TestCase
             $expectedAttributeType,
             $this->getSkipper()
         );
+
 
         // if the parser does not require pre-skipping
         // we are done here

@@ -11,7 +11,7 @@ class ExpectDirective extends Directive
         $subject = $this->subject;
         if (! $subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
             $info = $this->what();
-            throw new ExpectationFailedException(sprintf("Expecation failed: %s, %s"), $info[0], $info[1]);
+            throw new ExpectationFailedException(sprintf("Expecation failed: %s, %s", $info[0], $info[1]));
             return false;
         }
         $this->assignTo($subject->getAttribute(), $attributeType);
