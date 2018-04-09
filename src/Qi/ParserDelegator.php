@@ -3,32 +3,44 @@
 namespace Mxc\Parsec\Qi;
 
 use Mxc\Parsec\Exception\BadMethodCallException;
+use Mxc\Parsec\Domain;
 
 abstract class ParserDelegator extends Parser
 {
+    const     MSG = '%s: subject parser not initialized.';
 
-    const     MSG = '%s: Delegate not initialized.';
+    protected $subject = null;
+    protected $exception = BadMethodCallException::class;
 
-    protected $delegate = null;
+    public function __construct(Domain $domain, Parser $subject = null)
+    {
+        parent::__construct($domain);
+        $this->subject = $subject;
+    }
+
+    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    {
+        if ($this->subject === null) {
+            throw new $this->exception(sprintf(self::MSG, $this->what()));
+        }
+        return $this->subject->parse($iterator, $expectedValue, $attributeType, $skipper);
+    }
 
     public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
     {
-        if ($this->delegate === null) {
-            throw new BadMethodCallException(sprintf(self::MSG, $this->what()));
-        }
-        return $iterator->try()->done($this->delegate->parse($iterator, $expectedValue, $attributeType, $skipper));
+        return $iterator->try()->done($this->doParse($iterator, $expectedValue, $attributeType, $skipper));
     }
 
     public function getAttribute()
     {
-        if ($this->delegate === null) {
+        if ($this->subject === null) {
             throw new BadMethodCallException(sprintf(self::MSG, $this->what()));
         }
-        return $this->delegate->getAttribute();
+        return $this->subject->getAttribute();
     }
 
     public function what()
     {
-        return $this->delegate !== null ? [ parent::what(), $this->delegate->what()] : parent::what();
+        return $this->subject !== null ? [ parent::what(), $this->subject->what()] : parent::what();
     }
 }

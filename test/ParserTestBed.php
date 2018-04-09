@@ -10,7 +10,7 @@ use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Exception\UnknownCastException;
 use Mxc\Parsec\Qi\Unused;
 use Mxc\Parsec\Qi\Char\Char;
-use Mxc\Parsec\Qi\Directive\Directive;
+use Mxc\Parsec\Qi\NaryParser;
 
 /**
  * Base class of all parser tests.
@@ -249,13 +249,13 @@ class ParserTestBed extends TestCase
      *      Verify that the parser fails, if skippable content gets prepended to input and
      *      no skipper is supplied
      *
-     * @param string $cfg                   Text describing the parser and its configuration
-     * @param Parser $parser                Parser to be tested
-     * @param Traversable $input            Parser input
-     * @param bool $expectedResult          Expected result of parse()
-     * @param mixed $expectedValue          Expected value to get parsed
-     * @param mixed $expectedAttribute      Particular value of attribute
-     * @param string $expectedAttributeType Expected type of attribute
+     * @param string $cfg                       Text describing the parser and its configuration
+     * @param Parser $parser                    Parser to be tested
+     * @param Traversable $input                Parser input
+     * @param bool $expectedResult              Expected result of parse()
+     * @param mixed $expectedValue              Expected value to get parsed
+     * @param mixed $expectedAttribute          Particular value of attribute
+     * @param string $expectedAttributeType     Expected type of attribute
      */
     protected function doTest(
         string $cfg,
@@ -283,7 +283,12 @@ class ParserTestBed extends TestCase
 
         // if the parser does not require pre-skipping
         // we are done here
-        if (! $parser instanceof PreSkipper || $parser instanceof Directive) {
+        // if the parser is an operator or a directive
+        // it is tested against mocks without input
+        // and we are done also.
+        // @todo: This has to be reworked
+        if (! $parser instanceof PreSkipper
+            || $parser instanceof NaryParser) {
             return;
         }
 

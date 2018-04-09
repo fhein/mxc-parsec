@@ -14,6 +14,6 @@ class BoolParser extends ParserDelegator
         parent::__construct($domain);
         $this->defaultType = 'boolean';
         $policy = $policy ?? new BoolPolicy();
-        $this->delegate = new SymbolsParser($this->domain, $policy->getSymbols());
+        $this->subject = new SymbolsParser($this->domain, $policy->getSymbols());
     }
 }
