@@ -8,23 +8,14 @@ class SequenceOperator extends NaryParser
 {
     protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
-        $subtype = $this->isScalar($attributeType) ? 'string' : $attributeType;
-        // @todo: Not quite sure about this one
-        if ($expectedValue) {
-            $expectedValue = $this->castTo($expectedValue, $attributeType);
-        }
         $result = true;
         $i = 0;
         foreach ($this->subject as $parser) {
-            $result &= $parser->parse($iterator, $expectedValue ? $expectedValue[$i++] : null, $subtype, $skipper);
+            $result = $result && $parser->parse($iterator, null, null, $skipper);
             if ($result === false) {
                 return false;
             }
-            $this->assignTo($parser->getAttribute(), $subtype);
-        }
-        // @todo: Not sure about this one either
-        if ($attributeType !== $subtype) {
-            $this->assignTo($this->attribute, $attributeType);
+            $this->assignTo($parser->getAttribute(), $attributeType);
         }
         return true;
     }

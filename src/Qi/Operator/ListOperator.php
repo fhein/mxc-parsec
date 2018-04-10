@@ -2,30 +2,31 @@
 
 namespace Mxc\Parsec\Qi\Operator;
 
-use Mxc\Parsec\Qi\NaryParser;
+use Mxc\Parsec\Qi\BinaryParser;
 
-class ListOperator extends NaryParser
+class ListOperator extends BinaryParser
 {
     protected $parsers;
 
     protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $lhs = $this->subject[0];
-        $rhs = $this->subject[1];
 
         if (! $lhs->parse($iterator, $expectedValue, $attributeType, $skipper)) {
             return false;
         }
         $this->attribute[] = $lhs->getAttribute();
+        $rhs = $this->subject[1];
 
         while (true) {
             $save = $iterator->key();
             if ($rhs->parse($iterator, $skipper, null)
-                && $lhs->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+                && $this->subject[1]->parse($iterator, $expectedValue, $attributeType, $skipper)) {
                     $this->assignTo($lhs->getAttribute(), $attributeType);
                     continue;
             }
             $iterator->setPos($save);
+            break;
         }
         return true;
     }

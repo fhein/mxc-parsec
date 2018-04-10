@@ -11,15 +11,10 @@ class PermutationOperator extends NaryParser
         $result = false;
         $taken = [];
         $matched = 0;
-        $count = count($this->subject);
-        $assignment = null;
         do {
             cont:
             foreach ($this->subject as $key => $parser) {
-                if (! isset($taken[$key]) && $parser->parse($iterator, $expectedValue, $attributeType, $skipper)) {
-                    if ($assignment === null) {
-                        $assignment = $this->getAssignment($attributeType);
-                    }
+                if (! isset($taken[$key]) && $parser->parse($iterator, $expectedValue, null, $skipper)) {
                     $this->assignTo($parser->getAttribute(), $attributeType);
                     $matched++;
                     $taken[$key] = true;

@@ -11,6 +11,9 @@ use Mxc\Parsec\Exception\UnknownCastException;
 use Mxc\Parsec\Qi\Unused;
 use Mxc\Parsec\Qi\Char\Char;
 use Mxc\Parsec\Qi\NaryParser;
+use Mxc\Test\Parsec\Qi\Assets\MockParserInterface;
+use Mxc\Test\Parsec\Qi\Assets\MockParserNResult;
+use Mxc\Parsec\Qi\Operator\PlusOperator;
 
 /**
  * Base class of all parser tests.
@@ -288,7 +291,10 @@ class ParserTestBed extends TestCase
         // and we are done also.
         // @todo: This has to be reworked
         if (! $parser instanceof PreSkipper
-            || $parser instanceof NaryParser) {
+//             || $parser instanceof NaryParser
+//             || $parser instanceof PlusOperator
+//             || $parser instanceof MockParserInterface
+            ) {
             return;
         }
 

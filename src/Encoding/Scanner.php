@@ -119,7 +119,7 @@ class Scanner extends CharacterClassifier
     {
         array_pop($this->rew);
         // if no further backtracking can happen
-        if (! isset($this->rew[0])) {
+        if (empty($this->rew)) {
             // reset the cache
             //print('Clearing cache. ');
             $this->invalidCache = 0;

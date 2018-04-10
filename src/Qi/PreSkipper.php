@@ -2,7 +2,12 @@
 
 namespace Mxc\Parsec\Qi;
 
-abstract class PreSkipper extends PrimitiveParser
+abstract class PreSkipper extends Parser
 {
-    protected $skip = true;
+    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    {
+        $iterator->try();
+        $this->skipOver($iterator, $skipper);
+        return $iterator->done($this->doParse($iterator, $expectedValue, $attributeType, $skipper));
+    }
 }

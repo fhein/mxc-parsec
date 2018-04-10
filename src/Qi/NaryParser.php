@@ -4,7 +4,7 @@ namespace Mxc\Parsec\Qi;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 
-abstract class NaryParser extends PreSkipper
+abstract class NaryParser extends PrimitiveParser
 {
     protected $subject;
     protected $flat;

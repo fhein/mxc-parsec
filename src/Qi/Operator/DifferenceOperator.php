@@ -2,9 +2,9 @@
 
 namespace Mxc\Parsec\Qi\Operator;
 
-use Mxc\Parsec\Qi\NaryParser;
+use Mxc\Parsec\Qi\BinaryParser;
 
-class DifferenceOperator extends NaryParser
+class DifferenceOperator extends BinaryParser
 {
     protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
@@ -13,12 +13,12 @@ class DifferenceOperator extends NaryParser
 
         $count = count($this->subject);
         for ($idx = 1; $idx < $count; $idx++) {
-            if ($this->subject[$idx]->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+            if ($this->subject[$idx]->parse($iterator, null, null, $skipper)) {
                 return false;
             }
         }
 
-        if (! $lhs->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+        if (! $lhs->parse($iterator, null, null, $skipper)) {
             return false;
         }
 

@@ -4,7 +4,7 @@ namespace Mxc\Parsec\Qi;
 
 use Mxc\Parsec\Domain;
 
-abstract class UnaryParser extends PreSkipper
+abstract class UnaryParser extends PrimitiveParser
 {
     protected $subject;
 

@@ -57,7 +57,6 @@ abstract class Parser
     protected $attribute;
     protected $typeTag = self::TT_UNUSED;
     protected $defaultType;
-    protected $skip = false;
 
     public function __construct(Domain $domain)
     {
@@ -117,7 +116,7 @@ abstract class Parser
     protected function skipOver($iterator, $skipper = null)
     {
         // do not skip if we are not allowed to, or have no skipper, or have UnusedSkipper
-        if ((! $this->skip) || ($skipper === null) || $skipper instanceof UnusedSkipper) {
+        if ($skipper === null || $skipper instanceof UnusedSkipper) {
             return;
         }
 
