@@ -65,6 +65,7 @@ use Mxc\Parsec\Qi\String\SymbolsParser;
 use Mxc\Parsec\Qi\Unused;
 use Mxc\Parsec\Service\ParserFactory;
 use Zend\ServiceManager\ServiceManager;
+use Mxc\Parsec\Qi\Numeric\UShortParser;
 
 class ParserManager extends ServiceManager
 {
@@ -124,7 +125,6 @@ class ParserManager extends ServiceManager
         NoCaseDirective::class          => ParserFactory::class,
         NoSkipDirective::class          => ParserFactory::class,
         OmitDirective::class            => ParserFactory::class,
-        PassThroughDirective::class     => ParserFactory::class,
         RawDirective::class             => ParserFactory::class,
         RepeatDirective::class          => ParserFactory::class,
         SkipDirective::class            => ParserFactory::class,
@@ -137,6 +137,7 @@ class ParserManager extends ServiceManager
         IntParser::class                => ParserFactory::class,
         OctParser::class                => ParserFactory::class,
         UIntParser::class               => ParserFactory::class,
+        UShortParser::class               => ParserFactory::class,
         //operator
         AlternativeOperator::class      => ParserFactory::class,
         AndPredicate::class             => ParserFactory::class,
@@ -204,7 +205,6 @@ class ParserManager extends ServiceManager
         'no_case'           => NoCaseDirective::class,
         'no_skip'           => NoSkipDirective::class,
         'omit'              => OmitDirective::class,
-        'passthrough'       => PassThroughDirective::class,
         'raw'               => RawDirective::class,
         'repeat'            => RepeatDirective::class,
         'skip'              => SkipDirective::class,
@@ -217,6 +217,7 @@ class ParserManager extends ServiceManager
         'int'               => IntParser::class,
         'oct'               => OctParser::class,
         'uint'              => UIntParser::class,
+        'ushort'            => UShortParser::class,
         //operator
         '|'                 => AlternativeOperator::class,
         '&'                 => AndPredicate::class,
@@ -245,6 +246,7 @@ class ParserManager extends ServiceManager
         Unused::class => true,
         CharacterClassifier::class => true,
         Domain::class => true,
+        'input_encoding' => true,
     ];
 
     public function __construct(array $options = [])

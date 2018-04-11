@@ -5,7 +5,7 @@ namespace Mxc\Parsec\Qi\Numeric;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Qi\Numeric\Detail\BinIntPolicy;
 
-class BinaryParser extends IntegerParser
+class BinaryParser extends Integer
 {
     public function __construct(Domain $domain, int $minDigits = 1, int $maxDigits = -1)
     {

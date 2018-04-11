@@ -10,30 +10,24 @@ class Char extends PreSkipper
     protected $classifier;
     protected $negate;
 
-    public function __construct(Domain $domain, bool $negate = false)
+    public function __construct(Domain $domain, bool $negate = false, $noCase = false)
     {
         $this->negate = $negate;
         $this->defaultType = 'string';
+
         parent::__construct($domain);
     }
 
     public function doParse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
     {
-        if (! $iterator->valid()) {
-            return false;
-        }
-        $c = $iterator->current();
-        if (($this->classifier)($c)) {
-            if (! $this->negate && ($expectedValue === null  || $c === $expectedValue)) {
-                $this->assignTo($c, $attributeType);
-                $iterator->next();
-                return true;
-            }
-        } else {
-            if ($this->negate && ($expectedValue === null || $expectedValue === $c)) {
-                $this->assignTo($c, $attributeType);
-                $iterator->next();
-                return true;
+        $c = $iterator->parseChar();
+        if ($c !== false) {
+            if ((! $this->negate && ($this->classifier)($c))
+                || ($this->negate && ! ($this->classifier)($c))) {
+                if ($this->validate($expectedValue, $c, $attributeType)) {
+                    $iterator->next();
+                    return true;
+                }
             }
         }
         return false;

@@ -2,14 +2,9 @@
 
 namespace Mxc\Test\Parsec\Qi\Char;
 
-use Mxc\Test\Parsec\ParserTestBed;
-use Mxc\Parsec\Qi\Directive\LexemeDirective;
 use Mxc\Parsec\Domain;
-use Mxc\Test\Parsec\Qi\Assets\MockPreSkipperMatchNonSkippable;
-use Mxc\Parsec\Qi\Char\CharClassParser;
-use Mxc\Parsec\Qi\Operator\PlusOperator;
-use Mxc\Parsec\Qi\Operator\DifferenceOperator;
-use Mxc\Parsec\Qi\Char\CharParser;
+use Mxc\Parsec\Qi\Directive\LexemeDirective;
+use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Test\Parsec\Qi\Assets\MockPreSkipperMatchingAllButCaret;
 
 class LexemeDirectiveTest extends ParserTestBed

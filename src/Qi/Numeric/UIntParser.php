@@ -5,7 +5,7 @@ namespace Mxc\Parsec\Qi\Numeric;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Qi\Numeric\Detail\DecimalUIntPolicy;
 
-class UIntParser extends IntegerParser
+class UIntParser extends Integer
 {
     public function __construct(Domain $domain, $minDigits = 1, int $maxDigits = -1)
     {

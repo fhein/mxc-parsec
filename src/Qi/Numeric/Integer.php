@@ -14,7 +14,7 @@ use Mxc\Parsec\Qi\PreSkipper;
  * IntParser, UIntParser, BinaryParser, OctParser, HexParser
  *
  */
-class IntegerParser extends PreSkipper
+class Integer extends PreSkipper
 {
     protected $minDigits;
     protected $toDecimal;

@@ -2,6 +2,7 @@
 
 namespace Mxc\Parsec\Encoding;
 
+use IntlChar;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 
 class Scanner extends CharacterClassifier
@@ -26,7 +27,7 @@ class Scanner extends CharacterClassifier
         $this->noCase = $noCase;
         $this->binary = $binary;
 
-        if (($last > strlen($s)) || ($last < 0) || ($first < 0) || (($first !== 0) && ($first >= $last))) {
+        if (($last > strlen($s)) || ($last < 0) || ($first < 0) || (($first !== 0) && ($first > $last))) {
             throw new InvalidArgumentException('Scanner: Invalid arguments.');
         }
 
@@ -34,18 +35,55 @@ class Scanner extends CharacterClassifier
         $this->last = $last;
     }
 
+    /**
+     * Considering the current $noCase setting compare two characters.
+     * Return true, if characters are equal. Return false otherwise.
+     *
+     * @param string $c1
+     * @param string $c2
+     * @return boolean
+     */
+    protected function compareChar(string $c1, string $c2)
+    {
+        if ($this->noCase) {
+            return IntlChar::tolower($c1) === IntlChar::tolower($c2);
+        }
+
+        return $c1 === $c2;
+    }
+
+    /**
+     * Get the current character without advancing the iterator position.
+     * If an optional character argument is supplied, the current character
+     * gets compared with the supplied character (considering the current
+     * noCase setting). Returns
+     *
+     * If no character is supplied to compare with, return the current
+     * character and true.
+     *
+     * @param unknown $attr     return
+     * @param string $char      optional: expected value
+     * @return mixed            character or false
+     */
+    public function parseChar(string $char = null)
+    {
+        if (! $this->valid()) {
+            return false;
+        }
+        $c = $this->current();
+        if ($char !== null && ! $this->compareChar($c, $char)) {
+            $attr = null;
+            return false;
+        }
+        return $c;
+    }
+
     public function parseString($string, &$attr)
     {
         $attr = '';
         while ($string->valid() && $this->valid()) {
-            if ($this->noCase) {
-                $s = $this->tolower($string->current());
-                $c = $this->tolower($this->current());
-            } else {
-                $s = $string->current();
-                $c = $this->current();
-            }
-            if ($s !== $c) {
+            $c = $this->current();
+            if (! $this->compareChar($string->current(), $c)) {
                 $attr = null;
                 break;
             }
@@ -53,7 +91,8 @@ class Scanner extends CharacterClassifier
             $string->next();
             $this->next();
         }
-        return (! $string->valid());
+        // if $string is not valid here we have a match
+        return (! ($string->valid()));
     }
 
     public function valid()
@@ -133,7 +172,6 @@ class Scanner extends CharacterClassifier
             return false;
         }
         $this->first = array_pop($this->rew);
-        ;
         return true;
     }
 

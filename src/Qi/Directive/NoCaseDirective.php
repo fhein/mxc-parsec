@@ -9,7 +9,7 @@ class NoCaseDirective extends ParserDelegator
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $this->domain->setNoCase(true);
-        $result = parent::parse($iterator, $expectedValue, $attributeType, $skipper);
+        $result = parent::doParse($iterator, $expectedValue, $attributeType, $skipper);
         $this->domain->restoreNoCaseSetting();
         return $result;
     }
