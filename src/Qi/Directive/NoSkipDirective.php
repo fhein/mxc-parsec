@@ -3,12 +3,12 @@
 namespace Mxc\Parsec\Qi\Directive;
 
 use Mxc\Parsec\Qi\UnusedSkipper;
+use Mxc\Parsec\Qi\ParserDelegator;
 
-class NoSkipDirective extends PassThroughDirective
+class NoSkipDirective extends ParserDelegator
 {
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
-        $subject = $this->subject;
-        return $subject->parse($iterator, new UnusedSkipper($skipper), $attributeType);
+        return parent::doParse($iterator, $expectedValue, $attributeType, new UnusedSkipper($skipper));
     }
 }

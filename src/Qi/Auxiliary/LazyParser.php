@@ -75,4 +75,16 @@ class LazyParser extends Parser
         }
         return $this->subject;
     }
+
+    public function __debugInfo()
+    {
+        return array_merge_recursive(
+            parent::__debugInfo(),
+            [
+                'class' => $this->class ?? 'n/a',
+                'args'  => $this->args ?? 'n/a',
+                'subject' => $this->subject ?? 'n/a',
+            ]
+        );
+    }
 }

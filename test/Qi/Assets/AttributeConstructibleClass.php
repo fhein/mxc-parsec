@@ -1,7 +1,7 @@
 <?php
 namespace Mxc\Test\Parsec\Qi\Assets;
 
-class AttributeConstructible
+class AttributeConstructibleClass
 {
     protected $attribute;
 

@@ -7,7 +7,7 @@ use Mxc\Parsec\Qi\NaryParser;
 
 class AlternativeOperator extends NaryParser
 {
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         // return on first match
         $assignment = null;

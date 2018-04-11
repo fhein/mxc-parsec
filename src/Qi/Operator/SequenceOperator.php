@@ -6,7 +6,7 @@ use Mxc\Parsec\Qi\NaryParser;
 
 class SequenceOperator extends NaryParser
 {
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $result = true;
         $i = 0;

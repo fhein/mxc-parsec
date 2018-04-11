@@ -7,7 +7,7 @@ use Mxc\Parsec\Qi\ParserDelegator;
 
 class ExpectDirective extends ParserDelegator
 {
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         if (! $this->subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
             $info = $this->what();

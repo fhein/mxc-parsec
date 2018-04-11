@@ -3,13 +3,19 @@
 namespace Mxc\Parsec\Qi\Binary;
 
 use Mxc\Parsec\Qi\PrimitiveParser;
+use Mxc\Parsec\Domain;
 
 class BinParser extends PrimitiveParser
 {
     protected $endianness = null;
     protected $size = null;
 
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function __construct(Domain $domain)
+    {
+        parent::__construct($domain);
+    }
+
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         if ($iterator->getInputSize() >= $this->size) {
             $iterator->setBinary(true, $this->size);

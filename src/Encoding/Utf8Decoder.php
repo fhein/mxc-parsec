@@ -50,7 +50,6 @@ class Utf8Decoder extends Scanner /*implements DecoderInterface */
     public function current()
     {
         if ($this->first < $this->invalidCache && isset($this->cache[$this->first])) {
-            print ("Request served from cache. ");
             return $this->cache[$this->first];
         }
         $l = $this->last;

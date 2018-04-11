@@ -7,7 +7,7 @@ use Mxc\Parsec\Qi\PrimitiveParser;
 class EolParser extends PrimitiveParser
 {
 
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         if ($iterator->current() === "\r") {
             $iterator->next();

@@ -172,6 +172,13 @@ abstract class Parser
 
     protected function assignTo($value, $attributeType)
     {
+        // unused values can not be casted
+        if ($value instanceof Unused) {
+            return;
+        }
+
+        $attributeType = $attributeType ?? $this->defaultType;
+
         // float, double, int and boolean
         if (isset(self::NUMBER_CAST[$attributeType])) {
             $this->attribute = (self::NUMBER_CAST[$attributeType])($value);
@@ -179,12 +186,8 @@ abstract class Parser
             return;
         }
 
-        // @todo: default parameter of parse -> get rid off?
+        // Both $attributeType and $defaultType are null
         if ($attributeType === null) {
-            if ($this->defaultType !== null) {
-                $this->assignTo($value, $this->defaultType);
-                return;
-            }
             $this->attribute = $value;
             unset($this->typeTag);
             return;
@@ -232,5 +235,13 @@ abstract class Parser
         throw new InvalidArgumentException(
             sprintf('%s: Unknown attribute type %s', $this->what(), $attributeType)
         );
+    }
+
+    public function __debugInfo()
+    {
+        return [
+            'attribute' => $this->attribute ?? 'n/a',
+            'defaultType' => $this->defaultType ?? 'n/a',
+        ];
     }
 }

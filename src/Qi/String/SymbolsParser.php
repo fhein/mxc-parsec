@@ -39,7 +39,7 @@ class SymbolsParser extends PreSkipper
     }
 
     // return longest match
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $m = $this->map;
         $symbol = '';

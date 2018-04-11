@@ -13,4 +13,14 @@ abstract class UnaryParser extends PrimitiveParser
         parent::__construct($domain);
         $this->subject = $subject;
     }
+
+    public function __debugInfo()
+    {
+        return array_merge_recursive(
+            parent::__debugInfo(),
+            [
+                'subject' => $this->subject ?? 'n/a',
+            ]
+        );
+    }
 }

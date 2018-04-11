@@ -10,10 +10,6 @@ use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Exception\UnknownCastException;
 use Mxc\Parsec\Qi\Unused;
 use Mxc\Parsec\Qi\Char\Char;
-use Mxc\Parsec\Qi\NaryParser;
-use Mxc\Test\Parsec\Qi\Assets\MockParserInterface;
-use Mxc\Test\Parsec\Qi\Assets\MockParserNResult;
-use Mxc\Parsec\Qi\Operator\PlusOperator;
 
 /**
  * Base class of all parser tests.
@@ -136,6 +132,7 @@ class ParserTestBed extends TestCase
         Parser $parser,
         $input,
         bool $expectedResult,
+        int $expectedIteratorPos = null,
         $expectedValue = null,
         $expectedAttribute = null,
         string $expectedAttributeType = null,
@@ -143,7 +140,6 @@ class ParserTestBed extends TestCase
     ) {
         $iterator = $parser->setSource($input);
         $result = $parser->parse($iterator, $expectedValue, $expectedAttributeType, $skipper);
-
         self::assertSame(
             $expectedResult,
             $result,
@@ -158,7 +154,8 @@ class ParserTestBed extends TestCase
                     $expectedAttribute,
                     $result,
                     $skipper,
-                    $iterator->key()
+                    $iterator->key(),
+                    $expectedIteratorPos
                 ),
                 var_export($result, true),
                 var_export($expectedResult, true)
@@ -184,7 +181,8 @@ class ParserTestBed extends TestCase
                             $skipper,
                             $iterator->key(),
                             $attribute,
-                            $attributeType
+                            $attributeType,
+                            $expectedIteratorPos
                         ),
                         $attributeType,
                         $expectedAttributeType
@@ -208,10 +206,11 @@ class ParserTestBed extends TestCase
                             $skipper,
                             $iterator->key(),
                             $attribute,
-                            $attributeType
+                            $attributeType,
+                            $expectedIteratorPos
                         ),
-                        $attributeType,
-                        $expectedAttributeType
+                        $attribute,
+                        $expectedAttribute
                     )
                 );
             }
@@ -232,10 +231,36 @@ class ParserTestBed extends TestCase
                             $skipper,
                             $iterator->key(),
                             $attribute,
-                            $attributeType
+                            $attributeType,
+                            $expectedIteratorPos
                         ),
                         var_export($attribute, true),
                         var_export($expectedAttribute, true)
+                    )
+                );
+            }
+            if ($expectedIteratorPos !== null) {
+                self::assertSame(
+                    $expectedIteratorPos,
+                    $iterator->key(),
+                    sprintf(
+                        "%s\n%s\n\n  Iterator position mismatch: %d. Expected: %d\n",
+                        $cfg,
+                        $this->getTestDescription(
+                            $input,
+                            $expectedValue,
+                            $expectedAttributeType,
+                            $expectedResult,
+                            $expectedAttribute,
+                            $result,
+                            $skipper,
+                            $iterator->key(),
+                            $attribute,
+                            $attributeType,
+                            $expectedIteratorPos
+                        ),
+                        $iterator->key(),
+                        $expectedIteratorPos
                     )
                 );
             }
@@ -267,11 +292,13 @@ class ParserTestBed extends TestCase
         bool $expectedResult,
         $expectedValue = null,
         $expectedAttribute = null,
-        string $expectedAttributeType = null
+        string $expectedAttributeType = null,
+        $expectedIteratorPos = null
     ) {
         if ($expectedAttributeType === 'null') {
             $attributeType = 'NULL';
         }
+        $skipper = $this->getSkipper();
 
         // perform test with parameters as received
         $this->parserTest(
@@ -279,22 +306,16 @@ class ParserTestBed extends TestCase
             $parser,
             $input,
             $expectedResult,
+            $expectedIteratorPos,
             $expectedValue,
             $expectedAttribute,
-            $expectedAttributeType
+            $expectedAttributeType,
+            $skipper
         );
 
         // if the parser does not require pre-skipping
         // we are done here
-        // if the parser is an operator or a directive
-        // it is tested against mocks without input
-        // and we are done also.
-        // @todo: This has to be reworked
-        if (! $parser instanceof PreSkipper
-//             || $parser instanceof NaryParser
-//             || $parser instanceof PlusOperator
-//             || $parser instanceof MockParserInterface
-            ) {
+        if (! $parser instanceof PreSkipper) {
             return;
         }
 
@@ -305,10 +326,11 @@ class ParserTestBed extends TestCase
             $parser,
             $input,
             $expectedResult,
+            $expectedIteratorPos,
             $expectedValue,
             $expectedAttribute,
             $expectedAttributeType,
-            $this->getSkipper()
+            $skipper
         );
 
         // succeeding tests should also succeed if skipper is supplied
@@ -318,10 +340,11 @@ class ParserTestBed extends TestCase
             $parser,
             ' ' . $input,
             $expectedResult,
+            $expectedIteratorPos,
             $expectedValue,
             $expectedAttribute,
             $expectedAttributeType,
-            $this->getSkipper()
+            $skipper
         );
 
 
@@ -367,7 +390,8 @@ class ParserTestBed extends TestCase
         Parser $skipper = null,
         int $pos,
         $attribute = 'n/a',
-        $attributeType = 'n/a'
+        $attributeType = 'n/a',
+        $expectedIteratorPos = 'n/a'
     ) {
         return sprintf(
             "  Test Set:\n"
@@ -377,6 +401,7 @@ class ParserTestBed extends TestCase
             . "    Expected Result: %s\n"
             . "    Expected Attribute: %s\n\n"
             . "    Expected Attribute Type: %s\n"
+            . "    Expected Iterator Position: %s\n"
             . "  Results:\n"
             . "    Parser Result: %s\n"
             . "    Attribute: %s\n"
@@ -388,6 +413,7 @@ class ParserTestBed extends TestCase
             var_export($expectedResult, true),
             gettype($expectedAttribute) === 'object' ? get_class($expectedAttribute) : $expectedAttribute,
             $expectedAttributeType,
+            $expectedIteratorPos,
             var_export($result, true),
             is_string($attribute) ? $attribute : var_export($attribute, true),
             $attributeType,

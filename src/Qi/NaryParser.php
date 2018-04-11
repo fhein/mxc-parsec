@@ -51,4 +51,17 @@ abstract class NaryParser extends PrimitiveParser
     {
         return $this->subject;
     }
+
+    public function __debugInfo()
+    {
+        $i = 0;
+        $di = [];
+        foreach ($this->subject as $parser) {
+            $di['parser' . $i++] = $parser;
+        }
+        return array_merge_recursive(
+            parent::__debugInfo(),
+            $di
+        );
+    }
 }

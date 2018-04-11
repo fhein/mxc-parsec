@@ -2,11 +2,15 @@
 
 namespace Mxc\Parsec\Qi;
 
+use Mxc\Parsec\Domain;
+
 class UnusedSkipper extends Parser
 {
+    protected $skipper;
 
-    public function __construct(Parser $skipper = null)
+    public function __construct(Domain $domain, Parser $skipper = null)
     {
+        parent::__construct($domain);
         $this->skipper = $skipper;
     }
 
@@ -23,5 +27,15 @@ class UnusedSkipper extends Parser
     public function doParse($iterator, $expectedValue = 0, string $attributeType = null, $skipper = null)
     {
         return false;
+    }
+
+    public function __debugInfo()
+    {
+        return array_merge_recursive(
+            parent::__debugInfo(),
+            [
+                'skipper' => $this->skipper ?? 'n/a',
+            ]
+        );
     }
 }

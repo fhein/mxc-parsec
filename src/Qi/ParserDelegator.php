@@ -18,7 +18,7 @@ abstract class ParserDelegator extends Parser
         $this->subject = $subject;
     }
 
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         if ($this->subject === null) {
             throw new $this->exception(sprintf(self::MSG, $this->what()));
@@ -42,5 +42,15 @@ abstract class ParserDelegator extends Parser
     public function what()
     {
         return $this->subject !== null ? [ parent::what(), $this->subject->what()] : parent::what();
+    }
+
+    public function __debugInfo()
+    {
+        return array_merge_recursive(
+            parent::__debugInfo(),
+            [
+                'subject' => $this->subject ?? 'n/a',
+            ]
+        );
     }
 }

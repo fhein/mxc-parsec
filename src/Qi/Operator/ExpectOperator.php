@@ -7,7 +7,7 @@ use Mxc\Parsec\Qi\Directive\Detail\ExpectationFailedException;
 
 class ExpectOperator extends NaryParser
 {
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $subject = $this->subject;
         $lhs = $subject[0];

@@ -15,8 +15,18 @@ class EpsParser extends PrimitiveParser
         parent::__construct($domain);
     }
 
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         return (is_callable($this->callable)) ? ($this->callable)() : true;
+    }
+
+    public function __debugInfo()
+    {
+        return array_merge_recursive(
+            parent::__debugInfo(),
+            [
+                'callable' => $this->callable ?? 'n/a',
+            ]
+        );
     }
 }

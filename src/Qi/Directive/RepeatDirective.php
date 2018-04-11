@@ -4,10 +4,10 @@ namespace Mxc\Parsec\Qi\Directive;
 
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Qi\Parser;
+use Mxc\Parsec\Qi\ParserDelegator;
 
-class RepeatDirective extends Directive
+class RepeatDirective extends ParserDelegator
 {
-
     protected $gotMin;
     protected $gotMax;
 
@@ -43,7 +43,7 @@ class RepeatDirective extends Directive
         }
     }
 
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $attr = null;
         $assignment = null;

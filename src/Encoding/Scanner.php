@@ -21,8 +21,8 @@ class Scanner extends CharacterClassifier
     {
         $this->data = $s;
 
-        $first = $first?: 0;
-        $last = $last?: strlen($s);
+        $first = $first ?? 0;
+        $last = $last ?? strlen($s);
         $this->noCase = $noCase;
         $this->binary = $binary;
 

@@ -7,9 +7,10 @@ use Mxc\Parsec\Qi\ParserDelegator;
 
 class LexemeDirective extends ParserDelegator
 {
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
+        $unused = new UnusedSkipper($this->domain, $skipper);
         $this->skipOver($iterator, $skipper);
-        return parent::doParse($iterator, $expectedValue, $attributeType, new UnusedSkipper($skipper));
+        return parent::doParse($iterator, $expectedValue, $attributeType, $unused);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Mxc\Parsec\Qi\Directive;
 
-class HoldDirective extends PassthroughDirective
+use Mxc\Parsec\Qi\ParserDelegator;
+
+class HoldDirective extends ParserDelegator
 {
     // the hold directive is here only for compatibility
     // reasons

@@ -8,7 +8,7 @@ class ListOperator extends BinaryParser
 {
     protected $parsers;
 
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $lhs = $this->subject[0];
 

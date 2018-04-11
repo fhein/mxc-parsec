@@ -13,10 +13,11 @@ class Char extends PreSkipper
     public function __construct(Domain $domain, bool $negate = false)
     {
         $this->negate = $negate;
+        $this->defaultType = 'string';
         parent::__construct($domain);
     }
 
-    public function doParse($iterator, $expectedValue = null, $attributeType = 'string', $skipper = null)
+    public function doParse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
     {
         if (! $iterator->valid()) {
             return false;
@@ -36,5 +37,10 @@ class Char extends PreSkipper
             }
         }
         return false;
+    }
+
+    public function setNegate($negate = true)
+    {
+        $this->negate = $negate;
     }
 }

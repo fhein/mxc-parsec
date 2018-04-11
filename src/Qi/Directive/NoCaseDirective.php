@@ -2,14 +2,14 @@
 
 namespace Mxc\Parsec\Qi\Directive;
 
-class NoCaseDirective extends PassThroughDirective
-{
+use Mxc\Parsec\Qi\ParserDelegator;
 
-    protected function doParse($iterator, $expectedValue, $attributeType, $skipper)
+class NoCaseDirective extends ParserDelegator
+{
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $this->domain->setNoCase(true);
-        $subject = $this->subject;
-        $result = $subject->parse($iterator, $expectedValue, $attributeType, $skipper);
+        $result = parent::parse($iterator, $expectedValue, $attributeType, $skipper);
         $this->domain->restoreNoCaseSetting();
         return $result;
     }
