@@ -4,8 +4,30 @@
         <testsuite name="Complete">
             <directory>./test</directory>
         </testsuite>
+        <testsuite name="Auxiliary Parsers">
+            <directory>./test/Qi/Auxiliary</directory>
+        </testsuite>
+        <testsuite name="Binary Parsers">
+            <directory>./test/Qi/Binary</directory>
+        </testsuite>
+        <testsuite name="Character Parsers">
+            <directory>./test/Qi/Char</directory>
+        </testsuite>
+        <testsuite name="Directives">
+            <directory>./test/Qi/Directive</directory>
+        </testsuite>
+        <testsuite name="Non-Terminal Parsers">
+            <directory>./test/Qi/NonTerminal</directory>
+        </testsuite>
         <testsuite name="Numeric Parsers">
-        	<directory>./test/Qi/Numeric</directory></testsuite>
+        	<directory>./test/Qi/Numeric</directory>
+        </testsuite>
+        <testsuite name="Operators">
+            <directory>./test/Qi/Operator</directory>
+        </testsuite>
+        <testsuite name="String Parsers">
+            <directory>./test/Qi/String</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
