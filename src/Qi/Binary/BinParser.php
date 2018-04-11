@@ -24,4 +24,15 @@ class BinParser extends PrimitiveParser
         }
         return false;
     }
+
+    public function __debugInfo()
+    {
+        return array_merge_recursive(
+            parent::__debugInfo(),
+            [
+                'endianness' => $this->endianness ?? 'n/a',
+                'size'       => $this->size ?? 0,
+            ]
+        );
+    }
 }

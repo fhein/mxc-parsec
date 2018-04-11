@@ -7,7 +7,6 @@ use Mxc\Parsec\Exception\NotSupported32Exception;
 
 class LittleQWordParser extends BinParser
 {
-
     public function __construct(Domain $domain)
     {
         $this->endianness = 'P';

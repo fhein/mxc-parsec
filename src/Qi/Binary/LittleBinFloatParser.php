@@ -6,7 +6,6 @@ use Mxc\Parsec\Domain;
 
 class LittleBinFloatParser extends BinParser
 {
-
     public function __construct(Domain $domain)
     {
         $this->endianness = 'g';

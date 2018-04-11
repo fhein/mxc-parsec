@@ -6,7 +6,6 @@ use Mxc\Parsec\Domain;
 
 class DWordParser extends BinParser
 {
-
     public function __construct(Domain $domain)
     {
         $this->endianness = 'L';
