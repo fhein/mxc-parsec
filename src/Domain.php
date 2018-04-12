@@ -3,7 +3,6 @@
 namespace Mxc\Parsec;
 
 use Mxc\Parsec\Encoding\CharacterClassifier;
-use Mxc\Parsec\Encoding\Utf8Decoder;
 use Mxc\Parsec\Qi\Unused;
 
 class Domain
@@ -60,7 +59,9 @@ class Domain
     public function setSource(string $source)
     {
         $this->noCaseSetting = [];
-        $this->getInputIterator()->setData($source);
+        $iterator = $this->getInputIterator();
+        $iterator->setData($source);
+        return $iterator;
     }
 
     public function setNoCase(bool $state = true)

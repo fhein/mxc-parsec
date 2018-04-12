@@ -3,9 +3,9 @@
 namespace Mxc\Parsec\Qi\Directive;
 
 use Mxc\Parsec\Qi\Directive\Detail\ExpectationFailedException;
-use Mxc\Parsec\Qi\ParserDelegator;
+use Mxc\Parsec\Qi\DelegatingParser;
 
-class ExpectDirective extends ParserDelegator
+class ExpectDirective extends DelegatingParser
 {
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {

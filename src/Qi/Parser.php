@@ -2,22 +2,12 @@
 
 namespace Mxc\Parsec\Qi;
 
-use IntlChar;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 use Mxc\Parsec\Exception\UnknownCastException;
 
 abstract class Parser
 {
-    protected static $typeNames = null;
-
-    const NUMBER_CAST = [
-        'boolean' => 'boolval',
-        'integer' => 'intval',
-        'float'   => 'floatval',
-        'double'  => 'doubleval',
-    ];
-
     protected $domain;
     protected $attribute;
     protected $defaultType;
@@ -25,6 +15,27 @@ abstract class Parser
     public function __construct(Domain $domain)
     {
         $this->domain = $domain;
+    }
+
+    abstract public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null);
+
+    /**
+     * Return and reset the current attribute value.
+     *
+     * @return mixed    attribute value
+     */
+    public function getAttribute()
+    {
+        $result = $this->attribute;
+        $this->attribute = null;
+        return $result;
+    }
+
+    // you can set the input via any parser
+    // the new source gets applied to ALL parsers
+    public function setSource($source)
+    {
+        return $this->domain->setSource($source);
     }
 
     protected function validate($expectedValue, $value, $attributeType)
@@ -36,90 +47,87 @@ abstract class Parser
         return false;
     }
 
-    abstract public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null);
-
-    // you can set the input via any parser
-    // the new source gets applied to ALL parsers
-    public function setSource($source)
+    protected function validateChar($expectedValue, $value, $attributeType)
     {
-        $this->domain->setSource($source);
-        $this->attribute = null;
-        return $this->domain->getInputIterator();
-    }
-
-    public function getAttribute()
-    {
-        $result = $this->attribute;
-        $this->attribute = null;
-        return $result;
-    }
-
-    // return simple class name w/o namespace
-    public function what()
-    {
-        return substr(strrchr(get_class($this), '\\'), 1);
-    }
-
-    protected function getSubject()
-    {
-        return [];
+        $iterator = $this->domain->getInputIterator();
+        if ($expectedValue === null || $iterator->compareChar($expectedValue, $value)) {
+            $this->assignTo($value, $attributeType);
+            $iterator->next();
+            return true;
+        }
+        return false;
     }
 
     protected function skipOver($iterator, $skipper = null)
     {
-        // do not skip if we are not allowed to, or have no skipper, or have UnusedSkipper
         if ($skipper === null || $skipper instanceof UnusedSkipper) {
             return;
         }
-
-        // let skipper parse as long as it succeeds
         while ($iterator->valid() && $skipper->doParse($iterator, null, null, null)) {
             /***/ ;
         }
     }
 
-    protected function getType($value)
-    {
-        return is_object($value) ? get_class($value) : gettype($value);
-    }
-
     protected function castTo($targetType, $value)
     {
-        if ($targetType === null
-            || $targetType === 'unknown'
-            || $targetType === $this->getType($value)) {
+        $type = is_object($value) ? get_class($value) : gettype($value);
+        if ($targetType === $type || $value instanceof Unused) {
             return $value;
         }
-        if (isset(self::NUMBER_CAST[$targetType])) {
-            return (self::NUMBER_CAST[$targetType])($value);
-        }
-        if ($targetType === 'array') {
-            return [ $value ];
-        } elseif ($targetType === 'string') {
-            if (is_null($value)
-                || is_scalar($value)
-                || (is_object($value) && method_exists($value, '__toString'))) {
-                return strval($value);
-            }
-            if (is_array($value)) {
-                $result = '';
-                foreach ($value as $val) {
-                    $result .= $this->castTo($val, $targetType);
+
+        switch ($targetType) {
+            case null:
+                return $value;
+
+            case 'boolean':
+                return boolval($value);
+
+            case 'integer':
+                return intval($value);
+
+            case 'float':
+                return floatval($value);
+
+            case 'double':
+                return doubleval($value);
+
+            case 'unused':
+                return $this->domain->getUnused();
+                return;
+
+            case 'array':
+                return [ $value ];
+
+            case 'string':
+                if (is_null($value)
+                    || is_scalar($value)
+                    || is_object($value) && method_exists($value, '__toString')
+                ) {
+                    return strval($value);
                 }
-                return $result;
-            }
-        } elseif (class_exists($targetType)) {
-            return new $targetType($value);
+                if (is_array($value)) {
+                    $result = '';
+                    foreach ($value as $val) {
+                        $result .= $this->castTo($val, $targetType);
+                    }
+                    return $result;
+                }
+                break;
+
+            default:
+                if (class_exists($targetType)) {
+                    return new $targetType($value);
+                }
         }
 
         throw new UnknownCastException(
             sprintf(
-                "%s: Don't now how to cast to %s.",
+                "%s: Don't know how to cast from %s to %s.",
                 $this->what(),
+                var_export($type, true),
                 var_export($targetType, true)
             )
         );
-        return $value;
     }
 
     protected function assignTo($value, $attributeType)
@@ -131,61 +139,55 @@ abstract class Parser
 
         $attributeType = $attributeType ?? $this->defaultType;
 
-        // float, double, int and boolean
-        if (isset(self::NUMBER_CAST[$attributeType])) {
-            $this->attribute = (self::NUMBER_CAST[$attributeType])($value);
-            unset($this->typeTag);
-            return;
-        }
+        switch ($attributeType) {
+            case null:
+                $this->attribute = $value;
+                return;
 
-        // Both $attributeType and $defaultType are null
-        if ($attributeType === null) {
-            $this->attribute = $value;
-            unset($this->typeTag);
-            return;
-        }
+            case 'boolean':
+                $this->attribute = boolval($value);
+                return;
 
-        // unused type
-        if ($attributeType === 'unused') {
-            $this->attribute = $this->domain->getUnused();
-            return;
-        }
+            case 'integer':
+                $this->attribute = intval($value);
+                return;
 
-        // string type
-        // assigning means appending to string
-        if ($attributeType === 'string') {
-            // currently NULL or unused
-            if (isset($this->typeTag)) {
-                $this->attribute = '';
-                unset($this->typeTag);
-            }
-            $this->attribute .= $value;
-            return;
-        }
+            case 'float':
+                $this->attribute = floatval($value);
+                return;
 
-        // array type
-        // assigning means appending to array
-        if ($attributeType === 'array') {
-            // currently NULL or unused
-            if (isset($this->typeTag)) {
-                $this->attribute = [];
-                unset($this->typeTag);
-            }
-            $this->attribute [] = $value;
-            return;
-        }
+            case 'double':
+                $this->attribute = doubleval($value);
+                return;
 
-        // arbitrary class which is $attributeType
-        // constructable
-        if (class_exists($attributeType)) {
-            $this->attribute = new $attributeType($value);
-            unset($this->typeTag);
-            return;
+            case 'unused':
+                $this->attribute = $this->domain->getUnused();
+                return;
+
+            case 'string':
+                $this->attribute .= $value;
+                return;
+
+            case 'array':
+                $this->attribute [] = $value;
+                return;
+
+            default:
+                if (class_exists($attributeType)) {
+                    $this->attribute = new $attributeType($value);
+                    return;
+                }
         }
 
         throw new InvalidArgumentException(
             sprintf('%s: Unknown attribute type %s', $this->what(), $attributeType)
         );
+    }
+
+    // return simple class name w/o namespace
+    public function what()
+    {
+        return substr(strrchr(get_class($this), '\\'), 1);
     }
 
     public function __debugInfo()

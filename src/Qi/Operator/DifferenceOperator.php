@@ -12,16 +12,15 @@ class DifferenceOperator extends BinaryParser
         $rhs = $this->subject[1];
 
         $iterator->try();
-        if ($rhs->parse($iterator, null, $attributeType, $skipper)) {
+        if ($rhs->parse($iterator, null, null, $skipper)) {
             $iterator->reject();
             return false;
         }
         $iterator->reject();
-        if (! $lhs->parse($iterator, null, $attributeType, $skipper)) {
+        if (! $lhs->parse($iterator, null, null, $skipper)) {
             return false;
         }
 
-        $this->assignTo($lhs->getAttribute(), $attributeType);
-        return true;
+        return $this->validate($expectedValue, $lhs->getAttribute(), $attributeType);
     }
 }

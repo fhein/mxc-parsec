@@ -10,6 +10,7 @@ use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Exception\UnknownCastException;
 use Mxc\Parsec\Qi\Unused;
 use Mxc\Parsec\Qi\Char\Char;
+use Mxc\Parsec\Qi\Directive\NoCaseDirective;
 
 /**
  * Base class of all parser tests.
@@ -215,9 +216,19 @@ class ParserTestBed extends TestCase
                 );
             }
             if ($expectedValue !== null) {
+                $expValue = $this->getTypedExpectedValue($expectedAttributeType, $expectedValue);
+                $attr = $attribute;
+                if ($parser instanceof NoCaseDirective
+                    && $this->getType($expValue) === 'string'
+                    && $this->getType($attribute) === 'string'
+                ) {
+                    // @todo: IntlChar based version of strtolower
+                    $attr = strtolower($attr);
+                    $expValue = strtolower($expValue);
+                }
                 self::assertSame(
-                    $this->getTypedExpectedValue($expectedAttributeType, $expectedValue),
-                    $attribute,
+                    $expValue,
+                    $attr,
                     sprintf(
                         "%s\n%s\n\n  Attribute mismatch: %s. Expected: %s\n",
                         $cfg,

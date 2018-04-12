@@ -30,8 +30,11 @@ class MockPreSkipperMatchingAllButCaret extends PreSkipper
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         if ($this->parser->doParse($iterator, $expectedValue, 'string', $skipper)) {
-            $this->assignTo($this->parser->getAttribute(), $attributeType);
-            return true;
+            $c = $this->parser->getAttribute();
+            if ($iterator->compareChar($c, $expectedValue)) {
+                $this->assignTo($c, $attributeType);
+                return true;
+            }
         }
         return false;
     }

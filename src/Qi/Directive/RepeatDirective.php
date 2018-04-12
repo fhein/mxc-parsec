@@ -4,19 +4,16 @@ namespace Mxc\Parsec\Qi\Directive;
 
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Qi\Parser;
-use Mxc\Parsec\Qi\ParserDelegator;
+use Mxc\Parsec\Qi\DelegatingParser;
 
-class RepeatDirective extends ParserDelegator
+class RepeatDirective extends DelegatingParser
 {
     protected $gotMin;
     protected $gotMax;
 
-    public function __construct(Domain $domain, Parser $subject, ...$args)
+    public function __construct(Domain $domain, Parser $subject, int $min = null, int $max = null)
     {
-        parent::__construct($domain, $subject, $args);
-
-        $min = isset($this->args[0]) ? $this->args[0] : null;
-        $max = isset($this->args[1]) ? $this->args[1] : null;
+        parent::__construct($domain, $subject);
 
         // silently ignore additional args
 
@@ -49,18 +46,18 @@ class RepeatDirective extends ParserDelegator
         $assignment = null;
         $subject = $this->subject;
         for ($i = 0; ! $this->gotMin($i); $i++) {
-            if (! $subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+            if (! $subject->parse($iterator, null, null, $skipper)) {
                 return false;
             }
-            $this->assignTo($subject->getAttribute(), $attributeType);
+            $this->assignTo($subject->getAttribute(), 'array');
         }
         $save = $iterator->getPos();
-        for ($i = 0; ! $this->gotMax($i); $i++) {
-            if (! $this->subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+        for (; ! $this->gotMax($i); $i++) {
+            if (! $this->subject->parse($iterator, null, null, $skipper)) {
                 break;
-                $save = $iterator->key();
             }
-            $this->assignTo($subject->getAttribute(), $attributeType);
+            $this->assignTo($subject->getAttribute(), 'array');
+            $save = $iterator->key();
         }
         $iterator->setPos($save);
         return true;

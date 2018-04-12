@@ -53,7 +53,7 @@ class Integer extends PreSkipper
         $this->toDecimal = $policy->getToDecimal();
     }
 
-    public function doParse($iterator, $expectedValue = null, string $attributeType = null, $skipper = null)
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $got = 0;
 

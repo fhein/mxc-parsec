@@ -4,16 +4,15 @@ namespace Mxc\Parsec\Qi\Numeric;
 
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Qi\String\SymbolsParser;
-use Mxc\Parsec\Qi\ParserDelegator;
+use Mxc\Parsec\Qi\DelegatingParser;
 use Mxc\Parsec\Qi\Numeric\Detail\BoolPolicy;
 
-class BoolParser extends ParserDelegator
+class BoolParser extends DelegatingParser
 {
     public function __construct(Domain $domain, BoolPolicy $policy = null)
     {
-        parent::__construct($domain);
         $this->defaultType = 'boolean';
         $policy = $policy ?? new BoolPolicy();
-        $this->subject = new SymbolsParser($this->domain, $policy->getSymbols());
+        parent::__construct($domain, new SymbolsParser($domain, $policy->getSymbols()));
     }
 }

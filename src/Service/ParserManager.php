@@ -2,6 +2,7 @@
 
 namespace Mxc\Parsec\Service;
 
+use ReflectionClass;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Encoding\CharacterClassifier;
 use Mxc\Parsec\Encoding\Utf8Decoder;
@@ -38,11 +39,11 @@ use Mxc\Parsec\Qi\Directive\MatchesDirective;
 use Mxc\Parsec\Qi\Directive\NoCaseDirective;
 use Mxc\Parsec\Qi\Directive\NoSkipDirective;
 use Mxc\Parsec\Qi\Directive\OmitDirective;
-use Mxc\Parsec\Qi\Directive\PassThroughDirective;
 use Mxc\Parsec\Qi\Directive\RawDirective;
 use Mxc\Parsec\Qi\Directive\RepeatDirective;
 use Mxc\Parsec\Qi\Directive\SkipDirective;
-use Mxc\Parsec\Qi\NonTerminal\RuleParser;
+use Mxc\Parsec\Qi\NonTerminal\Rule;
+use Mxc\Parsec\Qi\NonTerminal\Grammar;
 use Mxc\Parsec\Qi\Numeric\BinaryParser;
 use Mxc\Parsec\Qi\Numeric\BoolParser;
 use Mxc\Parsec\Qi\Numeric\HexParser;
@@ -66,6 +67,12 @@ use Mxc\Parsec\Qi\Unused;
 use Mxc\Parsec\Service\ParserFactory;
 use Zend\ServiceManager\ServiceManager;
 use Mxc\Parsec\Qi\Numeric\UShortParser;
+use Mxc\Parsec\Qi\UnaryParser;
+use Mxc\Parsec\Qi\PrimitiveParser;
+use Mxc\Parsec\Qi\NaryParser;
+use Mxc\Parsec\Qi\PreSkipper;
+use Mxc\Parsec\Qi\DelegatingParser;
+use Mxc\Parsec\Qi\PredicateParser;
 
 class ParserManager extends ServiceManager
 {
@@ -129,7 +136,8 @@ class ParserManager extends ServiceManager
         RepeatDirective::class          => ParserFactory::class,
         SkipDirective::class            => ParserFactory::class,
         // nonterminal
-        RuleParser::class               => ParserFactory::class,
+        Rule::class                     => ParserFactory::class,
+        Grammar::class                  => ParserFactory::class,
         // numeric
         BinaryParser::class             => ParserFactory::class,
         BoolParser::class               => ParserFactory::class,
@@ -156,6 +164,78 @@ class ParserManager extends ServiceManager
         // non parsers
         Domain::class                   => DomainFactory::class,
     ];
+
+//     protected $delegators = [
+//         EolParser::class                => [ ParserDelegatorFactory::class, ],
+//         AttrParser::class               => [ ParserDelegatorFactory::class, ],
+//         EoiParser::class                => [ ParserDelegatorFactory::class, ],
+//         EpsParser::class                => [ ParserDelegatorFactory::class, ],
+//         LazyParser::class               => [ ParserDelegatorFactory::class, ],
+//         // binary
+//         ByteParser::class               => [ ParserDelegatorFactory::class, ],
+//         WordParser::class               => [ ParserDelegatorFactory::class, ],
+//         DWordParser::class              => [ ParserDelegatorFactory::class, ],
+//         QWordParser::class              => [ ParserDelegatorFactory::class, ],
+//         BigWordParser::class            => [ ParserDelegatorFactory::class, ],
+//         BigDWordParser::class           => [ ParserDelegatorFactory::class, ],
+//         BigQWordParser::class           => [ ParserDelegatorFactory::class, ],
+//         LittleWordParser::class         => [ ParserDelegatorFactory::class, ],
+//         LittleDWordParser::class        => [ ParserDelegatorFactory::class, ],
+//         LittleQWordParser::class        => [ ParserDelegatorFactory::class, ],
+//         BinDoubleParser::class          => [ ParserDelegatorFactory::class, ],
+//         BigBinDoubleParser::class       => [ ParserDelegatorFactory::class, ],
+//         LittleBinDoubleParser::class    => [ ParserDelegatorFactory::class, ],
+//         BinFloatParser::class           => [ ParserDelegatorFactory::class, ],
+//         BigBinFloatParser::class        => [ ParserDelegatorFactory::class, ],
+//         LittleBinFloatParser::class     => [ ParserDelegatorFactory::class, ],
+//         // char
+//         CharClassParser::class          => [ ParserDelegatorFactory::class, ],
+//         CharParser::class               => [ ParserDelegatorFactory::class, ],
+//         CharRangeParser::class          => [ ParserDelegatorFactory::class, ],
+//         CharSetParser::class            => [ ParserDelegatorFactory::class, ],
+//         '~' . CharClassParser::class    => [ ParserDelegatorFactory::class, ],
+//         '~' . CharParser::class         => [ ParserDelegatorFactory::class, ],
+//         '~' . CharRangeParser::class    => [ ParserDelegatorFactory::class, ],
+//         '~' . CharSetParser::class      => [ ParserDelegatorFactory::class, ],
+
+//         // directive
+//         ExpectDirective::class          => [ ParserDelegatorFactory::class, ],
+//         HoldDirective::class            => [ ParserDelegatorFactory::class, ],
+//         LexemeDirective::class          => [ ParserDelegatorFactory::class, ],
+//         MatchesDirective::class         => [ ParserDelegatorFactory::class, ],
+//         NoCaseDirective::class          => [ ParserDelegatorFactory::class, ],
+//         NoSkipDirective::class          => [ ParserDelegatorFactory::class, ],
+//         OmitDirective::class            => [ ParserDelegatorFactory::class, ],
+//         RawDirective::class             => [ ParserDelegatorFactory::class, ],
+//         RepeatDirective::class          => [ ParserDelegatorFactory::class, ],
+//         SkipDirective::class            => [ ParserDelegatorFactory::class, ],
+//         // nonterminal
+//         Rule::class                     => [ ParserDelegatorFactory::class, ],
+//         Grammar::class                  => [ ParserDelegatorFactory::class, ],
+//         // numeric
+//         BinaryParser::class             => [ ParserDelegatorFactory::class, ],
+//         BoolParser::class               => [ ParserDelegatorFactory::class, ],
+//         HexParser::class                => [ ParserDelegatorFactory::class, ],
+//         IntParser::class                => [ ParserDelegatorFactory::class, ],
+//         OctParser::class                => [ ParserDelegatorFactory::class, ],
+//         UIntParser::class               => [ ParserDelegatorFactory::class, ],
+//         UShortParser::class             => [ ParserDelegatorFactory::class, ],
+//         //operator
+//         AlternativeOperator::class      => [ ParserDelegatorFactory::class, ],
+//         AndPredicate::class             => [ ParserDelegatorFactory::class, ],
+//         DifferenceOperator::class       => [ ParserDelegatorFactory::class, ],
+//         ExpectOperator::class           => [ ParserDelegatorFactory::class, ],
+//         KleeneOperator::class           => [ ParserDelegatorFactory::class, ],
+//         ListOperator::class             => [ ParserDelegatorFactory::class, ],
+//         NotPredicate::class             => [ ParserDelegatorFactory::class, ],
+//         OptionalOperator::class         => [ ParserDelegatorFactory::class, ],
+//         PermutationOperator::class      => [ ParserDelegatorFactory::class, ],
+//         PlusOperator::class             => [ ParserDelegatorFactory::class, ],
+//         SequenceOperator::class         => [ ParserDelegatorFactory::class, ],
+//         // string
+//         StringParser::class             => [ ParserDelegatorFactory::class, ],
+//         SymbolsParser::class            => [ ParserDelegatorFactory::class, ],
+//     ];
 
     protected $invokables = [
         CharacterClassifier::class  => CharacterClassifier::class,
@@ -209,7 +289,8 @@ class ParserManager extends ServiceManager
         'repeat'            => RepeatDirective::class,
         'skip'              => SkipDirective::class,
         // nonterminal
-        'rule'              => RuleParser::class,
+        'rule'              => Rule::class,
+        'grammar'           => Grammar::class,
         // numeric
         'binary'            => BinaryParser::class,
         'bool'              => BoolParser::class,
@@ -241,12 +322,30 @@ class ParserManager extends ServiceManager
 
     protected $sharedByDefault = false;
 
+    // all parsers with only one constructor parameter (which is $domain) can be shared
     protected $shared =
     [
-        Unused::class => true,
-        CharacterClassifier::class => true,
-        Domain::class => true,
-        'input_encoding' => true,
+        Unused::class                   => true,
+        CharacterClassifier::class      => true,
+        Domain::class                   => true,
+        'input_encoding'                => true,
+        EolParser::class                => true,
+        EoiParser::class                => true,
+        ByteParser::class               => true,
+        WordParser::class               => true,
+        DWordParser::class              => true,
+        QWordParser::class              => true,
+        BigWordParser::class            => true,
+        BigQWordParser::class           => true,
+        LittleWordParser::class         => true,
+        LittleDWordParser::class        => true,
+        LittleQWordParser::class        => true,
+        BinDoubleParser::class          => true,
+        BigBinDoubleParser::class       => true,
+        LittleBinDoubleParser::class    => true,
+        BinFloatParser::class           => true,
+        BigBinFloatParser::class        => true,
+        LittleBinFloatParser::class     => true,
     ];
 
     public function __construct(array $options = [])
@@ -268,5 +367,102 @@ class ParserManager extends ServiceManager
 
         $this->services['input_encoding'] = $this->get($config['input_encoding']);
         $this->services['internal_encoding'] = $this->get($config['internal_encoding']);
+    }
+    /**
+     * This function generates a list of all parsers categorized by
+     * parser class
+     * @return string[]
+     */
+    public function getParsersByClass()
+    {
+        $di = [];
+        $tagged = [];
+        foreach (array_keys($this->factories) as $name) {
+            if ($name[0] === '~' || $name === Domain::class) {
+                continue;
+            }
+            $rc = new ReflectionClass($name);
+            $classes = [    NaryParser::class => 'Nary Parsers',
+                            BinaryParser::class => 'Binary Parsers',
+                            UnaryParser::class => 'Unary Parsers',
+                            PredicateParser::class => 'Unary Parsers',
+                            DelegatingParser::class => 'Unary Parsers',
+                            PrimitiveParser::class => 'Primitive Parsers',
+                            PreSkipper::class => 'Primitive Parsers'];
+            $dname = substr(strrchr($name, '\\'), 1);
+            foreach ($classes as $class => $idx) {
+                if ($tagged[$dname]) {
+                    continue;
+                }
+                if ($name === Rule::class || $name === Grammar::class) {
+                    if (! $tagged[$dname]) {
+                        $di['NonTerminal'][] = $dname;
+                        $tagged[$dname] = true;
+                    }
+                } elseif ($name === BoolParser::class) {
+                    $di['Primitive Parsers'][] = $dname;
+                    $tagged[$dname] = true;
+                } elseif ($rc->isSubClassOf($class)) {
+                    $di[$idx][] = $dname;
+                    $tagged[$dname] = true;
+                }
+            }
+            if (! $tagged[$dname]) {
+                $di['Unknown'] = $dname;
+                $tagged[$dname] = true;
+            }
+        }
+        return $di;
+    }
+    /**
+     * This function generates a list of all parsers categorized by
+     * parser category
+     * @return string[]
+     */
+    public function getParsersByCategory()
+    {
+        $di = [];
+        $tagged = [];
+        foreach (array_keys($this->factories) as $name) {
+            if ($name[0] === '~' || $name === Domain::class) {
+                continue;
+            }
+            $rc = new ReflectionClass($name);
+            $ns = $rc->getNamespaceName();
+            $dname = substr(strrchr($name, '\\'), 1);
+            $dns = substr(strrchr($ns, '\\'), 1);
+            $di[$dns][] = $dname;
+        }
+        return $di;
+    }
+
+    public function findShareableParsers()
+    {
+        $di = [];
+        foreach (array_keys($this->factories) as $name) {
+            if ($name[0] === '~' || $name === Domain::class) {
+                continue;
+            }
+            $rc = new ReflectionClass($name);
+            $m = $rc->getMethod('__construct');
+            $params = $m->getNumberOfParameters();
+            if ($params === 1) {
+                $dname = substr(strrchr($name, '\\'), 1);
+                $di[] = "        $dname::class => true,\n";
+            }
+        }
+        return $di;
+    }
+
+    public function __debugInfo()
+    {
+        return [
+            'encodings'             => $this->encodings,
+            'services'              => $this->services,
+            'factories'             => $this->factories,
+            'abstract_factories'    => $this->abstractFactories,
+            'shared'                => $this->shared,
+            'sharedByDefault'       => $this->sharedByDefault,
+        ];
     }
 }

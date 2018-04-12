@@ -11,7 +11,7 @@ class PlusOperator extends UnaryParser
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $subject = $this->subject;
-        if (! $subject->parse($iterator, $expectedValue, null, $skipper)) {
+        if (! $subject->parse($iterator, null, null, $skipper)) {
             return false;
         }
         $this->assignTo($subject->getAttribute(), $attributeType);

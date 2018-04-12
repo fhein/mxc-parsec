@@ -2,8 +2,8 @@
 
 namespace Mxc\Parsec\Encoding;
 
-use IntlChar;
 use Mxc\Parsec\Exception\InvalidArgumentException;
+use Mxc\Parsec\Exception\BadMethodCallException;
 
 class Scanner extends CharacterClassifier
 {
@@ -15,8 +15,8 @@ class Scanner extends CharacterClassifier
     protected $cache;
     protected $invalidCache;
     protected $lastSize;
-
-    protected $rew = [];
+    protected $noCaseStack = [];
+    protected $positionStack = [];
 
     public function __construct(string $s = '', $first = null, $last = null, bool $noCase = false, $binary = false)
     {
@@ -43,12 +43,14 @@ class Scanner extends CharacterClassifier
      * @param string $c2
      * @return boolean
      */
-    protected function compareChar(string $c1, string $c2)
+    public function compareChar(string $c1, string $c2 = null)
     {
-        if ($this->noCase) {
-            return IntlChar::tolower($c1) === IntlChar::tolower($c2);
+        if ($c2 === null) {
+            return true;
         }
-
+        if ($this->noCase) {
+            return $this->tolower($c1) === $this->tolower($c2);
+        }
         return $c1 === $c2;
     }
 
@@ -135,30 +137,29 @@ class Scanner extends CharacterClassifier
         $this->binary = false;
         $this->invalidCache = 0;
         unset($this->cache);
-        unset($this->rew);
+        unset($this->positionStack);
     }
 
     public function try()
     {
-        $this->rew[] = $this->first;
+        $this->positionStack[] = $this->first;
         return $this;
     }
 
     public function done(bool $accept)
     {
-        if ($accept === true) {
-            $this->accept();
-        } else {
-            $this->reject();
-        }
+        $accept ? $this->accept() : $this->reject();
         return $accept;
     }
 
     public function accept()
     {
-        array_pop($this->rew);
+        if (empty($this->positionStack)) {
+            throw new BadMethodCallException('accept() called without try().');
+        }
+        array_pop($this->positionStack);
         // if no further backtracking can happen
-        if (empty($this->rew)) {
+        if (empty($this->positionStack)) {
             // reset the cache
             //print('Clearing cache. ');
             $this->invalidCache = 0;
@@ -168,17 +169,21 @@ class Scanner extends CharacterClassifier
 
     public function reject()
     {
-        if (empty($this->rew)) {
-            return false;
+        if (empty($this->positionStack)) {
+            throw new BadMethodCallException('reject() called without try().');
         }
-        $this->first = array_pop($this->rew);
-        return true;
+        $this->first = array_pop($this->positionStack);
     }
 
     public function setNoCase(bool $noCase)
     {
-        $this->noCase = $noCase;
-        $this->invalidCache = $this->first;
+        if ($noCase === true) {
+            $this->noCaseStack[] = $this->noCase;
+            $this->noCase = true;
+            $this->invalidCache = $this->first;
+            return;
+        }
+        $this->noCase = empty($this->noCaseStack) ? false : array_pop($this->noCaseStack);
     }
 
     public function isNoCase()
@@ -187,8 +192,8 @@ class Scanner extends CharacterClassifier
     }
 
     /**
-     * Convert current character to lower case if noCase setting
-     * is active.
+     * Get character character at current position. Convert to lower case
+     * if noCase is active.
      *
      * @return string current character with noCase setting applied
      */

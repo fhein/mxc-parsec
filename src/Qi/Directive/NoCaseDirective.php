@@ -2,9 +2,9 @@
 
 namespace Mxc\Parsec\Qi\Directive;
 
-use Mxc\Parsec\Qi\ParserDelegator;
+use Mxc\Parsec\Qi\DelegatingParser;
 
-class NoCaseDirective extends ParserDelegator
+class NoCaseDirective extends DelegatingParser
 {
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {

@@ -24,10 +24,7 @@ class Char extends PreSkipper
         if ($c !== false) {
             if ((! $this->negate && ($this->classifier)($c))
                 || ($this->negate && ! ($this->classifier)($c))) {
-                if ($this->validate($expectedValue, $c, $attributeType)) {
-                    $iterator->next();
-                    return true;
-                }
+                return $this->validateChar($expectedValue, $c, $attributeType);
             }
         }
         return false;

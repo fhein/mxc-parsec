@@ -3,9 +3,9 @@
 namespace Mxc\Parsec\Qi\Directive;
 
 use Mxc\Parsec\Qi\UnusedSkipper;
-use Mxc\Parsec\Qi\ParserDelegator;
+use Mxc\Parsec\Qi\DelegatingParser;
 
-class LexemeDirective extends ParserDelegator
+class LexemeDirective extends DelegatingParser
 {
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {

@@ -2,13 +2,12 @@
 
 namespace Mxc\Parsec\Qi\Directive;
 
-use Mxc\Parsec\Qi\ParserDelegator;
+use Mxc\Parsec\Qi\DelegatingParser;
 
-// @todo: May be wrong to derive from ParserDelegator
-class OmitDirective extends ParserDelegator
+class OmitDirective extends DelegatingParser
 {
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
-        return parent::parse($iterator, null, 'unused', $skipper);
+        return parent::doParse($iterator, $expectedValue, 'unused', $skipper);
     }
 }

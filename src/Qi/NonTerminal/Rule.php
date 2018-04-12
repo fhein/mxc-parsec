@@ -2,9 +2,9 @@
 
 namespace Mxc\Parsec\Qi\NonTerminal;
 
-use Mxc\Parsec\Qi\Parser;
+use Mxc\Parsec\Qi\UnaryParser;
 
-class RuleParser extends Parser
+class Rule extends UnaryParser
 {
 
     public function __construct($domain, $name, $expression)
@@ -14,7 +14,7 @@ class RuleParser extends Parser
         $this->expression = $expression;
     }
 
-    public function parse($iterator, $expectedValue, $attributeType, $skipper)
+    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
     {
     }
 }
