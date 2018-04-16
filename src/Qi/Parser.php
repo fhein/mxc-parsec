@@ -11,6 +11,7 @@ abstract class Parser
     protected $domain;
     protected $attribute;
     protected $defaultType;
+    protected $name = 'no name';
 
     public function __construct(Domain $domain)
     {
@@ -188,6 +189,16 @@ abstract class Parser
     public function what()
     {
         return substr(strrchr(get_class($this), '\\'), 1);
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function __debugInfo()

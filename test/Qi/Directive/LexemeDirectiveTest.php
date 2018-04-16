@@ -45,6 +45,7 @@ class LexemeDirectiveTest extends ParserTestBed
 
     public function lexemeDirectiveDataProvider()
     {
+        // @todo: These tests do not actually test Lexeme
         $tests = [
             [ 'abcdef^', true, 'abcdef' ],
             [ '   abcdef^', true, 'abcdef' ],

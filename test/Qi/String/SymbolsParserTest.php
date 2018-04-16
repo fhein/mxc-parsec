@@ -3,7 +3,6 @@
 namespace Mxc\Test\Parsec\Qi\String;
 
 use Mxc\Parsec\Qi\String\SymbolsParser;
-use Mxc\Parsec\Qi\String\StringParser;
 use Mxc\Test\Parsec\ParserTestBed;
 
 class SymbolsParserTest extends ParserTestBed
@@ -20,9 +19,13 @@ class SymbolsParserTest extends ParserTestBed
     }
 
     /** @dataProvider symbolsParserDataProvider */
-    public function testSymbolsParserConstructor($input, $expectedValue, $expectedResult, $expectedAttribute = null)
-    {
-        $setup = [ 'abc' => 1, 'DEF' => 2 ];
+    public function testSymbolsParserConstructor(
+        $setup,
+        $input,
+        $expectedValue,
+        $expectedResult,
+        $expectedAttribute = null
+    ) {
         $cfg = $this->getParserConfig(SymbolsParser::class, $setup);
         $parser = $this->pm->build(SymbolsParser::class, [ $setup ]);
         self::assertInstanceOf(SymbolsParser::class, $parser);
@@ -30,30 +33,58 @@ class SymbolsParserTest extends ParserTestBed
     }
 
     /** @dataProvider symbolsParserDataProvider */
-    public function testSymbolsParserAdd($input, $expectedValue, $expectedResult, $expectedAttribute = null)
-    {
-        $setup = [ ];
+    public function testSymbolsParserAdd(
+        $setup,
+        $input,
+        $expectedValue,
+        $expectedResult,
+        $expectedAttribute = null
+    ) {
         $cfg = $this->getParserConfig(SymbolsParser::class, $setup);
         $parser = $this->pm->build(SymbolsParser::class);
         self::assertInstanceOf(SymbolsParser::class, $parser);
-        $parser->add('abc', 1);
-        $parser->add('DEF', 2);
-        $cfg .= "    Added: ('abc', 1), ('DEF', 2)\n";
+        foreach ($setup as $symbol => $value) {
+            $parser->add($symbol, $value);
+        }
         $this->doTest($cfg, $parser, $input, $expectedResult, $expectedValue, $expectedAttribute);
     }
 
     public function symbolsParserDataProvider()
     {
         $tests = [
-            ['abc', 1, true, 1],
-            ['abc', 2, false],
-            ['abc', null, true, 1],
-            ['ABC', null, false],
-            ['def', null, false],
-            ['DEF', 1, false],
-            ['DEF', 2, true, 2],
-            ['DEF', null, true, 2],
-            ['xyz', null, false],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'abc', 1, true, 1],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'abc', 2, false],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'abc', null, true, 1],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'ABC', null, false],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'def', null, false],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'DEF', 1, false],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'DEF', 2, true, 2],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'DEF', null, true, 2],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', null, false],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', 1, false],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', 2, false],
+            [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', 3, false],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', null, true, 1],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', null, true, 2],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', null, true, 3],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCD', null, true, 1],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', null, true, 2],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', null, true, 1],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', null, true, 2],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', 1, true, 1],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', 2, true, 2],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', 3, true, 3],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCD', 1, true, 1],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', 2, true, 2],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', 1, true, 1],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', 2, true, 2],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', 4, false],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', 4, false],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', 4, false],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCD', 4, false],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', 4, false],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', 4, false],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', 4, false],
         ];
 
         return $tests;

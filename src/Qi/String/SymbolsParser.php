@@ -36,13 +36,14 @@ class SymbolsParser extends PreSkipper
             $iterator->next();
         }
         $m['accept'] = true;
+        return $this;
     }
 
-    // return longest match
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $m = $this->map;
         $symbol = '';
+        $result = false;
         while ($iterator->valid()) {
             $c = $iterator->currentNoCase();
             if (! isset($m[$c])) {
@@ -51,9 +52,15 @@ class SymbolsParser extends PreSkipper
             $m = $m[$c];
             $symbol .= $c;
             $iterator->next();
+            if (isset($m['accept'])) {
+                $result = true;
+                $attr = $symbol;
+                $iterator->accept();
+                $iterator->try();
+            }
         };
-        if (isset($m['accept']) && $this->validate($expectedValue, $this->symbols[$symbol], $attributeType)) {
-            return true;
+        if ($result === true) {
+            return $this->validate($expectedValue, $this->symbols[$attr], $attributeType);
         }
         return false;
     }

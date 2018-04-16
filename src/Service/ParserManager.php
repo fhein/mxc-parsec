@@ -73,6 +73,21 @@ use Mxc\Parsec\Qi\NaryParser;
 use Mxc\Parsec\Qi\PreSkipper;
 use Mxc\Parsec\Qi\DelegatingParser;
 use Mxc\Parsec\Qi\PredicateParser;
+use Mxc\Parsec\Qi\Numeric\ShortParser;
+use Mxc\Parsec\Qi\Numeric\ULongParser;
+use Mxc\Parsec\Qi\Numeric\ULongLongParser;
+use Mxc\Parsec\Qi\Numeric\FloatParser;
+use Mxc\Parsec\Qi\Numeric\LongParser;
+use Mxc\Parsec\Qi\Numeric\LongLongParser;
+use Mxc\Parsec\Qi\Numeric\DoubleParser;
+use Mxc\Parsec\Qi\Numeric\LongDoubleParser;
+use Mxc\Parsec\Qi\Numeric\TrueParser;
+use Mxc\Parsec\Qi\Numeric\FalseParser;
+use Mxc\Parsec\Qi\Repository\Directive\DistinctDirective;
+use Mxc\Parsec\Qi\Operator\SequentialOrOperator;
+use Mxc\Parsec\Qi\Directive\AsStringDirective;
+use Mxc\Parsec\Qi\Repository\Auxiliary\AdvanceParser;
+use Mxc\Parsec\Qi\Auxiliary\LitParser;
 
 class ParserManager extends ServiceManager
 {
@@ -97,6 +112,7 @@ class ParserManager extends ServiceManager
         EoiParser::class                => ParserFactory::class,
         EpsParser::class                => ParserFactory::class,
         LazyParser::class               => ParserFactory::class,
+        LitParser::class                => ParserFactory::class,
         // binary
         ByteParser::class               => ParserFactory::class,
         WordParser::class               => ParserFactory::class,
@@ -135,17 +151,28 @@ class ParserManager extends ServiceManager
         RawDirective::class             => ParserFactory::class,
         RepeatDirective::class          => ParserFactory::class,
         SkipDirective::class            => ParserFactory::class,
+        AsStringDirective::class        => ParserFactory::class,
         // nonterminal
         Rule::class                     => ParserFactory::class,
         Grammar::class                  => ParserFactory::class,
         // numeric
         BinaryParser::class             => ParserFactory::class,
         BoolParser::class               => ParserFactory::class,
+        TrueParser::class               => ParserFactory::class,
+        FalseParser::class              => ParserFactory::class,
         HexParser::class                => ParserFactory::class,
-        IntParser::class                => ParserFactory::class,
         OctParser::class                => ParserFactory::class,
+        ShortParser::class              => ParserFactory::class,
+        IntParser::class                => ParserFactory::class,
+        LongParser::class               => ParserFactory::class,
+        LongLongParser::class           => ParserFactory::class,
+        UShortParser::class             => ParserFactory::class,
         UIntParser::class               => ParserFactory::class,
-        UShortParser::class               => ParserFactory::class,
+        ULongParser::class              => ParserFactory::class,
+        ULongLongParser::class          => ParserFactory::class,
+        FloatParser::class              => ParserFactory::class,
+        DoubleParser::class             => ParserFactory::class,
+        LongDoubleParser::class         => ParserFactory::class,
         //operator
         AlternativeOperator::class      => ParserFactory::class,
         AndPredicate::class             => ParserFactory::class,
@@ -158,9 +185,17 @@ class ParserManager extends ServiceManager
         PermutationOperator::class      => ParserFactory::class,
         PlusOperator::class             => ParserFactory::class,
         SequenceOperator::class         => ParserFactory::class,
+        SequentialOrOperator::class     => ParserFactory::class,
         // string
         StringParser::class             => ParserFactory::class,
         SymbolsParser::class            => ParserFactory::class,
+
+        // Repository
+        // directives
+        DistinctDirective::class        => ParserFactory::class,
+        // auxiliary
+        AdvanceParser::class            => ParserFactory::class,
+
         // non parsers
         Domain::class                   => DomainFactory::class,
     ];
@@ -250,6 +285,7 @@ class ParserManager extends ServiceManager
         'eoi'               => EoiParser::class,
         'eps'               => EpsParser::class,
         'lazy'              => LazyParser::class,
+        'lit'               => LitParser::class,
         // binary
         'byte'              => ByteParser::class,
         'word'              => WordParser::class,
@@ -288,17 +324,28 @@ class ParserManager extends ServiceManager
         'raw'               => RawDirective::class,
         'repeat'            => RepeatDirective::class,
         'skip'              => SkipDirective::class,
+        'as_string'         => AsStringDirective::class,
         // nonterminal
         'rule'              => Rule::class,
         'grammar'           => Grammar::class,
         // numeric
         'binary'            => BinaryParser::class,
         'bool'              => BoolParser::class,
+        'true_'             => TrueParser::class,
+        'false_'            => FalseParser::class,
         'hex'               => HexParser::class,
-        'int'               => IntParser::class,
         'oct'               => OctParser::class,
-        'uint'              => UIntParser::class,
-        'ushort'            => UShortParser::class,
+        'short_'            => ShortParser::class,
+        'int_'              => IntParser::class,
+        'long_'             => LongParser::class,
+        'long_long'         => LongLongParser::class,
+        'ushort_'           => UShortParser::class,
+        'uint_'             => UIntParser::class,
+        'ulong_'            => ULongParser::class,
+        'ulong_long'        => ULongLongParser::class,
+        'float_'            => FloatParser::class,
+        'double_'           => DoubleParser::class,
+        'long_double'       => DoubleParser::class,
         //operator
         '|'                 => AlternativeOperator::class,
         '&'                 => AndPredicate::class,
@@ -307,13 +354,20 @@ class ParserManager extends ServiceManager
         '*'                 => KleeneOperator::class,
         '%'                 => ListOperator::class,
         '!'                 => NotPredicate::class,
-        '-1'                => OptionalOperator::class,
+        'minus'             => OptionalOperator::class,
         '^'                 => PermutationOperator::class,
         '+'                 => PlusOperator::class,
         '>>'                => SequenceOperator::class,
+        '||'                => SequentialOrOperator::class,
         // string
         'string'            => StringParser::class,
         'symbols'           => SymbolsParser::class,
+
+        // Repository
+        // directives
+        'distinct'          => DistinctDirective::class,
+        // auxiliary
+        'advance'           => AdvanceParser::class,
     ];
 
     protected $abstractFactories = [
@@ -346,6 +400,8 @@ class ParserManager extends ServiceManager
         BinFloatParser::class           => true,
         BigBinFloatParser::class        => true,
         LittleBinFloatParser::class     => true,
+        TrueParser::class               => true,
+        FalseParser::class              => true,
     ];
 
     public function __construct(array $options = [])
@@ -399,7 +455,11 @@ class ParserManager extends ServiceManager
                         $di['NonTerminal'][] = $dname;
                         $tagged[$dname] = true;
                     }
-                } elseif ($name === BoolParser::class) {
+                } elseif ($name === BoolParser::class
+                    || $name === TrueParser::class
+                    || $name === FalseParser::class
+                    || $name === LitParser::class
+                ) {
                     $di['Primitive Parsers'][] = $dname;
                     $tagged[$dname] = true;
                 } elseif ($rc->isSubClassOf($class)) {

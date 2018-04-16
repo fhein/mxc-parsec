@@ -190,65 +190,87 @@ class ParserTestBed extends TestCase
                     )
                 );
             }
-            if ($expectedAttribute !== null) {
-                self::assertSame(
-                    $expectedAttribute,
-                    $attribute,
-                    sprintf(
-                        "%s\n%s\n\n  Unexpected attribute: %s. Expected: %s\n",
-                        $cfg,
-                        $this->getTestDescription(
-                            $input,
-                            $expectedValue,
-                            $expectedAttributeType,
-                            $expectedResult,
-                            $expectedAttribute,
-                            $result,
-                            $skipper,
-                            $iterator->key(),
-                            $attribute,
-                            $attributeType,
-                            $expectedIteratorPos
-                        ),
+            if (is_double($expectedAttribute)) {
+                if (is_nan($expectedAttribute)) {
+                    $this->assertTrue(is_nan($attribute));
+                } elseif (is_infinite($expectedAttribute)) {
+                    self::assertTrue(is_infinite($attribute));
+                }
+            } else {
+                if ($expectedAttribute !== null) {
+                    self::assertSame(
+                        $expectedAttribute,
                         $attribute,
-                        $expectedAttribute
-                    )
-                );
+                        sprintf(
+                            "%s\n%s\n\n  Unexpected attribute: %s. Expected: %s\n",
+                            $cfg,
+                            $this->getTestDescription(
+                                $input,
+                                $expectedValue,
+                                $expectedAttributeType,
+                                $expectedResult,
+                                $expectedAttribute,
+                                $result,
+                                $skipper,
+                                $iterator->key(),
+                                $attribute,
+                                $attributeType,
+                                $expectedIteratorPos
+                            ),
+                            $attribute,
+                            $expectedAttribute
+                        )
+                    );
+                }
             }
             if ($expectedValue !== null) {
-                $expValue = $this->getTypedExpectedValue($expectedAttributeType, $expectedValue);
-                $attr = $attribute;
-                if ($parser instanceof NoCaseDirective
-                    && $this->getType($expValue) === 'string'
-                    && $this->getType($attribute) === 'string'
-                ) {
-                    // @todo: IntlChar based version of strtolower
-                    $attr = strtolower($attr);
-                    $expValue = strtolower($expValue);
+                if (is_double($expectedValue)) {
+                    if (is_nan($expectedValue)) {
+                        $this->assertTrue(is_nan($attribute));
+                    } elseif (is_infinite($expectedValue)) {
+                        self::assertTrue(is_infinite($attribute));
+                    }
+                } else {
+                    $expValue = $this->getTypedExpectedValue($expectedAttributeType, $expectedValue);
+                    $attr = $attribute;
+                    if ($parser instanceof NoCaseDirective
+                        && $this->getType($expValue) === 'string'
+                        && $this->getType($attribute) === 'string'
+                    ) {
+                        // @todo: IntlChar based version of strtolower
+                        $attr = strtolower($attr);
+                        $expValue = strtolower($expValue);
+                    }
+                    if (is_float($expectedValue) && is_nan($expectedValue)) {
+                        self::assertSame(true, is_nan($attribute));
+                    } elseif (is_float($expectedValue) && is_infinite($expectedValue)) {
+                        self::assertSame(true, is_infinite($attribute));
+                    } else {
+                        self::assertSame(
+                            $expValue,
+                            $attr,
+                            sprintf(
+                                "%s\n%s\n\n  Attribute %s does not match expected value %s.\n",
+                                $cfg,
+                                $this->getTestDescription(
+                                    $input,
+                                    $expectedValue,
+                                    $expectedAttributeType,
+                                    $expectedResult,
+                                    $expectedAttribute,
+                                    $result,
+                                    $skipper,
+                                    $iterator->key(),
+                                    $attribute,
+                                    $attributeType,
+                                    $expectedIteratorPos
+                                ),
+                                var_export($attribute, true),
+                                var_export($expectedAttribute, true)
+                            )
+                        );
+                    }
                 }
-                self::assertSame(
-                    $expValue,
-                    $attr,
-                    sprintf(
-                        "%s\n%s\n\n  Attribute mismatch: %s. Expected: %s\n",
-                        $cfg,
-                        $this->getTestDescription(
-                            $input,
-                            $expectedValue,
-                            $expectedAttributeType,
-                            $expectedResult,
-                            $expectedAttribute,
-                            $result,
-                            $skipper,
-                            $iterator->key(),
-                            $attribute,
-                            $attributeType,
-                            $expectedIteratorPos
-                        ),
-                        var_export($attribute, true),
-                        var_export($expectedAttribute, true)
-                    )
-                );
             }
             if ($expectedIteratorPos !== null) {
                 self::assertSame(
