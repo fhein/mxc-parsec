@@ -36,9 +36,9 @@ class LazyParser extends Parser
      * @param string $class
      * @param array ...$args
      */
-    public function __construct(Domain $domain, string $class, ...$args)
+    public function __construct(Domain $domain, string $class, array $args = [])
     {
-        $this->domain = $domain;
+        parent::__construct($domain);
         $this->args = $args;
         $this->class = $class;
     }
@@ -66,7 +66,7 @@ class LazyParser extends Parser
             return $this->subject;
         }
         if (is_string($this->class) && class_exists($this->class)) {
-            $this->subject = new $this->class($this->domain, $this->args);
+            $this->subject = $this->domain->buildParser($this->class, $this->args);
         } else {
             throw new InvalidArgumentException('Provided class is not a string or class does not exist.');
         }
@@ -86,5 +86,10 @@ class LazyParser extends Parser
                 'subject' => $this->subject ?? 'n/a',
             ]
         );
+    }
+
+    public function getAttribute()
+    {
+        return $this->getSubject()->getAttribute();
     }
 }

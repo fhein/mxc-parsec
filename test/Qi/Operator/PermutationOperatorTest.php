@@ -32,7 +32,6 @@ class PermutationOperatorTest extends ParserTestBed
         $secondMock = new MockParserDoParse($domain, $result2);
 
         $operator = $this->pm->build(PermutationOperator::class, [ [ $firstMock, $secondMock ] ]);
-        self::assertInstanceOf(PermutationOperator::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

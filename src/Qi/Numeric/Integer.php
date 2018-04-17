@@ -56,7 +56,7 @@ class Integer extends PreSkipper
     public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
         $got = 0;
-
+        $sign = '';
         if ($this->signsParser->doParse($iterator)) {
             $sign = $this->signsParser->getAttribute();
         }
@@ -76,6 +76,9 @@ class Integer extends PreSkipper
         //     // check overflow condition
         //     if ($str === ($sgn.($this->toString)($this->castTo('integer', ($this->toDecimal)($str))))) {
         //     throw new OverflowException(sprintf('Integer overflow on %s. Try \'string\' attribute type.', $str));
+
+//         print("\n".$this->digitsParser->getAttribute()."\n");
+//         print($got."\n");
 
         return
             // got no more than max digits

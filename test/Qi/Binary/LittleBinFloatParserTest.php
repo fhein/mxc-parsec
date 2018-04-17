@@ -21,7 +21,6 @@ class LittleBinFloatParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(LittleBinFloatParser::class);
         $parser = $this->pm->build(LittleBinFloatParser::class);
-        self::assertInstanceOf(LittleBinFloatParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

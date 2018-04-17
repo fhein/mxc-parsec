@@ -24,12 +24,22 @@ class SymbolsParserTest extends ParserTestBed
         $input,
         $expectedValue,
         $expectedResult,
-        $expectedAttribute = null
+        $expectedAttribute = null,
+        $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(SymbolsParser::class, $setup);
         $parser = $this->pm->build(SymbolsParser::class, [ $setup ]);
-        self::assertInstanceOf(SymbolsParser::class, $parser);
-        $this->doTest($cfg, $parser, $input, $expectedResult, $expectedValue, $expectedAttribute);
+
+        $this->doTest(
+            $cfg,
+            $parser,
+            $input,
+            $expectedResult,
+            $expectedValue,
+            $expectedAttribute,
+            null,
+            $expectedIteratorPos
+        );
     }
 
     /** @dataProvider symbolsParserDataProvider */
@@ -38,15 +48,26 @@ class SymbolsParserTest extends ParserTestBed
         $input,
         $expectedValue,
         $expectedResult,
-        $expectedAttribute = null
+        $expectedAttribute = null,
+        $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(SymbolsParser::class, $setup);
         $parser = $this->pm->build(SymbolsParser::class);
-        self::assertInstanceOf(SymbolsParser::class, $parser);
+
         foreach ($setup as $symbol => $value) {
             $parser->add($symbol, $value);
         }
-        $this->doTest($cfg, $parser, $input, $expectedResult, $expectedValue, $expectedAttribute);
+
+        $this->doTest(
+            $cfg,
+            $parser,
+            $input,
+            $expectedResult,
+            $expectedValue,
+            $expectedAttribute,
+            null,
+            $expectedIteratorPos
+        );
     }
 
     public function symbolsParserDataProvider()
@@ -65,19 +86,19 @@ class SymbolsParserTest extends ParserTestBed
             [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', 2, false],
             [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', 3, false],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', null, true, 1],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', null, true, 2],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', null, true, 3],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCD', null, true, 1],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', null, true, 2],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', null, true, 1],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', null, true, 2],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', 1, true, 1],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', 2, true, 2],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', 3, true, 3],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCD', 1, true, 1],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', 2, true, 2],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', 1, true, 1],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', 2, true, 2],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', null, true, 2, 6],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', null, true, 3, 9],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCD', null, true, 1, 3],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', null, true, 2, 6],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', null, true, 1, 3],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', null, true, 2, 6],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', 1, true, 1, 3],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', 2, true, 2, 6],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', 3, true, 3, 9],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCD', 1, true, 1, 3],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', 2, true, 2, 6],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', 1, true, 1, 3],
+            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', 2, true, 2, 6],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', 4, false],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', 4, false],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', 4, false],

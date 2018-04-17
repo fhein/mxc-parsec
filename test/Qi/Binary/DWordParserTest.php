@@ -21,7 +21,6 @@ class DWordParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(DWordParser::class);
         $parser = $this->pm->build(DWordParser::class);
-        self::assertInstanceOf(DWordParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

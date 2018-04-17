@@ -3,7 +3,6 @@
 namespace Mxc\Parsec;
 
 use Mxc\Parsec\Encoding\CharacterClassifier;
-use Mxc\Parsec\Qi\Unused;
 
 class Domain
 {
@@ -22,20 +21,12 @@ class Domain
 
     protected $parserManager;
 
-    protected $unused;
-
     public function __construct($parserManager, $inputEncoding = 'UTF-8', $internalEncoding = 'UTF-8')
     {
         $this->inputEncoding = $inputEncoding;
         $this->internalEncoding = $internalEncoding;
         $this->inputIterator = $parserManager->get($inputEncoding);
         $this->parserManager = $parserManager;
-        $this->unused = $this->parserManager->get(Unused::class);
-    }
-
-    public function getUnused()
-    {
-        return $this->unused;
     }
 
     public function getCharacterClassifier()
@@ -78,5 +69,15 @@ class Domain
     public function getNoCaseSetting()
     {
         return end($this->noCaseSetting);
+    }
+
+    public function buildParser(string $class, array $options = [])
+    {
+        return $this->parserManager->build($class, $options);
+    }
+
+    public function __debugInfo()
+    {
+        return ['Domain'];
     }
 }

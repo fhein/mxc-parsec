@@ -29,7 +29,6 @@ class MatchesDirectiveTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $mock = new MockPreSkipperMatchingAllButCaret($domain);
         $directive = new MatchesDirective($domain, $mock);
-        self::assertInstanceOf(MatchesDirective::class, $directive);
 
         $this->doTest(
             $cfg,                       // test configuration description

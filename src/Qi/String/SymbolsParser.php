@@ -60,6 +60,8 @@ class SymbolsParser extends PreSkipper
             }
         };
         if ($result === true) {
+            $iterator->reject();
+            $iterator->try();
             return $this->validate($expectedValue, $this->symbols[$attr], $attributeType);
         }
         return false;

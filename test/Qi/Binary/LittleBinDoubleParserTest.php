@@ -21,7 +21,6 @@ class LittleBinDoubleParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(LittleBinDoubleParser::class);
         $parser = $this->pm->build(LittleBinDoubleParser::class);
-        self::assertInstanceOf(LittleBinDoubleParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

@@ -21,7 +21,6 @@ class BinFloatParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(BinFloatParser::class);
         $parser = $this->pm->build(BinFloatParser::class);
-        self::assertInstanceOf(BinFloatParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

@@ -5,6 +5,7 @@ namespace Mxc\Parsec\Qi;
 use Mxc\Parsec\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 use Mxc\Parsec\Exception\UnknownCastException;
+use Mxc\Parsec\Attribute\Optional;
 
 abstract class Parser
 {
@@ -93,8 +94,7 @@ abstract class Parser
                 return doubleval($value);
 
             case 'unused':
-                return $this->domain->getUnused();
-                return;
+                return new Unused();
 
             case 'array':
                 return [ $value ];
@@ -131,14 +131,22 @@ abstract class Parser
         );
     }
 
+    public function assignUnusedOptional($attributeType = null)
+    {
+        $this->assignTo(new Optional(new Unused()), $attributeType);
+    }
+
     protected function assignTo($value, $attributeType)
     {
+        $attributeType = $attributeType ?? $this->defaultType;
+
         // unused values can not be casted
         if ($value instanceof Unused) {
+            if ($attributeType === 'optional') {
+                $this->attribute = new Optional($value);
+            }
             return;
         }
-
-        $attributeType = $attributeType ?? $this->defaultType;
 
         switch ($attributeType) {
             case null:
@@ -162,7 +170,7 @@ abstract class Parser
                 return;
 
             case 'unused':
-                $this->attribute = $this->domain->getUnused();
+                $this->attribute = new Unused();
                 return;
 
             case 'string':
@@ -171,6 +179,14 @@ abstract class Parser
 
             case 'array':
                 $this->attribute [] = $value;
+                return;
+
+            case 'optional':
+                if ($this->attribute instanceof Optional) {
+                    $this->attribute->set($value);
+                    return;
+                }
+                $this->attribute = new Optional($value);
                 return;
 
             default:

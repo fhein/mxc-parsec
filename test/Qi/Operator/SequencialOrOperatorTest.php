@@ -27,7 +27,6 @@ class SequentialOrOperatorTest extends ParserTestBed
         }
 
         $operator = $this->pm->build(SequentialOrOperator::class, [[ $p[1], $p[2], $p[3], $p[4], $p[5]]]);
-        self::assertInstanceOf(SequentialOrOperator::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

@@ -32,7 +32,6 @@ class KleeneOperatorTest extends ParserTestBed
         $mock = new MockParserNResult($domain, $test[1], $test[0]);
 
         $operator = $this->pm->build(KleeneOperator::class, [ $mock ]);
-        self::assertInstanceOf(KleeneOperator::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

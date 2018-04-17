@@ -24,7 +24,6 @@ class EolParserTest extends ParserTestBed
 
         $cfg = $this->getParserConfig(EolParser::class);
         $parser = $this->pm->build(EolParser::class);
-        self::assertInstanceOf(EolParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

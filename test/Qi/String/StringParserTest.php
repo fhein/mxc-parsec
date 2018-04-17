@@ -23,7 +23,6 @@ class StringParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(StringParser::class, $expectedValue);
         $parser = $this->pm->build(StringParser::class, [$expectedValue]);
-        self::assertInstanceOf(StringParser::class, $parser);
 
         $this->doTest($cfg, $parser, $input, $expectedResult, $expectedValue, $expectedAttribute);
     }

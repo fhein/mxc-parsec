@@ -22,7 +22,6 @@ class EpsParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(EpsParser::class);
         $parser = $this->pm->build(EpsParser::class);
-        self::assertInstanceOf(EpsParser::class, $parser);
         $this->doTest(
             $cfg,               // test configuration description
             $parser,            // parser to test

@@ -29,7 +29,6 @@ class OmitDirectiveTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $mock = new MockPreSkipperMatchingAllButCaret($domain);
         $directive = new OmitDirective($domain, $mock);
-        self::assertInstanceOf(OmitDirective::class, $directive);
 
         $this->doTest(
             $cfg,                       // test configuration description
@@ -37,7 +36,7 @@ class OmitDirectiveTest extends ParserTestBed
             $source,                    // input
             $expectedResult,            // expected result
             null,                       // expected value (any)
-            $domain->GetUnused(),       // expected attribute
+            new Unused(),               // expected attribute
             null,                       // expected attribute type
             $expectedIteratorPos        // expected position of iterator after parsing
         );

@@ -45,7 +45,6 @@ class ExpectDirectiveTest extends ParserTestBed
             ->willReturn($mockResult);
 
         $directive = $this->pm->build(ExpectDirective::class, [ $mock ]);
-        self::assertInstanceOf(ExpectDirective::class, $directive);
 
         if ($exception !== null) {
             self::expectException($exception);

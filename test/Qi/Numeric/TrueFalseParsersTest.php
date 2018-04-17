@@ -25,7 +25,6 @@ class TrueFalseParsersTest extends ParserTestBed
     ) {
         $cfg = $this->getParserConfig($class);
         $parser = $this->pm->build($class);
-        self::assertInstanceOf($class, $parser);
 
         $this->doTest(
             $cfg,

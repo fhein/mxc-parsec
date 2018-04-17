@@ -514,6 +514,19 @@ class ParserManager extends ServiceManager
         return $di;
     }
 
+    public function getFQCN()
+    {
+        $di = [];
+        foreach (array_keys($this->factories) as $name) {
+            if ($name[0] === '~' || $name === Domain::class) {
+                continue;
+            }
+            $dname = substr(strrchr($name, '\\'), 1);
+            $di[$dname] = $name;
+        }
+        return $di;
+    }
+
     public function __debugInfo()
     {
         return [

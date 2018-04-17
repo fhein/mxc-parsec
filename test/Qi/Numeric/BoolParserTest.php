@@ -31,7 +31,6 @@ class BoolParserTest extends ParserTestBed
     ) {
         $cfg = $this->getParserConfig(BoolParser::class, $policy);
         $parser = $this->pm->build(BoolParser::class, [ new $policy() ]);
-        self::assertInstanceOf(BoolParser::class, $parser);
 
         $this->doTest(
             $cfg,

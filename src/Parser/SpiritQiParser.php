@@ -79,8 +79,8 @@ use Mxc\Parsec\Qi\Operator\SequentialOrOperator;
 use Mxc\Parsec\Qi\Directive\AsStringDirective;
 use Mxc\Parsec\Qi\Auxiliary\LitParser;
 use Mxc\Parsec\Qi\Repository\Auxiliary\AdvanceParser;
-
-class Symbols {}
+use Mxc\Parsec\Qi\Numeric\TrueParser;
+use Mxc\Parsec\Qi\Numeric\FalseParser;
 
 class SpiritQiParser
 {
@@ -90,9 +90,6 @@ class SpiritQiParser
     public function __construct(ParserManager $pm, string $source)
     {
         $this->pm = $pm;
-
-        $hex_char = "0-9a-zA-Z";
-        $msg = "Expected ";
 
         $backslash = "\\";
         $escaped_u = "\\U";
@@ -109,183 +106,165 @@ class SpiritQiParser
         $escaped_t = "\\\t";
         $escaped_v = "\\\v";
 
-
-
 //         // ****!**** BEGIN
 
-        $escapedChars = $this->pm->build(SymbolsParser::class);
-        $escapedChars
-        ->add(escaped_u, escaped_u)
-        ->add(escaped_x, escaped_x)
-        ->add(escaped_single_quote, escaped_single_quote)
-        ->add(escaped_quote, escaped_quote)
-        ->add(escaped_question_mark, escaped_question_mark)
-        ->add(escaped_backslash, escaped_backslash)
-        ->add(escaped_a, escaped_a)
-        ->add(escaped_b, escaped_b)
-        ->add(escaped_f, escaped_f)
-        ->add(escaped_n, escaped_n)
-        ->add(escaped_r, escaped_r)
-        ->add(escaped_t, escaped_t)
-        ->add(escaped_v, escaped_v)
-        ;
-
-        $directives = $this->pm->build(SymbolsParser::class);
-        $directives
-        ->add("lexeme", LexemeDirective::class)
-        ->add("no_skip", NoSkipDirective::class)
-        ->add("no_case", NoCaseDirective::class)
-        ->add("omit", OmitDirective::class)
-        ->add("matches", MatchesDirective::class)
-        ->add("as_string", AsStringDirective::class)
-        ->add("raw", RawDirective::class)
-        ->add("skip", SkipDirective::class)
-        ->add("hold", HoldDirective::class)
-        ->add("repeat", RepeatDirective::class)
-        //   ->add("as", AsDirective::class)
-        //   ->add("as_wstring", as_wstring_directive)
-        // directives from repository
-        //  ->add("confix", token_type::confix_directive)
-        //  ->add("kwd", token_type::keyword_directive)
-        //  ->add("ikwd", token_type::ignore_case_keyword_directive)
-        //  ->add("seek", token_type::seek_directive)
-        ;
-
-        // qi parsers should not take parsers as
-        // arguments to their constructors
-        // distinct does not comply to this
-        // convention, so we need special handling
-        $distinctDirective = $this->pm->build(SymbolsParser::class);
-        $distinctDirective
-        ->add("distinct", DistinctDirective::class);
-
-        // unary operators
-        $prec_3_op = $this->pm->build(SymbolsParser::class);
-        $prec_3_op->setName("unary operator");
-        $prec_3_op
-        ->add("-", OptionalOperator::class)
-        ->add("!", NotPredicate::class)
-        ->add("+", PlusOperator::class)
-        ->add("*", KleeneOperator::class)
-        ->add("&", AndPredicate::class)
-        ;
-
-        $prec_5_op = $this->pm->build(SymbolsParser::class);
-        $prec_5_op->setName("% or /");
-        $prec_5_op
-        ->add("%", ListOperator::class)
-//      ->add("/", KeywordListOperator::class)  // repository
-        ;
-
-        $prec_6_op = $this->pm->build(SymbolsParser::class);
-        $prec_6_op->setName("difference operator");
-        $prec_6_op
-        ->add("-", DifferenceOperator::class)
-        ;
-
-        $prec_7_op = $this->pm->build(SymbolsParser::class);
-        $prec_7_op->setName("sequence operator");
-        $prec_7_op
-        ->add(">>", SequenceOperator::class)
-        ;
-
-        $prec_8_op = $this->pm->build(SymbolsParser::class);
-        $prec_8_op->setName('expect operator');
-        $prec_8_op
-        ->add(">", ExpectOperator::class)
-        ;
-
-        $prec_11_op = $this->pm->build(SymbolsParser::class);
-        $prec_11_op->setName("permutation operator");
-        $prec_11_op
-        ->add("^", PermutationOperator::class)
-        ;
-
-        $prec_12_op = $this->pm->build(SymbolsParser::class);
-        $prec_12_op->setName("alternative operator");
-        $prec_12_op
-        ->add("|", AlternativeOperator::class)
-        ;
-
-        $prec_14_op = $this->pm->build(SymbolsParser::class);
-        $prec_14_op->setName("sequential-or operator");
-        $prec_14_op
-        ->add("||", SequentialOrOperator::class)
-        ;
-
-        $prec_15_op = $this->pm->build(SymbolsParser::class);
-        $prec_15_op->setName("assignment operator");
-        $prec_15_op
-        ("=", Rule::class)
-        ("%=", Rule::class)
-        ;
-
-        $parsers = $this->pm->build(SymbolsParser::class);
-        $parsers->setName("parser");
-        $parsers
-        ->add("float_", FloatParser::class)
-        ->add("double_", DoubleParser::class)
-        ->add("long_double", LongDoubleParser::class)
-        ->add("bin", BinaryParser::class)
-        ->add("oct", OctParser::class)
-        ->add("hex", HexParser::class)
-        ->add("ushort_", UShortParser::class)
-        ->add("ulong_", ULongParser::class)
-        ->add("uint_", UIntParser::class)
-        ->add("ulong_long", ULongLongParser::class)
-        ->add("short_", ShortParser::class)
-        ->add("long_", LongParser::class)
-        ->add("int_", IntParser::class)
-        ->add("long_long", LongLongParser::class)
-        ->add("eps", EpsParser::class)
-        ->add("lazy", LazyParser::class)
-        ->add("attr", AttrParser::class)
-        ->add("byte_", ByteParser::class)
-        ->add("word", WordParser::class)
-        ->add("big_word", BigWordParser::class)
-        ->add("little_word", LittleWordParser::class)
-        ->add("qword", QWordParser::class)
-        ->add("big_qword", BigQWordParser::class)
-        ->add("little_qword", LittleQWordParser::class)
-        ->add("bin_float", BinFloatParser::class)
-        ->add("big_bin_float", BigBinFloatParser::class)
-        ->add("little_bin_float", LittleBinFloatParser::class)
-        ->add("bin_double", BinDoubleParser::class)
-        ->add("big_bin_double", BigBinDoubleParser::class)
-        ->add("little_bin_double", LittleBinDoubleParser::class)
-        ->add("char_", CharParser::class)
-        ->add("string", StringParser::class)
-        ->add("lit", LitParser::class)
-        ->add("advance", AdvanceParser::class)
-        ->add("eol", EolParser::class)
-        ->add("eoi", EoiParser::class)
-//        ->add("auto_", AutoParser::class) @todo: Necessary?
-        ->add("alnum", AlnumParser::class)
-        ->add("alpha", AlphaParser::class)
-        ->add("blank", BlankParser::class)
-        ->add("cntrl", CntrlParser::class)
-        ->add("digit", DigitParser::class)
-        ->add("graph", GraphParser::class)
-        ->add("print", PrintParser::class)
-        ->add("punct", PunctParser::class)
-        ->add("space", SpaceParser::class)
-        ->add("xdigit", XDigitParser::class)
-        ->add("lower", LowerParser::class)
-        ->add("upper", UpperParser::class)
-        ->add("bool_", BoolParser::class)
-        ->add("true_", TrueParser::class)
-        ->add("false_", FalseParser::class)
-        ;
-
-
         $this->rules = [
+            'directives' => [
+                SymbolsParser::class, [
+                    "lexeme" => LexemeDirective::class,
+                    "no_skip" => NoSkipDirective::class,
+                    "no_case" => NoCaseDirective::class,
+                    "omit" => OmitDirective::class,
+                    "matches" => MatchesDirective::class,
+                    "as_string" => AsStringDirective::class,
+                    "raw" => RawDirective::class,
+                    "skip" => SkipDirective::class,
+                    "hold" => HoldDirective::class,
+                    "repeat" => RepeatDirective::class,
+                    //   "as" => AsDirective::class,
+                    //   "as_wstring" => as_wstring_directive,
+                    // directives from repository
+                    //  "confix" => token_type::confix_directive,
+                    //  "kwd" => token_type::keyword_directive,
+                    //  "ikwd" => token_type::ignore_case_keyword_directive,
+                    //  "seek" => token_type::seek_directive,
+                ],
+            ],
+            'distinct_directive' => [
+                SymbolsParser::class, [
+                    'distinct' => DistinctDirective::class,
+                ],
+            ],
+            'prec_3_op' => [
+                SymbolsParser::class, [
+                    "-" => OptionalOperator::class,
+                    "!" => NotPredicate::class,
+                    "+" => PlusOperator::class,
+                    "*" => KleeneOperator::class,
+                    "&" => AndPredicate::class,
+                ],
+            ],
+            'prec_5_op' => [
+                SymbolsParser::class, [
+                    '%' => ListOperator::class,
+                ],
+            ],
+            'prec_6_op' => [
+                SymbolsParser::class, [
+                    '-' => DifferenceOperator::class,
+                ],
+            ],
+            'prec_7_op' => [
+                SymbolsParser::class, [
+                    '>>' => SequenceOperator::class,
+                ],
+            ],
+            'prec_8_op' => [
+                SymbolsParser::class, [
+                    '>' => ExpectOperator::class,
+                ],
+            ],
+            'prec_11_op' => [
+                SymbolsParser::class, [
+                    '^' => PermutationOperator::class,
+                ],
+            ],
+            'prec_12_op' => [
+                SymbolsParser::class, [
+                    '|' => AlternativeOperator::class,
+                ],
+            ],
+            'prec_14_op' => [
+                SymbolsParser::class, [
+                    '||' => SequentialOrOperator::class,
+                ],
+            ],
+            'prec_15_op' => [
+                SymbolsParser::class, [
+                    '=' => Rule::class,
+                    '%=' => Rule::class,
+                ],
+            ],
+            'escaped_chars' => [
+                SymbolsParser::class, [
+                    'escaped_u' => $escaped_u,
+                    'escaped_x' => $escaped_x,
+                    'escaped_single_quote' => $escaped_single_quote,
+                    'escaped_quote' => $escaped_quote,
+                    'escaped_question_mark' => $escaped_question_mark,
+                    'escaped_backslash' => $escaped_backslash,
+                    'escaped_a' => $escaped_a,
+                    'escaped_b' => $escaped_b,
+                    'escaped_f' => $escaped_f,
+                    'escaped_n' => $escaped_n,
+                    'escaped_r' => $escaped_r,
+                    'escaped_t' => $escaped_t,
+                    'escaped_v' => $escaped_v,
+                ]
+            ],
+            'parsers' => [
+                SymbolsParser::class, [
+                    "float_" => FloatParser::class,
+                    "double_" => DoubleParser::class,
+                    "long_double" => LongDoubleParser::class,
+                    "bin" => BinaryParser::class,
+                    "oct" => OctParser::class,
+                    "hex" => HexParser::class,
+                    "ushort_" => UShortParser::class,
+                    "ulong_" => ULongParser::class,
+                    "uint_" => UIntParser::class,
+                    "ulong_long" => ULongLongParser::class,
+                    "short_" => ShortParser::class,
+                    "long_" => LongParser::class,
+                    "int_" => IntParser::class,
+                    "long_long" => LongLongParser::class,
+                    "eps" => EpsParser::class,
+                    "lazy" => LazyParser::class,
+                    "attr" => AttrParser::class,
+                    "byte_" => ByteParser::class,
+                    "word" => WordParser::class,
+                    "big_word" => BigWordParser::class,
+                    "little_word" => LittleWordParser::class,
+                    "qword" => QWordParser::class,
+                    "big_qword" => BigQWordParser::class,
+                    "little_qword" => LittleQWordParser::class,
+                    "bin_float" => BinFloatParser::class,
+                    "big_bin_float" => BigBinFloatParser::class,
+                    "little_bin_float" => LittleBinFloatParser::class,
+                    "bin_double" => BinDoubleParser::class,
+                    "big_bin_double" => BigBinDoubleParser::class,
+                    "little_bin_double" => LittleBinDoubleParser::class,
+                    "char_" => CharParser::class,
+                    "string" => StringParser::class,
+                    "lit" => LitParser::class,
+                    "advance" => AdvanceParser::class,
+                    "eol" => EolParser::class,
+                    "eoi" => EoiParser::class,
+                    //        "auto_" => AutoParser::class, @todo: Necessary?
+                    "alnum" => AlnumParser::class,
+                    "alpha" => AlphaParser::class,
+                    "blank" => BlankParser::class,
+                    "cntrl" => CntrlParser::class,
+                    "digit" => DigitParser::class,
+                    "graph" => GraphParser::class,
+                    "print" => PrintParser::class,
+                    "punct" => PunctParser::class,
+                    "space" => SpaceParser::class,
+                    "xdigit" => XDigitParser::class,
+                    "lower" => LowerParser::class,
+                    "upper" => UpperParser::class,
+                    "bool_" => BoolParser::class,
+                    "true_" => TrueParser::class,
+                    "false_" => FalseParser::class,
+                ],
+            ],
             // start = +(symboltable | assignment | symboltable_definition);
             'start' => [
                 PlusOperator::class, [
                     [AlternativeOperator::class, [
-                        [Rule::class, ['symboltable']],
-                        [Rule::class, ['assignment']],
-                        [Rule::class, ['symboltable_definition']],
+                        'symboltable',
+                        'assignment',
+                        'symboltable_definition',
                     ]],
                 ],
             ],
@@ -294,17 +273,17 @@ class SpiritQiParser
             'assignment' => [[
                 ExpectOperator::class, [
                     [SequenceOperator::class, [
-                        [Rule::class, ['id']],
-                        [Rule::class, ['rule_operation']]
+                        'id',
+                        'rule_operation'
                     ]],
                 ]
             ],
             // rule_operation = prec_15_op > prec_14_expr;
             'rule_operation' => [
                 ExpectOperator::class, [
-                    [SymbolsParser::class, ['prec_15_op']],
-                    [Rule::class, ['prec_14_expr']]
-                ]
+                    'prec_15_op',
+                    'prec_14_expr',
+                ],
             ],
 
             // symboltable = identifier >> lit('.') >> lit('add') >> +symbol >> lit(';')
@@ -312,7 +291,7 @@ class SpiritQiParser
                 SequenceOperator::class, [
                     [LitParser::class, ['.add']],
                     [PlusOperator::class, [
-                        [Rule::class, ['symbol']],
+                        'symbol',
                     ]],
                     [LitParser::class, [';']],
                 ],
@@ -331,7 +310,7 @@ class SpiritQiParser
                         [LitParser::class, ['"']],
                     ]],
                 ],
-                [Rule::class, ['identifier']]
+                'identifier',
             ],
 
             // value = *(char_ - ')')
@@ -344,14 +323,13 @@ class SpiritQiParser
                 ],
             ],
             // symbol = '(' >> name >> lit(',') >> value > ')';
-
             'symbol' => [
                 ExpectOperator::class, [
                     [SequenceOperator::class, [
                         [LitParser::class, ['(']],
-                        [Rule::class, ['name']],
+                        'name',
                         [LitParser::class, [',']],
-                        [Rule::class, ['value']],
+                        'value',
                     ]],
                     [LitParser::class, [')']],
                 ],
@@ -374,7 +352,7 @@ class SpiritQiParser
             'symdef_ids' => [
                 PlusOperator::class, [
                     [SequenceOperator::class, [
-                        [Rule::class, ['id']],
+                        'id',
                         [LitParser::class, [',']],
                     ]],
                 ]
@@ -388,8 +366,8 @@ class SpiritQiParser
                     [LitParser::class, ['<']],
                     [LitParser::class, ['char']],
                     [LitParser::class, [',']],
-                    [Rule::class, ['symbol_type']],
-                    [Rule::class, ['symdef_ids']],
+                    'symbol_type',
+                    'symdef_ids',
                     [LitParser::class, [';']],
                 ],
             ],
@@ -401,11 +379,11 @@ class SpiritQiParser
             // prec_14_expr = prec_12_expr >> *(prec_14_op > prec_12_expr);
             'prec_14_expr' => [
                 SequenceOperator::class, [
-                    [Rule::class,  ['prec_12_expr']],
+                    'prec_12_expr',
                     [KleeneOperator::class, [
                         [ExpectOperator::class, [
-                            [Rule::class, ['prec_14_op']],
-                            [Rule::class, ['prec_12_expr']],
+                            'prec_14_op',
+                            'prec_12_expr',
                         ]],
                     ]],
                 ],
@@ -414,11 +392,11 @@ class SpiritQiParser
             // prec_12_expr = prec_11_expr >> *(prec_12_op > prec_11_expr);
             'prec_12_expr' => [
                 SequenceOperator::class, [
-                    [Rule::class,  ['prec_11_expr']],
+                    'prec_11_expr',
                     [KleeneOperator::class, [
                         [ExpectOperator::class, [
-                            [Rule::class, ['prec_12_op']],
-                            [Rule::class, ['prec_11_expr']],
+                            'prec_12_op',
+                            'prec_11_expr',
                         ]],
                     ]],
                 ],
@@ -427,11 +405,11 @@ class SpiritQiParser
             // prec_11_expr = prec_8_expr >> *(prec_11_op > prec_8_expr);
             'prec_11_expr' => [
                 SequenceOperator::class, [
-                    [Rule::class,  ['prec_8_expr']],
+                    'prec_8_expr',
                     [KleeneOperator::class, [
                         [ExpectOperator::class, [
-                            [Rule::class, ['prec_11_op']],
-                            [Rule::class, ['prec_8_expr']],
+                            'prec_11_op',
+                            'prec_8_expr',
                         ]],
                     ]],
                 ],
@@ -440,11 +418,11 @@ class SpiritQiParser
             // prec_8_expr = prec_7_expr >> *(prec_8_op > prec_7_expr);
             'prec_8_expr' => [
                 SequenceOperator::class, [
-                    [Rule::class,  ['prec_7_expr']],
+                    'prec_7_expr',
                     [KleeneOperator::class, [
                         [ExpectOperator::class, [
-                            [Rule::class, ['prec_8_op']],
-                            [Rule::class, ['prec_7_expr']],
+                            'prec_8_op',
+                            'prec_7_expr',
                         ]],
                     ]],
                 ],
@@ -454,11 +432,11 @@ class SpiritQiParser
             // prec_7_expr = prec_6_expr >> *(prec_7_op > prec_6_expr);
             'prec_7_expr' => [
                 SequenceOperator::class, [
-                    [Rule::class,  ['prec_6_expr']],
+                    'prec_6_expr',
                     [KleeneOperator::class, [
                         [ExpectOperator::class, [
-                            [Rule::class, ['prec_7_op']],
-                            [Rule::class, ['prec_6_expr']],
+                            'prec_7_op',
+                            'prec_6_expr',
                         ]],
                     ]],
                 ],
@@ -467,11 +445,11 @@ class SpiritQiParser
             // prec_6_expr = prec_5_expr >> *(prec_6_op > prec_5_expr);
             'prec_6_expr' => [
                 SequenceOperator::class, [
-                    [Rule::class,  ['prec_5_expr']],
+                    'prec_5_expr',
                     [KleeneOperator::class, [
                         [ExpectOperator::class, [
-                            [Rule::class, ['prec_6_op']],
-                            [Rule::class, ['prec_5_expr']],
+                            'prec_6_op',
+                            'prec_5_expr',
                         ]],
                     ]],
                 ],
@@ -480,11 +458,11 @@ class SpiritQiParser
             // prec_5_expr = prec_3_expr >> *(prec_5_op > prec_3_expr);
             'prec_5_expr' => [
                 SequenceOperator::class, [
-                    [Rule::class,  ['prec_3_expr']],
+                    'prec_3_expr',
                     [KleeneOperator::class, [
                         [ExpectOperator::class, [
-                            [Rule::class, ['prec_5_op']],
-                            [Rule::class, ['prec_3_expr']],
+                            'prec_5_op',
+                            'prec_3_expr',
                         ]],
                     ]],
                 ],
@@ -497,16 +475,16 @@ class SpiritQiParser
             // prec_3_expr = prec_2_expr | unary_expr;
             'prec_3_expr' => [
                 AlternativeOperator::class, [
-                    [Rule::class,  ['prec_2_expr']],
-                    [Rule::class,  ['unary_expr']],
+                    'prec_2_expr',
+                    'unary_expr',
                 ],
             ],
 
             // unary_expr = prec_3_op > prec_2_expr;
             'unary_expr' => [
                 ExpectOperator::class, [
-                    [Rule::class,  ['prec_3_op']],  // @todo symbols
-                    [Rule::class,  ['prec_2_expr']],
+                    'prec_3_op',
+                    'prec_2_expr',
                 ],
             ],
             // precedence level 2: function call, array []
@@ -520,13 +498,13 @@ class SpiritQiParser
             //      | paren_expr
             'prec_2_expr' => [
                 AlternativeOperator::class, [
-                    [Symbols::class, ['parsers']],
-                    [Symbols::class, ['directives']],
-                    $distinct_expr,
-                    [Rule::class, ['id']],
-                    [Rule::class, ['quoted_string']],
-                    [Rule::class, ['quoted_char']],
-                    [Rule::class, ['paren_expr']]
+                    'parsers',
+                    'directives',
+                    'distinct_expr',
+                    'id',
+                    'quoted_string',
+                    'quoted_char',
+                    'paren_expr'
 
                 ]
             ],
@@ -552,8 +530,8 @@ class SpiritQiParser
                         ]]
                     ]],
                     [CharSetParser::class, ['a-z_']],
-                    [KleeneOperator, [
-                        [CharSetParser, ['a-z_0-9']],
+                    [KleeneOperator::class, [
+                        [CharSetParser::class, ['a-z_0-9']],
                     ]],
                 ],
             ],
@@ -561,16 +539,16 @@ class SpiritQiParser
             // id = identifier >> attr(token_type::op_identifier);
             'id' => [
                 SequenceOperator::class, [
-                    [Rule::class, ['identifier']],
+                    'identifier',
                     [AttrParser::class, ['identifier']],
-                ]
+                ],
             ],
 
             // paren_expr = lit('(') > attr(token_type::op_brace_open) > prec_14_expr > lit(')');
             'paren_expr' => [
                 ExpectOperator::class, [
                     [CharParser::class, ['(']],
-                    [Rule::class, ['prec_14_expr']],
+                    'prec_14_expr',
                     [LitParser::class, [')']],
                 ]
             ],
@@ -579,9 +557,9 @@ class SpiritQiParser
                 ExpectOperator::class => [
                     [DistinctDirective::class, [
                         [CharSetParser::class, ['a-z_']],
-                        [Symbols::class, ['parsers']],
+                        'parsers',
                     ]],
-                    [Rule::class, ['argument_list']],
+                    'argument_list',
                 ],
             ],
             // distinct_expr = distinct(char_("a-z_"))[distinct_directive]
@@ -590,23 +568,23 @@ class SpiritQiParser
                 ExpectOperator::class, [
                     [DistinctDirective, [
                         [CharSetParser::class, ['a-z_']],
-                        [Symbols::class, ['distinct_directive']],
+                        'distinct_directive',
                     ]],
                     [LitParser::class, ['(']],
-                    [Rule::class, ['prec_14_expr']],
+                    'prec_14_expr',
                     [LitParser::class, [')']],
                     [LitParser::class, ['[']],
-                    [Rule::class, ['prec_14_expr']],
+                    'prec_14_expr',
                     [LitParser::class, [']']],
                 ]
             ],
             // directive = distinct(char_("a-z_"))[directives] > argument_list > '[' > prec_14_expr > ']'
             'directive' => [
                 ExpectOperator::class, [
-                    [DistinctDirective, ['a-z_', [Symbols::class, ['directives']]]],
-                    [Rule::class, ['argument_list']],
+                    [DistinctDirective, ['a-z_', 'directives']],
+                    'argument_list',
                     [LitParser::class, ['[']],
-                    [Rule::class, ['prec_14_expr']],
+                    'prec_14_expr',
                     [LitParser::class, [']']],
                 ],
             ],
@@ -617,10 +595,10 @@ class SpiritQiParser
                         [LitParser::class, ['(']],
                         [ListOperator::class, [
                             [AlternativeOperator::class, [
-                                [Rule::class, ['quoted_char']],
-                                [Rule::class, ['quoted_string']],
-                                [Rule::class, ['id']],
-                                [Rule::class, ['number']],
+                                'quoted_char',
+                                'quoted_string',
+                                'id',
+                                'number',
                             ]],
                             [LitParser::class, [',']],
                         ]],
@@ -785,18 +763,18 @@ class SpiritQiParser
             // | float_p | double_p | long_double_p | bool_p
             'number' => [
                 AlternativeOperator::class, [
-                    [Rule::class, ['ushort']],
-                    [Rule::class, ['uint']],
-                    [Rule::class, ['ulong']],
-                    [Rule::class, ['ulonglong']],
-                    [Rule::class, ['short']],
-                    [Rule::class, ['int']],
-                    [Rule::class, ['long']],
-                    [Rule::class, ['longlong']],
-                    [Rule::class, ['float']],
-                    [Rule::class, ['double']],
-                    [Rule::class, ['longdouble']],
-                    [Rule::class, ['bool']],
+                    'ushort',
+                    'uint',
+                    'ulong',
+                    'ulonglong',
+                    'short',
+                    'int',
+                    'long',
+                    'longlong',
+                    'float',
+                    'double',
+                    'longdouble',
+                    'bool',
                 ]],
             ],
         ];

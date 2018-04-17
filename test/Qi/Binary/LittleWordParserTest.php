@@ -21,7 +21,6 @@ class LittleWordParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(LittleWordParser::class);
         $parser = $this->pm->build(LittleWordParser::class);
-        self::assertInstanceOf(LittleWordParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

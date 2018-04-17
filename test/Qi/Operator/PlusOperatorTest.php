@@ -32,7 +32,6 @@ class PlusOperatorTest extends ParserTestBed
         $mock = new MockParserNResult($domain, $test[1], $test[0]);
 
         $operator = $this->pm->build(PlusOperator::class, [ $mock ]);
-        self::assertInstanceOf(PlusOperator::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

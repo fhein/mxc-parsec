@@ -32,7 +32,6 @@ class AlternativeOperatorTest extends ParserTestBed
         $secondMock = new MockParserDoParse($domain, $result2);
 
         $operator = $this->pm->build(AlternativeOperator::class, [ [ $firstMock, $secondMock ] ]);
-        self::assertInstanceOf(AlternativeOperator::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

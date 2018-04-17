@@ -35,7 +35,6 @@ class DifferenceOperatorTest extends ParserTestBed
         $secondMock = new MockParserDoParse($domain, $result2);
 
         $operator = $this->pm->build(DifferenceOperator::class, [ $firstMock, $secondMock ]);
-        self::assertInstanceOf(DifferenceOperator::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

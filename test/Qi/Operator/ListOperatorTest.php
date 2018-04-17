@@ -36,7 +36,6 @@ class ListOperatorTest extends ParserTestBed
         $secondMock = new MockParserNResult($domain, $test[3], $test[2]);
 
         $operator = $this->pm->build(ListOperator::class, [ $firstMock, $secondMock ]);
-        self::assertInstanceOf(ListOperator::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

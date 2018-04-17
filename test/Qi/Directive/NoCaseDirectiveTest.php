@@ -30,7 +30,6 @@ class NoCaseDirectiveTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $mock = new MockPreSkipperMatchingAllButCaret($domain);
         $directive = new NoCaseDirective($domain, $mock);
-        self::assertInstanceOf(NoCaseDirective::class, $directive);
 
         $this->doTest(
             $cfg,                       // test configuration description

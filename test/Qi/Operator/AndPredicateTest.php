@@ -34,7 +34,6 @@ class AndPredicateTest extends ParserTestBed
         $mock = new MockParserDoParse($domain, $test[0]);
 
         $operator = $this->pm->build(AndPredicate::class, [ $mock ]);
-        self::assertInstanceOf(AndPredicate::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

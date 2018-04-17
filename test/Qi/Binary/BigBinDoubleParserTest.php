@@ -21,7 +21,6 @@ class BigBinDoubleParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(BigBinDoubleParser::class);
         $parser = $this->pm->build(BigBinDoubleParser::class);
-        self::assertInstanceOf(BigBinDoubleParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

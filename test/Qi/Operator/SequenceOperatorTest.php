@@ -32,7 +32,6 @@ class SequenceOperatorTest extends ParserTestBed
         $secondMock = new MockParserDoParse($domain, $result2);
 
         $operator = $this->pm->build(SequenceOperator::class, [ [ $firstMock, $secondMock ] ]);
-        self::assertInstanceOf(SequenceOperator::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description

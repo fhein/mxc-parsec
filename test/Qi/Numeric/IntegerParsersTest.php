@@ -41,7 +41,6 @@ class IntegerParsersTest extends ParserTestBed
     ) {
         $cfg = $this->getParserConfig($cParser, $minDigits, $maxDigits);
         $parser = $this->pm->build($cParser, [ $minDigits, $maxDigits]);
-        self::assertInstanceOf($cParser, $parser);
 
         $expectedAttributeType = $expectedAttributeType ?? 'integer';
         if ($expectedValue !== null) {

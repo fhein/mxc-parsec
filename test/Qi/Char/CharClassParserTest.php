@@ -33,7 +33,6 @@ class CharClassParserTest extends ParserTestBed
     ) {
         $cfg = $this->getParserConfig(CharClassParser::class, $charClass, $negate);
         $parser = $this->pm->build(CharClassParser::class, [ $charClass, $negate ]);
-        self::assertInstanceOf(CharClassParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

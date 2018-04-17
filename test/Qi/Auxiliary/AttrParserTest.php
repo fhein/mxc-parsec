@@ -25,7 +25,6 @@ class AttrParserTest extends ParserTestBed
 
         $cfg = $this->getParserConfig(AttrParser::class, $expectedValue);
         $parser = $this->pm->build(AttrParser::class, [ $expectedValue ]);
-        self::assertInstanceOf(AttrParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

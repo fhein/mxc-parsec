@@ -34,7 +34,6 @@ class CharRangeParserTest extends ParserTestBed
     ) {
         $cfg = $this->getParserConfig(CharRangeParser::class, $min, $max, $negate);
         $parser = $this->pm->build(CharRangeParser::class, [ $min, $max, $negate ]);
-        self::assertInstanceOf(CharRangeParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

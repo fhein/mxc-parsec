@@ -29,7 +29,6 @@ class LexemeDirectiveTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $mock = new MockPreSkipperMatchingAllButCaret($domain);
         $directive = new LexemeDirective($domain, $mock);
-        self::assertInstanceOf(LexemeDirective::class, $directive);
 
         $this->doTest(
             $cfg,                   // test configuration description

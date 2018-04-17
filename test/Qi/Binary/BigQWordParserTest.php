@@ -21,7 +21,6 @@ class BigQWordParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(BigQWordParser::class);
         $parser = $this->pm->build(BigQWordParser::class);
-        self::assertInstanceOf(BigQWordParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

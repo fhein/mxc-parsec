@@ -21,7 +21,6 @@ class QWordParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(QWordParser::class);
         $parser = $this->pm->build(QWordParser::class);
-        self::assertInstanceOf(QWordParser::class, $parser);
 
         $this->doTest(
             $cfg,               // test configuration description

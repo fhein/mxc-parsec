@@ -2,19 +2,18 @@
 
 namespace Mxc\Parsec\Service;
 
-use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 
-class ParserDelegatorFactory implements DelegatorFactoryInterface
+class ParserDelegatorFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
-     * @see \Zend\ServiceManager\Factory\DelegatorFactoryInterface::__invoke()
+     * @see \Zend\ServiceManager\Factory\FactoryInterface::__invoke()
      */
-    public function __invoke(ContainerInterface $container, $name, callable $callback, array $options = null)
+    public function __invoke(\Interop\Container\ContainerInterface $container, $requestedName, array $options = null)
     {
-        print($name."\n");
-        $parser = $options === null ? $callback() : $callback($options);
-        return new ParserDelegator($parser, $options);
+        $parser = $container->get($requestedName);
+        return new ParserDelegator($parser, ...$options);
     }
 }

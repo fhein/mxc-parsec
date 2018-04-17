@@ -20,7 +20,6 @@ class ByteParserTest extends ParserTestBed
     {
         $cfg = $this->getParserConfig(ByteParser::class);
         $parser = $this->pm->build(ByteParser::class);
-        self::assertInstanceOf(ByteParser::class, $parser);
 
         $input = "\x01";
         $this->doTest(

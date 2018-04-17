@@ -6,15 +6,15 @@ use Mxc\Parsec\Qi\UnaryParser;
 
 class Rule extends UnaryParser
 {
-
-    public function __construct($domain, $name, $expression)
+    public function __construct($domain, $name, $subject, string $attributeType = null)
     {
-        parent::construct($domain);
+        parent::construct($domain, $subject);
         $this->name = $name;
-        $this->expression = $expression;
+        $this->attributeType = $attributeType;
     }
 
-    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function what()
     {
+        return sprintf('%s (%s)', parent::what(), $this->name);
     }
 }

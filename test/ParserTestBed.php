@@ -148,6 +148,7 @@ class ParserTestBed extends TestCase
                 "%s\n%s\n\n  Unexpected result of parse(): %s. Expected: %s\n",
                 $cfg,
                 $this->getTestDescription(
+                    $iterator,
                     $input,
                     $expectedValue,
                     $expectedAttributeType,
@@ -173,6 +174,7 @@ class ParserTestBed extends TestCase
                         "%s\n%s\n\n  Unexpected attribute type: %s. Expected: %s\n",
                         $cfg,
                         $this->getTestDescription(
+                            $iterator,
                             $input,
                             $expectedValue,
                             $expectedAttributeType,
@@ -198,13 +200,14 @@ class ParserTestBed extends TestCase
                 }
             } else {
                 if ($expectedAttribute !== null) {
-                    self::assertSame(
+                    self::assertEquals(
                         $expectedAttribute,
                         $attribute,
                         sprintf(
                             "%s\n%s\n\n  Unexpected attribute: %s. Expected: %s\n",
                             $cfg,
                             $this->getTestDescription(
+                                $iterator,
                                 $input,
                                 $expectedValue,
                                 $expectedAttributeType,
@@ -217,7 +220,7 @@ class ParserTestBed extends TestCase
                                 $attributeType,
                                 $expectedIteratorPos
                             ),
-                            $attribute,
+                            $attribute ?? 'n/a',
                             $expectedAttribute
                         )
                     );
@@ -246,13 +249,14 @@ class ParserTestBed extends TestCase
                     } elseif (is_float($expectedValue) && is_infinite($expectedValue)) {
                         self::assertSame(true, is_infinite($attribute));
                     } else {
-                        self::assertSame(
+                        self::assertEquals(
                             $expValue,
                             $attr,
                             sprintf(
                                 "%s\n%s\n\n  Attribute %s does not match expected value %s.\n",
                                 $cfg,
                                 $this->getTestDescription(
+                                    $iterator,
                                     $input,
                                     $expectedValue,
                                     $expectedAttributeType,
@@ -273,13 +277,15 @@ class ParserTestBed extends TestCase
                 }
             }
             if ($expectedIteratorPos !== null) {
+                $pos = $iterator->key();
                 self::assertSame(
                     $expectedIteratorPos,
-                    $iterator->key(),
+                    $pos,
                     sprintf(
                         "%s\n%s\n\n  Iterator position mismatch: %d. Expected: %d\n",
                         $cfg,
                         $this->getTestDescription(
+                            $iterator,
                             $input,
                             $expectedValue,
                             $expectedAttributeType,
@@ -287,12 +293,12 @@ class ParserTestBed extends TestCase
                             $expectedAttribute,
                             $result,
                             $skipper,
-                            $iterator->key(),
+                            $pos,
                             $attribute,
                             $attributeType,
                             $expectedIteratorPos
                         ),
-                        $iterator->key(),
+                        $pos,
                         $expectedIteratorPos
                     )
                 );
@@ -373,7 +379,7 @@ class ParserTestBed extends TestCase
             $parser,
             ' ' . $input,
             $expectedResult,
-            $expectedIteratorPos,
+            $expectedIteratorPos === null ? null : $expectedIteratorPos + 1,
             $expectedValue,
             $expectedAttribute,
             $expectedAttributeType,
@@ -414,6 +420,7 @@ class ParserTestBed extends TestCase
      * @return string                           formatted test description
      */
     public function getTestDescription(
+        $iterator,
         $input,
         $expectedValue,
         string $expectedAttributeType = null,
@@ -426,31 +433,46 @@ class ParserTestBed extends TestCase
         $attributeType = 'n/a',
         $expectedIteratorPos = 'n/a'
     ) {
+        $nextInput = '';
+        $iterator->try();
+        for ($i = 0; $i < 20; $i++) {
+            if ($iterator->valid()) {
+                $nextInput .= $iterator->current();
+                $iterator->next();
+            }
+        }
+        $iterator->reject();
+        $expectedAttribute = $expectedAttribute !== null ?
+            gettype($expectedAttribute) === 'object' ? get_class($expectedAttribute)
+            : $expectedAttribute : 'n/a';
+
         return sprintf(
             "  Test Set:\n"
             . "    Input: %s\n"
             . "    Skipper: %s\n"
             . "    Expected Value: %s\n"
             . "    Expected Result: %s\n"
-            . "    Expected Attribute: %s\n\n"
+            . "    Expected Attribute: %s\n"
             . "    Expected Attribute Type: %s\n"
             . "    Expected Iterator Position: %s\n"
             . "  Results:\n"
             . "    Parser Result: %s\n"
             . "    Attribute: %s\n"
             . "    Attribute Type: %s\n"
-            . "    Iterator Position: %d",
+            . "    Iterator Position: %s\n"
+            . "    Next max 20 characters of input: %s\n",
             var_export($input, true),
             is_object($skipper) ? get_class($skipper) : 'none',
             var_export($expectedValue, true),
             var_export($expectedResult, true),
-            gettype($expectedAttribute) === 'object' ? get_class($expectedAttribute) : $expectedAttribute,
-            $expectedAttributeType,
-            $expectedIteratorPos,
+            $expectedAttribute,
+            $expectedAttributeType ?? 'n/a',
+            $expectedIteratorPos ?? 'n/a',
             var_export($result, true),
             is_string($attribute) ? $attribute : var_export($attribute, true),
-            $attributeType,
-            $pos
+            $attributeType ?? 'n/a',
+            $pos,
+            var_export($nextInput, true)
         );
     }
 }

@@ -33,7 +33,6 @@ class NotPredicateTest extends ParserTestBed
         $mock = new MockParserDoParse($domain, $test[0]);
 
         $operator = $this->pm->build(NotPredicate::class, [ $mock ]);
-        self::assertInstanceOf(NotPredicate::class, $operator);
 
         $this->doTest(
             $cfg,                       // test configuration description
