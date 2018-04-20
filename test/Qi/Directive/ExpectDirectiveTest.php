@@ -5,7 +5,7 @@ namespace Mxc\Test\Parsec\Qi\Char;
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Parsec\Qi\Directive\ExpectDirective;
 use Mxc\Parsec\Qi\PrimitiveParser;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Directive\Detail\ExpectationFailedException;
 use Mxc\Parsec\Qi\PreSkipper;
 

@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi\Char;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 
 class CharSetParser extends Char

@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi\Binary;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 class LittleBinDoubleParser extends BinParser
 {

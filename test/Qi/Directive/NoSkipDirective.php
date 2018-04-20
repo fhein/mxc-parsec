@@ -2,7 +2,7 @@
 
 namespace Mxc\Test\Parsec\Qi\Char;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Directive\NoSkipDirective;
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Test\Parsec\Qi\Assets\MockPreSkipperMatchingAllButCaret;

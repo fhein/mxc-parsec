@@ -3,7 +3,7 @@
 namespace Mxc\Parsec\Qi\Numeric;
 
 use Mxc\Parsec\Qi\Numeric\Detail\DecimalIntPolicy;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Char\CharParser;
 use Mxc\Parsec\Qi\Directive\NoCaseDirective;
 use Mxc\Parsec\Qi\String\SymbolsParser;

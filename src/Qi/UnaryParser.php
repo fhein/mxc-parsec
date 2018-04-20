@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 abstract class UnaryParser extends PrimitiveParser
 {

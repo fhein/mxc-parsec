@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 use Mxc\Parsec\Exception\UnknownCastException;
 use Mxc\Parsec\Attribute\Optional;
@@ -12,7 +12,7 @@ abstract class Parser
     protected $domain;
     protected $attribute;
     protected $defaultType;
-    protected $name = 'no name';
+    protected $name = 'unnamed';
 
     public function __construct(Domain $domain)
     {
@@ -204,6 +204,11 @@ abstract class Parser
     // return simple class name w/o namespace
     public function what()
     {
+        return $this->shortClassName() . '[' . $this->name . ']';
+    }
+
+    public function shortClassName()
+    {
         return substr(strrchr(get_class($this), '\\'), 1);
     }
 
@@ -220,6 +225,7 @@ abstract class Parser
     public function __debugInfo()
     {
         return [
+            'name'      => $this->name,
             'attribute' => $this->attribute ?? 'n/a',
             'defaultType' => $this->defaultType ?? 'n/a',
         ];

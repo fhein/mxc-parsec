@@ -6,7 +6,7 @@ use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Parsec\Qi\String\StringParser;
 use Mxc\Parsec\Qi\Char\CharSetParser;
 use Mxc\Parsec\Qi\Repository\Directive\DistinctDirective;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 class DistinctDirectiveTest extends ParserTestBed
 {

@@ -3,7 +3,7 @@ namespace Mxc\Test\Parsec\Qi\Assets;
 
 use Mxc\Parsec\Qi\PreSkipper;
 use Mxc\Parsec\Qi\String\StringParser;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 class MockPreSkipperString extends PreSkipper
 {

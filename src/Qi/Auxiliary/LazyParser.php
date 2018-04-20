@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi\Auxiliary;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 use Mxc\Parsec\Qi\Parser;
 

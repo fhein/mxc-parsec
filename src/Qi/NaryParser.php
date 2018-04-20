@@ -1,7 +1,7 @@
 <?php
 namespace Mxc\Parsec\Qi;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 
 abstract class NaryParser extends PrimitiveParser
@@ -52,12 +52,26 @@ abstract class NaryParser extends PrimitiveParser
         return $this->subject;
     }
 
+    public function what()
+    {
+        $i = 0;
+        foreach ($this->subject as $parser) {
+            $what = parent::what() . '(' . $parser->what();
+            break;
+        }
+        foreach (array_slice($this->subject, 1) as $parser) {
+            $what .= ', ' . $parser->what();
+        };
+        $what .= ')';
+        return $what;
+    }
+
     public function __debugInfo()
     {
         $i = 0;
         $di = [];
-        foreach ($this->subject as $parser) {
-            $di['parser' . $i++] = $parser;
+        foreach ($this->subject as $idx => $parser) {
+            $di[is_string($idx) ? $idx : 'parser' . $i++] = $parser->what();
         }
         return array_merge_recursive(
             parent::__debugInfo(),

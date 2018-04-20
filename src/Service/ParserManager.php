@@ -3,7 +3,7 @@
 namespace Mxc\Parsec\Service;
 
 use ReflectionClass;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Encoding\CharacterClassifier;
 use Mxc\Parsec\Encoding\Utf8Decoder;
 use Mxc\Parsec\Exception\InvalidArgumentException;
@@ -277,6 +277,8 @@ class ParserManager extends ServiceManager
         Unused::class => Unused::class,
     ];
 
+    protected $shortNames = [];
+
     protected $aliases =
     [
         // auxiliary
@@ -423,7 +425,14 @@ class ParserManager extends ServiceManager
 
         $this->services['input_encoding'] = $this->get($config['input_encoding']);
         $this->services['internal_encoding'] = $this->get($config['internal_encoding']);
+        $this->shortNames = array_flip($this->aliases);
     }
+
+    public function getShortName(string $class)
+    {
+        return $this->shortNames[$class] ?? $class;
+    }
+
     /**
      * This function generates a list of all parsers categorized by
      * parser class

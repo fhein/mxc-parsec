@@ -1,8 +1,10 @@
 <?php
 
-namespace Mxc\Parsec;
+namespace Mxc\Parsec\Qi;
 
 use Mxc\Parsec\Encoding\CharacterClassifier;
+use Mxc\Parsec\Qi\NonTerminal\Grammar;
+use Mxc\Parsec\Qi\NonTerminal\Rule;
 
 class Domain
 {
@@ -21,12 +23,20 @@ class Domain
 
     protected $parserManager;
 
+    protected $rulePool = [];
+
     public function __construct($parserManager, $inputEncoding = 'UTF-8', $internalEncoding = 'UTF-8')
     {
         $this->inputEncoding = $inputEncoding;
         $this->internalEncoding = $internalEncoding;
         $this->inputIterator = $parserManager->get($inputEncoding);
         $this->parserManager = $parserManager;
+    }
+
+    public function registerRule(Rule $r)
+    {
+        $this->rulePool[] = $r;
+        return end($this->rulePool);
     }
 
     public function getCharacterClassifier()
@@ -74,6 +84,17 @@ class Domain
     public function buildParser(string $class, array $options = [])
     {
         return $this->parserManager->build($class, $options);
+    }
+
+    public function enterContext(Grammar $context)
+    {
+        $this->contextStack[] = $context;
+    }
+
+    public function leaveContext()
+    {
+        $lastContext = array_pop($this->contextStack);
+        return $lastContext;
     }
 
     public function __debugInfo()

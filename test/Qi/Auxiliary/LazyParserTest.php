@@ -6,7 +6,7 @@ use function array_merge;
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Parsec\Qi\Auxiliary\LazyParser;
 use Mxc\Parsec\Qi\Char\CharParser;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Numeric\IntParser;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 use Mxc\Parsec\Service\ParserFactory;

@@ -4,7 +4,7 @@ namespace Mxc\Parsec\Service;
 
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 class ParserFactory implements FactoryInterface
 {

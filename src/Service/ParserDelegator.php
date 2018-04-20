@@ -3,7 +3,7 @@
 namespace Mxc\Parsec\Service;
 
 use Mxc\Parsec\Qi\Parser;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 class ParserDelegator
 {

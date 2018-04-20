@@ -3,7 +3,7 @@
 namespace Mxc\Parsec\Qi\Auxiliary;
 
 use Mxc\Parsec\Qi\PrimitiveParser;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 class EpsParser extends PrimitiveParser
 {

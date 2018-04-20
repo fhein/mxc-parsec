@@ -1,7 +1,7 @@
 <?php
 namespace Mxc\Test\Parsec\Qi\Assets;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Parser;
 
 class MockParserDoParse extends Parser implements MockParserInterface

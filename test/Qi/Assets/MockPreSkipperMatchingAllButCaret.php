@@ -1,7 +1,7 @@
 <?php
 namespace Mxc\Test\Parsec\Qi\Assets;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Char\CharParser;
 use Mxc\Parsec\Qi\Operator\DifferenceOperator;
 use Mxc\Parsec\Qi\Operator\PlusOperator;

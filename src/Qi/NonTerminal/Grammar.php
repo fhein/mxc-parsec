@@ -2,11 +2,12 @@
 
 namespace Mxc\Parsec\Qi\NonTerminal;
 
-use Mxc\Parsec\Qi\Parser;
 use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Exception\UnknownRuleException;
+use Mxc\Parsec\Qi\NaryParser;
+use Mxc\Parsec\Exception\InvalidArgumentException;
 
-class Grammar extends Parser
+class Grammar extends NaryParser
 {
     protected $name;
     protected $rules;
@@ -14,16 +15,18 @@ class Grammar extends Parser
 
     public function __construct($domain, $name, array $rules = [], string $startRule = null)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $rules);
         $this->name = $name;
         $this->startRule = $startRule;
-        $this->setRules($rules);
-    }
-
-    public function setRules(array $rules)
-    {
-        foreach ($rules as $rule) {
-            $this->rules[$rule->getName()] = $rule;
+        foreach ($this->subject as $idx => $rule) {
+            $name = $rule->getName();
+            if (isset($this->subject[$name])) {
+                throw new InvalidArgumentException(
+                    sprintf('%s: Duplicate rule name \'%s\'', $this->what(), $name)
+                );
+            }
+            $this->subject[$rule->getName()] = $rule;
+            unset($this->subject[$idx]);
         }
     }
 
@@ -31,14 +34,16 @@ class Grammar extends Parser
     {
         $name = $rule->getName();
         if (! $overwrite && $this->hasRule($name)) {
-            return false;
+            throw new InvalidArgumentException(
+                sprintf('%s: Duplicate rule name \'%s\'', $this->what(), $name)
+            );
         }
-        $this->rules[$name] = $rule;
+        $this->subject[$name] = $this->flat ? $this->flatten([$rule])[0] : $rule;
     }
 
     public function hasRule(string $name)
     {
-        return isset($this->rules[$name]);
+        return isset($this->subject[$name]);
     }
 
     public function getRule(string $name)
@@ -50,9 +55,8 @@ class Grammar extends Parser
         }
     }
 
-    public function parseRule($name, $iterator, $expectedValue, $attributeType, $skipper)
+    public function parseRule(Rule $rule, $iterator, $expectedValue, $attributeType, $skipper)
     {
-        $rule = $this->getRule($name);
         if ($rule->parse($iterator, $expectedValue, $attributeType, $skipper)) {
             $this->attribute = $rule->getAttribute();
             return true;
@@ -60,13 +64,26 @@ class Grammar extends Parser
         return false;
     }
 
-    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function doParse()
     {
-        return $this->parseRule($this->startRule, $iterator, $expectedValue, $attributeType, $skipper);
+        $this->domain->enterContext($this);
+        $result = $this->parseRule($this->getRule($this->startRule));
+        $this->domain->leaveContext($this);
+        return $result;
     }
 
-    public function what()
-    {
-        return sprintf('%s (%s)', parent::what(), $this->name);
-    }
+//     public function what()
+//     {
+//         $i = 0;
+//         foreach ($this->subject as $name => $rule) {
+//             $what = $this->shortClassName() . '['. $this->name . '] (' . $name . ' => '. $rule->what();
+//             break;
+//         }
+//         foreach (array_slice($this->subject, 1) as $name => $rule) {
+//             $what .= ', ';
+//             $what .= $name. ' => ' .  $rule->what();
+//         };
+//         $what .= ')';
+//         return $what;
+//     }
 }

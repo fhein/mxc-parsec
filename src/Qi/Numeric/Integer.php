@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi\Numeric;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 use Mxc\Parsec\Qi\Char\CharSetParser;
 use Mxc\Parsec\Qi\Numeric\Detail\IntegerPolicy;

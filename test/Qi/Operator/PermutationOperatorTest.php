@@ -3,7 +3,7 @@
 namespace Mxc\Test\Parsec\Qi\Operator;
 
 use Mxc\Test\Parsec\ParserTestBed;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Operator\PermutationOperator;
 use Mxc\Test\Parsec\Qi\Assets\MockParserDoParse;
 

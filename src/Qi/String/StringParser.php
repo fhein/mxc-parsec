@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi\String;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\PreSkipper;
 
 class StringParser extends PreSkipper

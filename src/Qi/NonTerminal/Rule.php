@@ -2,19 +2,22 @@
 
 namespace Mxc\Parsec\Qi\NonTerminal;
 
-use Mxc\Parsec\Qi\UnaryParser;
+use Mxc\Parsec\Qi\DelegatingParser;
 
-class Rule extends UnaryParser
+class Rule extends DelegatingParser
 {
+    protected $poolId = null;
+
     public function __construct($domain, $name, $subject, string $attributeType = null)
     {
         parent::construct($domain, $subject);
         $this->name = $name;
         $this->attributeType = $attributeType;
+        $this->poolId = $this->domain->registerRule($this);
     }
 
-    public function what()
+    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
     {
-        return sprintf('%s (%s)', parent::what(), $this->name);
+        return $this->subject->parse($iterator, $expectedValue, $this->attributeType, $skipper);
     }
 }

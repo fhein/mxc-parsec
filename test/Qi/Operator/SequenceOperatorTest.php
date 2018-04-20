@@ -2,9 +2,9 @@
 
 namespace Mxc\Test\Parsec\Qi\Operator;
 
-use Mxc\Test\Parsec\ParserTestBed;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Operator\SequenceOperator;
+use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Test\Parsec\Qi\Assets\MockParserDoParse;
 
 class SequenceOperatorTest extends ParserTestBed
@@ -32,7 +32,6 @@ class SequenceOperatorTest extends ParserTestBed
         $secondMock = new MockParserDoParse($domain, $result2);
 
         $operator = $this->pm->build(SequenceOperator::class, [ [ $firstMock, $secondMock ] ]);
-
         $this->doTest(
             $cfg,                       // test configuration description
             $operator,                  // operator to test

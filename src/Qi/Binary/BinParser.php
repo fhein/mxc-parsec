@@ -3,7 +3,7 @@
 namespace Mxc\Parsec\Qi\Binary;
 
 use Mxc\Parsec\Qi\PrimitiveParser;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 class BinParser extends PrimitiveParser
 {

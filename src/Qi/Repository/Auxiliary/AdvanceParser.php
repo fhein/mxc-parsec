@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi\Repository\Auxiliary;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\PrimitiveParser;
 
 class AdvanceParser extends PrimitiveParser

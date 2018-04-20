@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Qi;
 
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 abstract class BinaryParser extends NaryParser
 {

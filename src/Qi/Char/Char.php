@@ -3,7 +3,7 @@
 namespace Mxc\Parsec\Qi\Char;
 
 use Mxc\Parsec\Qi\PreSkipper;
-use Mxc\Parsec\Domain;
+use Mxc\Parsec\Qi\Domain;
 
 class Char extends PreSkipper
 {
