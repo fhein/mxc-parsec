@@ -7,13 +7,13 @@ use Mxc\Parsec\Qi\NaryParser;
 
 class AlternativeOperator extends NaryParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         // return on first match
         $assignment = null;
         foreach ($this->subject as $parser) {
-            if ($parser->parse($iterator, $expectedValue, $attributeType, $skipper)) {
-                $this->assignTo($parser->getAttribute(), $attributeType);
+            if ($parser->parse($skipper)) {
+                $this->attribute = $parser->getAttribute();
                 return true;
             }
         }

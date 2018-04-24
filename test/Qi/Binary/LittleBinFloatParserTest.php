@@ -7,27 +7,30 @@ use Mxc\Parsec\Qi\Binary\LittleBinFloatParser;
 
 class LittleBinFloatParserTest extends ParserTestBed
 {
-    protected function getParserConfig(string $parser)
+    protected function getParserConfig(string $parser, $expectedValue)
     {
         return sprintf(
             "Test of %s:\n"
-            . "  Setup:\n",
-            $parser
+            . "  Setup:\n"
+            . "   Expected Value: %s",
+            $parser,
+            strval($expectedValue)
         );
     }
 
     /** @dataProvider littleBinFloatDataProvider */
-    public function testLittleBinFloatParser($input, $expectedResult, $expectedValue = null)
+    public function testLittleBinFloatParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
-        $cfg = $this->getParserConfig(LittleBinFloatParser::class);
-        $parser = $this->pm->build(LittleBinFloatParser::class);
+        $cfg = $this->getParserConfig(LittleBinFloatParser::class, $expectedValue);
+        $parser = $this->pm->build(LittleBinFloatParser::class, [$expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description
             $parser,            // parser to test
             $input,             // parser input
             $expectedResult,    // expected result
-            $expectedValue      // expected value
+            $expectedValue,     // expected value
+            $expectedAttribute  // expected attribute
         );
     }
 
@@ -38,8 +41,9 @@ class LittleBinFloatParserTest extends ParserTestBed
             [ "\x01", false ],
             [ "\x01\x02", false ],
             [ "\x01\x02\x03", false ],
-            [ "\x01\x02\x03\x04", true, unpack("g", "\x01\x02\x03\x04")[1] ],
+            [ "\x01\x02\x03\x04", true, unpack("g", "\x01\x02\x03\x04")[1], unpack("g", "\x01\x02\x03\x04")[1] ],
             [ "\x01\x02\x03\x04", true, null, unpack("g", "\x01\x02\x03\x04")[1] ],
+            [ "\x01\x02\x03\x04", false, 42.0 ],
         ];
     }
 }

@@ -2,16 +2,14 @@
 
 namespace Mxc\Parsec\Qi\Numeric;
 
-use Mxc\Parsec\Qi\Domain;
-
 class UShortParser extends UIntParser
 {
     protected $minValue = 0;
     protected $maxValue = 65536;
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        if (parent::doParse($iterator, $expectedValue, $attributeType, $skipper)) {
+        if (parent::doParse($skipper)) {
             return ($this->minValue <= $this->attribute && $this->attribute <= $this->maxValue);
         }
     }

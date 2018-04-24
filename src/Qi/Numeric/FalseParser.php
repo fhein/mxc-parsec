@@ -12,9 +12,9 @@ class FalseParser extends BoolParser
         parent::__construct($domain, new BoolPolicy());
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        if (parent::doParse($iterator, $expectedValue, $attributeType, $skipper)) {
+        if (parent::doParse($skipper)) {
             return $this->subject->attribute === false;
         }
     }

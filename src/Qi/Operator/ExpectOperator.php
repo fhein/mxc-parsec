@@ -7,26 +7,26 @@ use Mxc\Parsec\Qi\Directive\Detail\ExpectationFailedException;
 
 class ExpectOperator extends NaryParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $subject = $this->subject;
         $lhs = $subject[0];
 
-        if (! $lhs->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+        if (! $lhs->parse($skipper)) {
             return false;
         }
 
         $last = count($subject);
-        $this->assignTo($lhs->getAttribute(), $attributeType);
+        $this->attribute = $lhs->getAttribute();
 
         for ($idx = 1; $idx < $last; $idx++) {
             $rhs = $subject[$idx];
-            if (! $rhs->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+            if (! $rhs->parse($skipper)) {
                 $info = $this->what();
                 throw new ExpectationFailedException(sprintf(" %s, %s: Expectation failed.", $info[0], $info[1]));
                 return false;
             }
-            $this->assignTo($rhs->getAttribute(), $attributeType);
+            $this->attribute = $rhs->getAttribute();
         }
         return true;
     }

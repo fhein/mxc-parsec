@@ -6,7 +6,7 @@ use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Directive\OmitDirective;
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Test\Parsec\Qi\Assets\MockPreSkipperMatchingAllButCaret;
-use Mxc\Parsec\Qi\Unused;
+use Mxc\Parsec\Attribute\Unused;
 
 class OmitDirectiveTest extends ParserTestBed
 {

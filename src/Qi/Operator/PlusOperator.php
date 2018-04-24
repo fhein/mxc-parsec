@@ -6,17 +6,15 @@ use Mxc\Parsec\Qi\UnaryParser;
 
 class PlusOperator extends UnaryParser
 {
-    protected $defaultType = 'array';
-
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $subject = $this->subject;
-        if (! $subject->parse($iterator, null, null, $skipper)) {
+        if (! $subject->parse($skipper)) {
             return false;
         }
-        $this->assignTo($subject->getAttribute(), $attributeType);
-        while ($subject->parse($iterator, $expectedValue, null, $skipper)) {
-            $this->assignTo($subject->getAttribute(), $attributeType);
+        $this->attribute[] = $subject->getAttribute();
+        while ($subject->parse($skipper)) {
+            $this->attribute[] = $subject->getAttribute();
         }
         return true;
     }

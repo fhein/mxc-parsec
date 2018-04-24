@@ -40,26 +40,26 @@ class RepeatDirective extends DelegatingParser
         }
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $attr = null;
         $assignment = null;
         $subject = $this->subject;
         for ($i = 0; ! $this->gotMin($i); $i++) {
-            if (! $subject->parse($iterator, null, null, $skipper)) {
+            if (! $subject->parse($skipper)) {
                 return false;
             }
-            $this->assignTo($subject->getAttribute(), 'array');
+            $this->attribute[] = $subject->getAttribute();
         }
-        $save = $iterator->getPos();
+        $save = $this->iterator->getPos();
         for (; ! $this->gotMax($i); $i++) {
-            if (! $this->subject->parse($iterator, null, null, $skipper)) {
+            if (! $this->subject->parse($skipper)) {
                 break;
             }
-            $this->assignTo($subject->getAttribute(), 'array');
-            $save = $iterator->key();
+            $this->attribute[] = $subject->getAttribute();
+            $save = $this->iterator->key();
         }
-        $iterator->setPos($save);
+        $this->iterator->setPos($save);
         return true;
     }
 }

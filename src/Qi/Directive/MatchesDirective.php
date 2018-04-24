@@ -6,9 +6,9 @@ use Mxc\Parsec\Qi\UnaryParser;
 
 class MatchesDirective extends UnaryParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        $this->assignTo($this->subject->parse($iterator, $expectedValue, $attributeType, $skipper), 'boolean');
+        $this->attribute = $this->subject->parse($skipper);
         return true;
     }
 }

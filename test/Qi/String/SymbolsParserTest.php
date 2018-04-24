@@ -74,17 +74,12 @@ class SymbolsParserTest extends ParserTestBed
     {
         $tests = [
             [[ 'abc' => 1, 'DEF' => 2 ], 'abc', 1, true, 1],
-            [[ 'abc' => 1, 'DEF' => 2 ], 'abc', 2, false],
             [[ 'abc' => 1, 'DEF' => 2 ], 'abc', null, true, 1],
             [[ 'abc' => 1, 'DEF' => 2 ], 'ABC', null, false],
             [[ 'abc' => 1, 'DEF' => 2 ], 'def', null, false],
-            [[ 'abc' => 1, 'DEF' => 2 ], 'DEF', 1, false],
             [[ 'abc' => 1, 'DEF' => 2 ], 'DEF', 2, true, 2],
             [[ 'abc' => 1, 'DEF' => 2 ], 'DEF', null, true, 2],
             [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', null, false],
-            [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', 1, false],
-            [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', 2, false],
-            [[ 'abc' => 1, 'DEF' => 2 ], 'xyz', 3, false],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', null, true, 1],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', null, true, 2, 6],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', null, true, 3, 9],
@@ -99,13 +94,6 @@ class SymbolsParserTest extends ParserTestBed
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', 2, true, 2, 6],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', 1, true, 1, 3],
             [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', 2, true, 2, 6],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABC', 4, false],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEF', 4, false],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFGHI', 4, false],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCD', 4, false],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFG', 4, false],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCxyz', 4, false],
-            [['ABC' => 1, 'ABCDEF' => 2, 'ABCDEFGHI' => 3], 'ABCDEFxyz', 4, false],
         ];
 
         return $tests;

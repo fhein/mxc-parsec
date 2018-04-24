@@ -13,18 +13,17 @@ class MockParserDoParse extends Parser implements MockParserInterface
         $this->result = $result;
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         if ($this->result) {
-            $this->assignTo($this->attribute, $attributeType);
             return true;
         }
         return false;
     }
 
-    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function parse($skipper = null)
     {
-        return $this->doParse($iterator, $expectedValue, $attributeType, $skipper);
+        return $this->doParse($this->iterator, $skipper);
     }
 
     public function setAttribute($attribute)

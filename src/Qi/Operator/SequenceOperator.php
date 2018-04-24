@@ -6,16 +6,21 @@ use Mxc\Parsec\Qi\NaryParser;
 
 class SequenceOperator extends NaryParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $result = true;
         $i = 0;
         foreach ($this->subject as $parser) {
-            $result = $result && $parser->parse($iterator, null, null, $skipper);
+            $result = $result && $parser->parse($skipper);
+
             if ($result === false) {
                 return false;
             }
-            $this->assignTo($parser->getAttribute(), $attributeType);
+            $x = $parser->getAttribute();
+//            var_dump($x);
+            $this->attribute[] = $x;
+//             print("----\n");
+//             var_dump($this->attribute);
         }
         return true;
     }

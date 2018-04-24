@@ -11,7 +11,7 @@ class CharRangeParser extends Char
     {
         parent::__construct($domain, $negate);
 
-        $cc = $domain->getCharacterClassifier();
+        $cc = $this->iterator;
 
         // @todo: CodePage support for min and max
 
@@ -35,13 +35,9 @@ class CharRangeParser extends Char
             );
         }
 
-        $this->classifier = ($min === $max) ?
-            function (string $ch) use ($min, $cc) {
-                return ($cc->ord($ch) === ($cc->ord($min)));
-            } :
-            function (string $ch) use ($min, $max, $cc) {
-                $ord = $cc->ord($ch);
-                return (($ord >= $cc->ord($min)) && ($ord <= $cc->ord($max)));
-            };
+        $this->classifier = function (string $ch) use ($min, $max, $cc) {
+            $ord = $cc->ord($ch);
+            return (($ord >= $cc->ord($min)) && ($ord <= $cc->ord($max)));
+        };
     }
 }

@@ -7,19 +7,19 @@ use Mxc\Parsec\Qi\PrimitiveParser;
 class EolParser extends PrimitiveParser
 {
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        if ($iterator->current() === "\r") {
-            $iterator->next();
-            if ($iterator->current() === "\n") {
+        if ($this->iterator->current() === "\r") {
+            $this->iterator->next();
+            if ($this->iterator->current() === "\n") {
                 return true;
             } else {
-                $iterator->reject();
-                $iterator->try();
+                $this->iterator->reject();
+                $this->iterator->try();
             }
         }
 
-        switch ($iterator->current()) {
+        switch ($this->iterator->current()) {
             // @todo: Critical where charset's \n
             // does not mean a line separator
             case "\n":

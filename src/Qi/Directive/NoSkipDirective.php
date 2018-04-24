@@ -7,9 +7,9 @@ use Mxc\Parsec\Qi\DelegatingParser;
 
 class NoSkipDirective extends DelegatingParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        $this->skipOver($iterator, $skipper);
-        return parent::doParse($iterator, $expectedValue, $attributeType, new UnusedSkipper($skipper));
+        $this->skipOver($skipper);
+        return parent::doParse(new UnusedSkipper($skipper));
     }
 }

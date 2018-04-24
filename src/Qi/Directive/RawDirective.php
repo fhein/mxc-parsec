@@ -6,16 +6,12 @@ use Mxc\Parsec\Qi\DelegatingParser;
 
 class RawDirective extends DelegatingParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        $this->skipOver($iterator, $skipper);
-        $first = $iterator->getPos();
-        if (parent::doParse($iterator, $expectedValue, 'unused', $skipper)) {
-            if ($attributeType === 'string') {
-                $this->attribute = $iterator->getData($first, $iterator->key() - $first);
-                return true;
-            }
-            $this->attribute = [ $first, $iterator->key() ];
+        $this->skipOver($skipper);
+        $first = $this->iterator->getPos();
+        if (parent::doParse($skipper)) {
+            $this->attribute = $this->iterator->getSubStr($first, $this->iterator->key() - $first);
             return true;
         }
         return false;

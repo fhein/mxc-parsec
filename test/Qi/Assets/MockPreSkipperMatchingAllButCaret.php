@@ -13,8 +13,6 @@ class MockPreSkipperMatchingAllButCaret extends PreSkipper
     {
         parent::__construct($domain);
 
-        $this->defaultType = 'string';
-
         $this->parser = new PlusOperator(
             $domain,
             new DifferenceOperator(
@@ -27,14 +25,14 @@ class MockPreSkipperMatchingAllButCaret extends PreSkipper
         );
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        if ($this->parser->doParse($iterator, $expectedValue, 'string', $skipper)) {
-            $c = $this->parser->getAttribute();
-            if ($iterator->compareChar($c, $expectedValue)) {
-                $this->assignTo($c, $attributeType);
-                return true;
+        if ($this->parser->doParse($skipper)) {
+            $attr = $this->parser->getAttribute();
+            foreach ($attr as $char) {
+                $this->attribute .= $char;
             }
+            return true;
         }
         return false;
     }

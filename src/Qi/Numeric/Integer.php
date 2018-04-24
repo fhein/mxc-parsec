@@ -18,11 +18,13 @@ class Integer extends PreSkipper
 {
     protected $minDigits;
     protected $toDecimal;
+    protected $expectedValue;
     protected $notmax;
 
     public function __construct(
         Domain $domain,
         IntegerPolicy $policy,
+        int $expectedValue = null,
         int $minDigits = 1,
         int $maxDigits = 0
     ) {
@@ -37,9 +39,7 @@ class Integer extends PreSkipper
         }
 
         parent::__construct($domain);
-
-        $this->defaultType = 'integer';
-
+        $this->expectedValue = $expectedValue;
         $this->minDigits = $minDigits;
         $this->notmax = $maxDigits < $minDigits ? function ($i) {
             return true;
@@ -48,27 +48,27 @@ class Integer extends PreSkipper
         };
 
         $this->policy = $policy;
-        $this->digitsParser = new CharsetParser($this->domain, $policy->getDigits());
-        $this->signsParser = new CharsetParser($this->domain, $policy->getSigns());
+        $this->digitsParser = new CharsetParser($domain, $policy->getDigits());
+        $this->signsParser = new CharsetParser($domain, $policy->getSigns());
         $this->toDecimal = $policy->getToDecimal();
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $got = 0;
         $sign = '';
-        if ($this->signsParser->doParse($iterator)) {
+        if ($this->signsParser->doParse($this->iterator)) {
             $sign = $this->signsParser->getAttribute();
         }
 
         while ($got < $this->minDigits) {
-            if (! $this->digitsParser->doParse($iterator)) {
+            if (! $this->digitsParser->doParse($this->iterator)) {
                 return false;
             }
             $got++;
         }
 
-        while (($this->notmax)($got) && $this->digitsParser->doParse($iterator)) {
+        while (($this->notmax)($got) && $this->digitsParser->doParse($this->iterator)) {
             $got++;
         }
 
@@ -76,18 +76,9 @@ class Integer extends PreSkipper
         //     // check overflow condition
         //     if ($str === ($sgn.($this->toString)($this->castTo('integer', ($this->toDecimal)($str))))) {
         //     throw new OverflowException(sprintf('Integer overflow on %s. Try \'string\' attribute type.', $str));
-
-//         print("\n".$this->digitsParser->getAttribute()."\n");
-//         print($got."\n");
-
-        return
-            // got no more than max digits
-            ($this->notmax)($got)
-            // and got value matches expected value ($expectedValue === 0 => any value)
-            && $this->validate(
-                $expectedValue,
-                ($this->toDecimal)($sign . $this->digitsParser->getAttribute()),
-                $attributeType
-            );
+        $this->attribute = ($this->toDecimal)($sign . $this->digitsParser->getAttribute());
+//         if (get_class($this) === BinaryParser::class)
+//             print($this->attribute."\n");
+        return ($this->notmax)($got) && ($this->expectedValue === null || $this->attribute === $this->expectedValue);
     }
 }

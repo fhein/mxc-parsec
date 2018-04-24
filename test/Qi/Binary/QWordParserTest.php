@@ -7,27 +7,30 @@ use Mxc\Parsec\Qi\Binary\QWordParser;
 
 class QWordParserTest extends ParserTestBed
 {
-    protected function getParserConfig(string $parser)
+    protected function getParserConfig(string $parser, $expectedValue)
     {
         return sprintf(
             "Test of %s:\n"
-            . "  Setup:\n",
-            $parser
+            . "  Setup:\n"
+            . "   Expected Value: %s",
+            $parser,
+            strval($expectedValue)
         );
     }
 
     /** @dataProvider QWordDataProvider */
-    public function testQWordParser($input, $expectedResult, $expectedValue = null)
+    public function testQWordParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
-        $cfg = $this->getParserConfig(QWordParser::class);
-        $parser = $this->pm->build(QWordParser::class);
+        $cfg = $this->getParserConfig(QWordParser::class, $expectedValue);
+        $parser = $this->pm->build(QWordParser::class, [$expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description
             $parser,            // parser to test
             $input,             // parser input
             $expectedResult,    // expected result
-            $expectedValue      // expected value
+            $expectedValue,     // expected value
+            $expectedAttribute  // expected attribute
         );
     }
 
@@ -42,8 +45,9 @@ class QWordParserTest extends ParserTestBed
             [ "\x01\x02\x03\x04\x05", false ],
             [ "\x01\x02\x03\x04\x05\x06", false ],
             [ "\x01\x02\x03\x04\x05\x06\x07", false ],
-            [ "\x01\x02\x03\x04\x05\x06\x07\x08", true, unpack("Q", "\x01\x02\x03\x04\x05\x06\x07\x08")[1] ],
+            [ "\x01\x02\x03\x04\x05\x06\x07\x08", true, unpack("Q", "\x01\x02\x03\x04\x05\x06\x07\x08")[1], unpack("Q", "\x01\x02\x03\x04\x05\x06\x07\x08")[1] ],
             [ "\x01\x02\x03\x04\x05\x06\x07\x08", true, null, unpack("Q", "\x01\x02\x03\x04\x05\x06\x07\x08")[1] ],
+            [ "\x01\x02\x03\x04\x05\x06\x07\x08", false, 42 ],
         ];
     }
 }

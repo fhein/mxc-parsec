@@ -63,7 +63,7 @@ use Mxc\Parsec\Qi\Operator\PlusOperator;
 use Mxc\Parsec\Qi\Operator\SequenceOperator;
 use Mxc\Parsec\Qi\String\StringParser;
 use Mxc\Parsec\Qi\String\SymbolsParser;
-use Mxc\Parsec\Qi\Unused;
+use Mxc\Parsec\Attribute\Unused;
 use Mxc\Parsec\Service\ParserFactory;
 use Zend\ServiceManager\ServiceManager;
 use Mxc\Parsec\Qi\Numeric\UShortParser;
@@ -88,6 +88,8 @@ use Mxc\Parsec\Qi\Operator\SequentialOrOperator;
 use Mxc\Parsec\Qi\Directive\AsStringDirective;
 use Mxc\Parsec\Qi\Repository\Auxiliary\AdvanceParser;
 use Mxc\Parsec\Qi\Auxiliary\LitParser;
+use Mxc\Parsec\Qi\Char\SpaceParser;
+use Mxc\Parsec\Qi\Auxiliary\RuleReference;
 
 class ParserManager extends ServiceManager
 {
@@ -139,6 +141,7 @@ class ParserManager extends ServiceManager
         '~' . CharParser::class         => NegatedCharParserFactory::class,
         '~' . CharRangeParser::class    => NegatedCharParserFactory::class,
         '~' . CharSetParser::class      => NegatedCharParserFactory::class,
+        SpaceParser::class              => ParserFactory::class,
 
         // directive
         ExpectDirective::class          => ParserFactory::class,
@@ -154,6 +157,7 @@ class ParserManager extends ServiceManager
         AsStringDirective::class        => ParserFactory::class,
         // nonterminal
         Rule::class                     => ParserFactory::class,
+        RuleReference::class            => ParserFactory::class,
         Grammar::class                  => ParserFactory::class,
         // numeric
         BinaryParser::class             => ParserFactory::class,

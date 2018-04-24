@@ -7,9 +7,9 @@ class ShortParser extends IntParser
     protected $minValue = -32768;
     protected $maxValue = 32767;
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        if (parent::doParse($iterator, $expectedValue, $attributeType, $skipper)) {
+        if (parent::doParse($skipper)) {
             return ($this->minValue <= $this->attribute && $this->attribute <= $this->maxValue);
         }
     }

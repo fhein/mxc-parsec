@@ -15,14 +15,9 @@ class StringParser extends PreSkipper
         $this->string = $string;
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        $attr = null;
         $string = $this->domain->getInternalIterator($this->string);
-        if ($iterator->parseString($string, $attr)) {
-            $this->assignTo($attr, $attributeType);
-            return true;
-        }
-        return false;
+        return $this->iterator->parseString($string, $this->attribute);
     }
 }

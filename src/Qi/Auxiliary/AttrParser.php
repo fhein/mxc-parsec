@@ -19,9 +19,8 @@ class AttrParser extends PrimitiveParser
         $this->attribute = $attribute;
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        $this->assignTo($expectedValue, $attributeType);
         return true;
     }
 }

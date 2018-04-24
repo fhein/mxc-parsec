@@ -39,31 +39,31 @@ class SymbolsParser extends PreSkipper
         return $this;
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $m = $this->map;
         $symbol = '';
         $result = false;
-        while ($iterator->valid()) {
-            $c = $iterator->currentNoCase();
+        while ($this->iterator->valid()) {
+            $c = $this->iterator->currentNoCase();
             if (! isset($m[$c])) {
                 break;
             }
             $m = $m[$c];
             $symbol .= $c;
-            $iterator->next();
+            $this->iterator->next();
             if (isset($m['accept'])) {
                 $result = true;
                 $attr = $symbol;
-                $iterator->accept();
-                $iterator->try();
+                $this->iterator->accept();
+                $this->iterator->try();
             }
         };
         if ($result === true) {
-            $iterator->reject();
-            $iterator->try();
-            return $this->validate($expectedValue, $this->symbols[$attr], $attributeType);
+            $this->iterator->reject();
+            $this->iterator->try();
+            $this->attribute = $this->symbols[$attr];
         }
-        return false;
+        return $result;
     }
 }

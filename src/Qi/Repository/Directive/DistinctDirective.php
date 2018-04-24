@@ -6,12 +6,12 @@ use Mxc\Parsec\Qi\BinaryParser;
 
 class DistinctDirective extends BinaryParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $subject = $this->subject[1];
-        if ($subject->parse($iterator, $expectedValue, $attributeType, $skipper)
-            && ! $this->subject[0]->doParse($iterator, null, null, null)) {
-            $this->assignTo($subject->getAttribute(), $attributeType);
+        if ($subject->parse($skipper)
+            && ! $this->subject[0]->doParse(null)) {
+            $this->attribute = $subject->getAttribute();
             return true;
         }
         return false;

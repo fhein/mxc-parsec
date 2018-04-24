@@ -6,8 +6,8 @@ use Mxc\Parsec\Qi\PreSkipper;
 
 class EoiParser extends PreSkipper
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        return (! $iterator->valid());
+        return (! $this->iterator->valid());
     }
 }

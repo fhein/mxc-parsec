@@ -6,10 +6,10 @@ use Mxc\Parsec\Qi\Domain;
 
 class ByteParser extends BinParser
 {
-    public function __construct(Domain $domain)
+    public function __construct(Domain $domain, $expectedValue = null)
     {
         $this->endianness = 'C';
         $this->size = 1;
-        parent::__construct($domain);
+        parent::__construct($domain, $expectedValue);
     }
 }

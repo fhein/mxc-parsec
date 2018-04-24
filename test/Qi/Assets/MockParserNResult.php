@@ -14,11 +14,11 @@ class MockParserNResult extends MockParserDoParse
         $this->n = $n;
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         if ($this->count < $this->n) {
             $this->count++;
-            return parent::doParse($iterator, $expectedValue, $attributeType, $skipper);
+            return parent::doParse($this->iterator, $skipper);
         }
         return ! $this->result;
     }

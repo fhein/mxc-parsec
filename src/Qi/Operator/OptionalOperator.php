@@ -3,17 +3,17 @@
 namespace Mxc\Parsec\Qi\Operator;
 
 use Mxc\Parsec\Qi\UnaryParser;
+use Mxc\Parsec\Attribute\Optional;
+use Mxc\Parsec\Attribute\Unused;
 
 class OptionalOperator extends UnaryParser
 {
-    protected $defaultType = 'optional';
-
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        if ($this->subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
-            $this->assignTo($this->subject->getAttribute(), 'optional');
+        if ($this->subject->parse($skipper)) {
+            $this->attribute = new Optional($this->subject->getAttribute());
         } else {
-            $this->assignUnusedOptional();
+            $this->attribute = new Optional(new Unused());
         }
         return true;
     }

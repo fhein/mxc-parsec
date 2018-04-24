@@ -3,12 +3,8 @@ namespace Mxc\Test\Parsec\Qi\Assets;
 
 class MockParserParse extends MockParserDoParse
 {
-    public function parse($iterator, $expectedValue, $attributeType, $skipper)
+    public function parse($iterator, $skipper)
     {
-        if ($this->result) {
-            $this->assignTo($this->attribute, $attributeType);
-            return true;
-        }
-        return false;
+        return $this->result;
     }
 }

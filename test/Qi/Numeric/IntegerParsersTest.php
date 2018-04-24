@@ -15,14 +15,19 @@ use Mxc\Parsec\Qi\Numeric\ULongLongParser;
 
 class IntegerParsersTest extends ParserTestBed
 {
-    protected function getParserConfig(string $parser, int $minDigits, $maxDigits)
+    protected function getParserConfig(string $parser, array $configuration)
     {
+        $value = $configuration[0] ?? 'all';
+        $minDigits = $configuration[1] ?? 1;
+        $maxDigits = $configuration[2] ?? 0;
         return sprintf(
             "Test of %s:\n"
             . "  Setup:\n"
+            . "    Accept Value: %s\n"
             . "    Min Digits: %d\n"
             . "    Max Digits: %d\n",
             $parser,
+            $value,
             $minDigits,
             $maxDigits
         );
@@ -31,21 +36,17 @@ class IntegerParsersTest extends ParserTestBed
     /** @dataProvider intParserDataProvider */
     public function testIntParser(
         $cParser,
+        $configuration,
         $input,
-        $expectedValue,
         $expectedResult,
-        $expectedAttributeType,
-        $expectedAttribute,
-        $minDigits = 1,
-        $maxDigits = -1
+        $expectedAttribute
     ) {
-        $cfg = $this->getParserConfig($cParser, $minDigits, $maxDigits);
-        $parser = $this->pm->build($cParser, [ $minDigits, $maxDigits]);
+        $cfg = $this->getParserConfig($cParser, $configuration);
+        $parser = $this->pm->build($cParser, $configuration);
+        $configuration[1] = $configuration[1] ?? 1;
+        $configuration[2] = $configuration[2] ?? 0;
 
-        $expectedAttributeType = $expectedAttributeType ?? 'integer';
-        if ($expectedValue !== null) {
-            $expectedAttribute = $this->getTypedExpectedValue($expectedAttributeType, $expectedValue);
-        }
+        $expectedValue = $expectedAttribute = $configuration[0] ?? null;
 
         $this->doTest(
             $cfg,
@@ -53,8 +54,7 @@ class IntegerParsersTest extends ParserTestBed
             $input,
             $expectedResult,
             $expectedValue,
-            $expectedAttribute,
-            $expectedAttributeType
+            $expectedAttribute
         );
     }
 
@@ -79,9 +79,9 @@ class IntegerParsersTest extends ParserTestBed
                 ],
                 // which values to expect in this scenario
                 // null: all values
-                'expectedValue' => [
-                    null,
-                    123,
+                'configurations' => [
+                    [],
+                    [123],
                 ],
                 // expected parsing result
                 'expectedResult' => false,
@@ -95,9 +95,9 @@ class IntegerParsersTest extends ParserTestBed
                     '+123',
                     '123'
                 ],
-                'expectedValue' => [
-                    null,
-                    123,
+                'configurations' => [
+                    [],
+                    [123],
                 ],
                 'expectedResult' => true,
                 // expected raw attribute value (only necessary if
@@ -112,13 +112,13 @@ class IntegerParsersTest extends ParserTestBed
                     IntParser::class,
                     UIntParser::class,
                 ],
+                'configurations' => [
+                    [],
+                    [ 12 ],
+                ],
                 'input' => [
                     '+12 3',
                     '12 3'
-                ],
-                'expectedValue' => [
-                    null,
-                    12,
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => 12,
@@ -127,12 +127,12 @@ class IntegerParsersTest extends ParserTestBed
                 'parsers' => [
                     IntParser::class,
                 ],
+                'configurations' => [
+                    [],
+                    [ -12 ]
+                ],
                 'input' => [
                     '-12 3',
-                ],
-                'expectedValue' => [
-                    null,
-                    -12,
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => -12,
@@ -144,9 +144,9 @@ class IntegerParsersTest extends ParserTestBed
                 'input' => [
                     '-123',
                 ],
-                'expectedValue' => [
-                    null,
-                    -123,
+                'configurations' => [
+                    [],
+                    [-123],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => -123,
@@ -168,7 +168,9 @@ class IntegerParsersTest extends ParserTestBed
                     '- 123',
                     '-12 3'
                 ],
-                'expectedValue' => [456],
+                'configurations' => [
+                    [456],
+                ],
                 'expectedResult' => false,
             ],
             [
@@ -182,10 +184,10 @@ class IntegerParsersTest extends ParserTestBed
                     '-123',
                     '-12 3',
                 ],
-                'expectedValue' => [
-                    null,
-                    -123,
-                    456
+                'configurations' => [
+                    [],
+                    [-123],
+                    [456]
                 ],
                 'expectedResult' => false,
             ],
@@ -199,10 +201,10 @@ class IntegerParsersTest extends ParserTestBed
                     '+123',
                     '+12 3',
                 ],
-                'expectedValue' => [
-                    null,
-                    123,
-                    456
+                'configurations' => [
+                    [],
+                    [123],
+                    [456],
                 ],
                 'expectedResult' => false,
             ],
@@ -213,9 +215,9 @@ class IntegerParsersTest extends ParserTestBed
                 'input' => [
                     '1a2b',
                 ],
-                'expectedValue' => [
-                    null,
-                    hexdec('1a2b'),
+                'configurations' => [
+                    [],
+                    [hexdec('1a2b')],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => hexdec('1a2b')
@@ -227,9 +229,9 @@ class IntegerParsersTest extends ParserTestBed
                 'input' => [
                     '123',
                 ],
-                'expectedValue' => [
-                    null,
-                    octdec('123'),
+                'configurations' => [
+                    [],
+                    [octdec('123')],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => octdec('123')
@@ -241,9 +243,9 @@ class IntegerParsersTest extends ParserTestBed
                 'input' => [
                     '110110110',
                 ],
-                'expectedValue' => [
-                    null,
-                    bindec('110110110'),
+                'configurations' => [
+                    [],
+                    [bindec('110110110')],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => bindec('110110110')
@@ -257,11 +259,9 @@ class IntegerParsersTest extends ParserTestBed
                     '+1234',
                     '+12345',
                 ],
-                'expectedValue' => [
-                    null,
+                'configurations' => [
+                    [null, 3, 5],
                 ],
-                'minDigits' => 3,
-                'maxDigits' => 5,
                 'expectedResult' => true,
                 'expectedAttribute' => null
             ],
@@ -273,11 +273,9 @@ class IntegerParsersTest extends ParserTestBed
                     '+12',
                     '+123456'
                 ],
-                'expectedValue' => [
-                    null,
+                'configurations' => [
+                    [null, 3, 5 ],
                 ],
-                'minDigits' => 3,
-                'maxDigits' => 5,
                 'expectedResult' => false,
             ],
             [
@@ -292,11 +290,9 @@ class IntegerParsersTest extends ParserTestBed
                     '+1234',
                     '+123'
                 ],
-                'expectedValue' => [
-                    null,
+                'configurations' => [
+                    [ null, 3, 5 ]
                 ],
-                'minDigits' => 3,
-                'maxDigits' => 5,
                 'expectedResult' => true,
                 'expectedAttribute' => null
             ],
@@ -310,8 +306,8 @@ class IntegerParsersTest extends ParserTestBed
                     '+123456',
                     '+12'
                 ],
-                'expectedValue' => [
-                    null,
+                'configurations' => [
+                    [ null, 3, 5 ]
                 ],
                 'minDigits' => 3,
                 'maxDigits' => 5,
@@ -330,11 +326,9 @@ class IntegerParsersTest extends ParserTestBed
                     '1101',
                     '110',
                 ],
-                'expectedValue' => [
-                    null,
+                'configurations' => [
+                    [null, 3, 5],
                 ],
-                'minDigits' => 3,
-                'maxDigits' => 5,
                 'expectedResult' => true,
                 'expectedAttribute' => null
             ],
@@ -356,11 +350,9 @@ class IntegerParsersTest extends ParserTestBed
                     '11',
                     '111111'
                 ],
-                'expectedValue' => [
-                    null,
+                'configurations' => [
+                    [null, 3, 5],
                 ],
-                'minDigits' => 3,
-                'maxDigits' => 5,
                 'expectedResult' => false,
             ],
         ];
@@ -368,22 +360,17 @@ class IntegerParsersTest extends ParserTestBed
         foreach ($scenarios as $scenario) {
             $inputs = $scenario['input'];
             $parsers = $scenario['parsers'];
-            $expectedValues = $scenario['expectedValue'];
+            $configurations = $scenario['configurations'];
             $expectedResult = $scenario['expectedResult'];
-            $minDigits = $scenario['minDigits'] ?? 1;
-            $maxDigits = $scenario['maxDigits'] ?? 0;
             foreach ($parsers as $parser) {
                 foreach ($inputs as $input) {
-                    foreach ($expectedValues as $expectedValue) {
+                    foreach ($configurations as $configuration) {
                         $tests[] = [
                             $parser,                // integer parser to use
+                            $configuration,         // parser configurations
                             $input,                 // string to parse
-                            $expectedValue,         // acceptable value or null for any
                             $expectedResult,        // expected result of parse (true/false)
-                            null,                   // requested attribute type
-                            null,                   // expected typed attribute
-                            $minDigits,             // minimum # of digits
-                            $maxDigits,             // maximum # of digits
+                            null                    // expected attribute
                         ];
                     }
                 }

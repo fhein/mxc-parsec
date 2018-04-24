@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Encoding;
 
-class CodePage extends CharacterClassification
+class CodePage extends CharacterClassifier
 {
     protected static $encodingRoot = __DIR__ . '/../config/encoding';
 

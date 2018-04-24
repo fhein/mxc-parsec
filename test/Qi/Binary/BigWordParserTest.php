@@ -7,27 +7,30 @@ use Mxc\Parsec\Qi\Binary\BigWordParser;
 
 class BigWordParserTest extends ParserTestBed
 {
-    protected function getParserConfig(string $parser)
+    protected function getParserConfig(string $parser, $expectedValue)
     {
         return sprintf(
             "Test of %s:\n"
-            . "  Setup:\n",
-            $parser
+            . "  Setup:\n"
+            . "   Expected Value: %s",
+            $parser,
+            strval($expectedValue)
         );
     }
 
     /** @dataProvider bigWordDataProvider */
-    public function testBigWordParser($input, $expectedResult, $expectedValue = null)
+    public function testBigWordParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
-        $cfg = $this->getParserConfig(BigWordParser::class);
-        $parser = $this->pm->build(BigWordParser::class);
+        $cfg = $this->getParserConfig(BigWordParser::class, $expectedValue);
+        $parser = $this->pm->build(BigWordParser::class, [$expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description
             $parser,            // parser to test
             $input,             // parser input
             $expectedResult,    // expected result
-            $expectedValue      // expectedValue
+            $expectedValue,     // expected value
+            $expectedAttribute  // expected attribute
         );
     }
 
@@ -36,8 +39,9 @@ class BigWordParserTest extends ParserTestBed
         return [
             [ '', false ],
             [ "\x01", false],
-            [ "\x01\x02", true, 258],
-            [ "\x01\x02", true, null, 258],
+            [ "\x01\x02", true, 258 ],
+            [ "\x01\x02", true, null, 258 ],
+            [ "\x01\x02", false, 42 ],
         ];
     }
 }

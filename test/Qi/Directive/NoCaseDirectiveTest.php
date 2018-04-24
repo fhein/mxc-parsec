@@ -6,6 +6,7 @@ use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Directive\NoCaseDirective;
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Test\Parsec\Qi\Assets\MockPreSkipperMatchingAllButCaret;
+use Mxc\Parsec\Qi\Char\CharSetParser;
 
 class NoCaseDirectiveTest extends ParserTestBed
 {
@@ -28,8 +29,8 @@ class NoCaseDirectiveTest extends ParserTestBed
         $cfg = $this->getParserConfig(NoCaseDirective::class);
 
         $domain = $this->pm->get(Domain::class);
-        $mock = new MockPreSkipperMatchingAllButCaret($domain);
-        $directive = new NoCaseDirective($domain, $mock);
+        $csp = new CharSetParser($domain, 'a-z');
+        $directive = new NoCaseDirective($domain, $csp);
 
         $this->doTest(
             $cfg,                       // test configuration description
@@ -47,8 +48,8 @@ class NoCaseDirectiveTest extends ParserTestBed
     {
         $tests = [
             [ '^', false],
-            [ 'A', true, 'a', 'A' ],
-            [ 'a', false, 'B' ],
+            [ 'A', true,  'A' ],
+            [ 'a', true, 'a' ],
         ];
         return $tests;
     }

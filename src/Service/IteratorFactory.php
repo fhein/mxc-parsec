@@ -28,6 +28,6 @@ class IteratorFactory implements AbstractFactoryInterface
     public function __invoke(\Interop\Container\ContainerInterface $container, $requestedName, array $options = null)
     {
         $iterator = self::ITERATORS[$requestedName];
-        return new $iterator();
+        return $options ? new $iterator(...$options) : new $iterator();
     }
 }

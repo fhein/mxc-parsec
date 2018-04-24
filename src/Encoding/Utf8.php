@@ -2,7 +2,7 @@
 
 namespace Mxc\Parsec\Encoding;
 
-class Utf8 extends CharacterClassification
+class Utf8 extends CharacterClassifier
 {
     public function getName()
     {

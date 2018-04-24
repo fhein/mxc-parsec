@@ -2,63 +2,91 @@
 
 namespace Mxc\Parsec\Qi\Numeric;
 
-use Mxc\Parsec\Qi\Numeric\Detail\DecimalIntPolicy;
 use Mxc\Parsec\Qi\Domain;
-use Mxc\Parsec\Qi\Char\CharParser;
-use Mxc\Parsec\Qi\Directive\NoCaseDirective;
 use Mxc\Parsec\Qi\String\SymbolsParser;
+use Mxc\Parsec\Qi\PreSkipper;
 
-class FloatParser extends Integer
+class FloatParser extends PreSkipper
 {
     protected $char;
 
     public function __construct(Domain $domain)
     {
-        parent::__construct($domain, new DecimalIntPolicy());
-        $this->char = new NoCaseDirective($domain, new CharParser($domain));
+        parent::__construct($domain);
         $this->symbols = new SymbolsParser(
             $domain,
             ['NAN' => NAN, '-NAN' => -NAN, 'INF' => INF, '-INF' => INF, '+NAN' => NAN, '+INF' => INF]
         );
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $fraction = false;
         $attr = '';
-        $iterator->try();
-        if ($iterator->done($this->symbols->doParse($iterator, null, null, null))) {
+        $this->iterator->try();
+
+        if ($this->iterator->done($this->symbols->doParse($skipper))) {
             $this->attribute = $this->symbols->getAttribute();
             return true;
         }
 
-        // parse integer part
-        if (parent::doParse($iterator, null, 'string', $skipper)) {
-            $attr .= $this->getAttribute();
+        $c = $this->iterator->current();
+        if ($c === '-' || ($c === '+')) {
+            $attr .= $c;
         }
-        if ($this->char->doParse($iterator, '.', null, null)) {
-            $attr .= '.';
+
+        // parse integer part
+        while ($this->iterator->valid()) {
+            $c = $this->iterator->current();
+            if ($c >= '0' && $c <= '9') {
+                $attr .= $c;
+                $this->iterator->next();
+            } else {
+                break;
+            }
+        }
+
+        // parse fractional part
+        if ($c === '.') {
+            $attr .= $c;
+            $this->iterator->next();
             $fraction = true;
         }
+
         if ($attr === '') {
             return false;
         }
 
         // parse fractional part
-        if ($fraction && parent::doParse($iterator, null, 'string', null)) {
-            $attr .= $this->getAttribute();
+        if ($fraction) {
+            while ($this->iterator->valid()) {
+                $c = $this->iterator->current();
+                if ($c >= '0' && $c <= '9') {
+                    $attr .= $c;
+                    $this->iterator->next();
+                } else {
+                    break;
+                }
+            }
         }
 
         // parse exponent marker
-        if ($this->char->doParse($iterator, 'e', null, null)) {
+        if ($c === 'e' || $c === 'E') {
             // parse exponent
             $attr .= 'e';
-            if (! parent::doParse($iterator, null, 'string', null)) {
-                return false;
+            $this->iterator->next();
+
+            while ($this->iterator->valid()) {
+                $c = $this->iterator->current();
+                if ($c >= '0' && $c <= '9') {
+                    $attr .= $c;
+                    $this->iterator->next();
+                } else {
+                    break;
+                }
             }
-            $attr .= strval($this->getAttribute());
         }
-        $this->assignTo($attr, 'double');
+        $this->attribute = floatval($attr);
         return true;
     }
 }

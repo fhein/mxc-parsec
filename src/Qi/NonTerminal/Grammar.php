@@ -53,37 +53,25 @@ class Grammar extends NaryParser
                 sprintf('%s: Unknown rule \'%s\'', $this->what(), $name)
             );
         }
+        return $this->subject[$name];
     }
 
-    public function parseRule(Rule $rule, $iterator, $expectedValue, $attributeType, $skipper)
-    {
-        if ($rule->parse($iterator, $expectedValue, $attributeType, $skipper)) {
-            $this->attribute = $rule->getAttribute();
-            return true;
-        }
-        return false;
-    }
 
-    public function doParse()
+    public function doParse($skipper)
     {
         $this->domain->enterContext($this);
-        $result = $this->parseRule($this->getRule($this->startRule));
-        $this->domain->leaveContext($this);
-        return $result;
-    }
 
-//     public function what()
-//     {
-//         $i = 0;
-//         foreach ($this->subject as $name => $rule) {
-//             $what = $this->shortClassName() . '['. $this->name . '] (' . $name . ' => '. $rule->what();
-//             break;
-//         }
-//         foreach (array_slice($this->subject, 1) as $name => $rule) {
-//             $what .= ', ';
-//             $what .= $name. ' => ' .  $rule->what();
-//         };
-//         $what .= ')';
-//         return $what;
-//     }
+        $rule = $this->getRule($this->startRule);
+        if ($rule->parse($skipper)) {
+//            print("Result: true\n");
+            $x = $rule->getAttribute();
+//            var_export($x);
+            $this->assignTo($x, $this->attributeType);
+            $this->domain->leaveContext($this);
+            return true;
+        }
+ //       print("Result: false\n");
+        $this->domain->leaveContext($this);
+        return false;
+    }
 }

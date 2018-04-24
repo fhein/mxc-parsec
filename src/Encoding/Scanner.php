@@ -20,6 +20,8 @@ class Scanner extends CharacterClassifier
 
     public function __construct(string $s = '', $first = null, $last = null, bool $noCase = false, $binary = false)
     {
+        $this->setData($s);
+        return;
         $this->data = $s;
 
         $first = $first ?? 0;
@@ -74,10 +76,14 @@ class Scanner extends CharacterClassifier
         }
         $c = $this->current();
         if ($char !== null && ! $this->compareChar($c, $char)) {
-            $attr = null;
             return false;
         }
         return $c;
+    }
+
+    public function getSubStr($start, $length)
+    {
+        return substr($this->data, $start, $length);
     }
 
     public function parseString($string, &$attr)
@@ -136,6 +142,7 @@ class Scanner extends CharacterClassifier
         $this->noCase = false;
         $this->binary = false;
         $this->invalidCache = 0;
+        $this->noCaseStack = [];
         unset($this->cache);
         unset($this->positionStack);
     }
@@ -175,7 +182,7 @@ class Scanner extends CharacterClassifier
         $this->first = array_pop($this->positionStack);
     }
 
-    public function setNoCase(bool $noCase)
+    public function setNoCase(bool $noCase = null)
     {
         if ($noCase === true) {
             $this->noCaseStack[] = $this->noCase;
@@ -199,7 +206,12 @@ class Scanner extends CharacterClassifier
      */
     public function currentNoCase()
     {
-        return $this->noCase ? $this->tolower($this->current()) : $this->current();
+        return $this->getNoCaseComparableCharacter($this->current());
+    }
+
+    public function getNoCaseComparableCharacter(string $c)
+    {
+        return $this->noCase ? $this->tolower($c) : $c;
     }
 
     public function setBinary(bool $binary, int $size = 1)

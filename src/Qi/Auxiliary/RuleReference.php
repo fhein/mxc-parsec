@@ -3,37 +3,37 @@
 namespace Mxc\Parsec\Qi\Auxiliary;
 
 use Mxc\Parsec\Qi\Domain;
-use Mxc\Parsec\Qi\DelegatingParser;
+use Mxc\Parsec\Qi\DynamicDelegatingParser;
 
-class RuleReference extends DelegatingParser
+class RuleReference extends DynamicDelegatingParser
 {
     protected $name = null;
     protected $ruleId = null;
-    protected $rule = null;
-    protected $context = null;
 
-    public function doParse(Domain $domain, $expectedValue, $attributeType, $skipper)
+    public function __construct(Domain $domain, string $name, int $ruleId = 0)
     {
-        return $this->getRule()->parse($domain, $expectedValue, $attributeType, $skipper);
+        $this->domain = $domain;
+        $this->iterator = $domain->getInputIterator();
+        $this->name = $name;
+        $this->ruleId = $ruleId;
     }
 
-    protected function getRule()
+    protected function getSubject()
     {
-        // rule references are allowed only in grammars
-        if (! $this->rule) {
-            // will throw if not in grammar
+        if (! $this->subject) {
+            // Allthough rule references can get created in any
+            // context, parsing of rule references is only allowed
+            // in a valid grammar context
+            // The next line will throw if not in a valid context
             $grammar = $this->domain->getContext();
             // if grammar does not know requested rule by name ...
             if (! $grammar->hasRule($this->name)) {
                 // ... get it from domain's rulepool by ruleId ...
-                $rule = $this->domain->getRule($this->ruleId());
                 // ... and add it to grammar by name
-                $grammar->addRule($rule);
-                // @todo: What about using numeric rule id only
-                // and having name only for informational purposes?
+                $grammar->addRule($this->domain->getRule($this->ruleId()));
             }
-            $this->rule = $grammar->getRule($this->name);
+            $this->subject = $grammar->getRule($this->name);
         }
-        return $this->rule;
+        return $this->subject;
     }
 }

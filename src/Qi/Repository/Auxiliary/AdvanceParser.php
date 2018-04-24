@@ -13,11 +13,11 @@ class AdvanceParser extends PrimitiveParser
         $this->advance = $advance;
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        for ($i = 0; $i < $this->advance && $iterator->valid(); $i++) {
-            $iterator->current();
-            $iterator->next();
+        for ($i = 0; $i < $this->advance && $this->iterator->valid(); $i++) {
+            $this->iterator->current();
+            $this->iterator->next();
         }
         return ($i === $this->advance);
     }

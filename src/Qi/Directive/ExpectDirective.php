@@ -7,9 +7,9 @@ use Mxc\Parsec\Qi\DelegatingParser;
 
 class ExpectDirective extends DelegatingParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        if (! $this->subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+        if (! $this->subject->parse($skipper)) {
             $info = $this->what();
             throw new ExpectationFailedException(sprintf("Expecation failed: %s, %s", $info[0], $info[1]));
             return false;

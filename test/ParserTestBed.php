@@ -8,7 +8,7 @@ use Mxc\Parsec\Qi\PreSkipper;
 use PHPUnit\Framework\TestCase;
 use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Exception\UnknownCastException;
-use Mxc\Parsec\Qi\Unused;
+use Mxc\Parsec\Attribute\Unused;
 use Mxc\Parsec\Qi\Char\Char;
 use Mxc\Parsec\Qi\Directive\NoCaseDirective;
 
@@ -99,7 +99,7 @@ class ParserTestBed extends TestCase
             case 'NULL':
                 return null;
             case 'unused':
-                return $this->pm->get(Unused::class);
+                return new Unused();
             default:
                 if (class_exists($type)) {
                     return new $type($value);
@@ -140,7 +140,7 @@ class ParserTestBed extends TestCase
         Parser $skipper = null
     ) {
         $iterator = $parser->setSource($input);
-        $result = $parser->parse($iterator, $expectedValue, $expectedAttributeType, $skipper);
+        $result = $parser->parse($skipper);
         self::assertSame(
             $expectedResult,
             $result,
@@ -386,7 +386,6 @@ class ParserTestBed extends TestCase
             $skipper
         );
 
-
         // if the parser does not require pre-skipping
         // we are done here
         if ($parser instanceof Char) {
@@ -395,12 +394,12 @@ class ParserTestBed extends TestCase
 
         // parsing should fail if no skipper defined
         // and skippable content is prepended to input
-         $this->parserTest(
-             $cfg,
-             $parser,
-             ' ' . $input,
-             false
-         );
+        $this->parserTest(
+            $cfg,
+            $parser,
+            ' ' . $input,
+            false
+        );
     }
 
     /**
@@ -465,7 +464,7 @@ class ParserTestBed extends TestCase
             is_object($skipper) ? get_class($skipper) : 'none',
             var_export($expectedValue, true),
             var_export($expectedResult, true),
-            $expectedAttribute,
+            print_r($expectedAttribute, true),
             $expectedAttributeType ?? 'n/a',
             $expectedIteratorPos ?? 'n/a',
             var_export($result, true),

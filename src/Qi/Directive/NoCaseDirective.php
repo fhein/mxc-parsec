@@ -6,11 +6,11 @@ use Mxc\Parsec\Qi\DelegatingParser;
 
 class NoCaseDirective extends DelegatingParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        $this->domain->setNoCase(true);
-        $result = parent::doParse($iterator, $expectedValue, $attributeType, $skipper);
-        $this->domain->restoreNoCaseSetting();
+        $this->iterator->setNoCase(true);
+        $result = parent::doParse($skipper);
+        $this->iterator->setNoCase();
         return $result;
     }
 }

@@ -2,27 +2,18 @@
 
 namespace Mxc\Parsec\Qi;
 
-use Mxc\Parsec\Encoding\CharacterClassifier;
+use Mxc\Parsec\Exception\NoRuleContextException;
+use Mxc\Parsec\Exception\UnknownRuleException;
 use Mxc\Parsec\Qi\NonTerminal\Grammar;
 use Mxc\Parsec\Qi\NonTerminal\Rule;
+use Mxc\Parsec\Support\NamedObject;
 
-class Domain
+class Domain extends NamedObject
 {
-
     protected $inputEncoding;
     protected $internalEncoding;
-
-    protected $characterClassifier;
-    protected $inputClassifier;
-
     protected $inputIterator;
-
-    protected $services;
-
-    protected $noCaseSetting = [];
-
     protected $parserManager;
-
     protected $rulePool = [];
 
     public function __construct($parserManager, $inputEncoding = 'UTF-8', $internalEncoding = 'UTF-8')
@@ -33,23 +24,9 @@ class Domain
         $this->parserManager = $parserManager;
     }
 
-    public function registerRule(Rule $r)
-    {
-        $this->rulePool[] = $r;
-        return end($this->rulePool);
-    }
-
-    public function getCharacterClassifier()
-    {
-        return $this->characterClassifier ??
-            $this->characterClassifier = $this->parserManager->get(CharacterClassifier::class);
-    }
-
     public function getInternalIterator(string $arg)
     {
-        $iterator = $this->parserManager->build($this->internalEncoding);
-        $iterator->setData($arg, 0, strlen($arg), $this->noCaseSetting);
-        return $iterator;
+        return $this->parserManager->build($this->internalEncoding, [$arg]);
     }
 
     public function getInputIterator()
@@ -57,33 +34,25 @@ class Domain
         return $this->inputIterator;
     }
 
-    public function setSource(string $source)
-    {
-        $this->noCaseSetting = [];
-        $iterator = $this->getInputIterator();
-        $iterator->setData($source);
-        return $iterator;
-    }
-
-    public function setNoCase(bool $state = true)
-    {
-        $this->noCaseSetting[] = $this->inputIterator->isNoCase();
-        $this->inputIterator->setNoCase($state);
-    }
-
-    public function restoreNoCaseSetting()
-    {
-        $this->inputIterator->setNoCase(array_pop($this->noCaseSetting) ?? false);
-    }
-
-    public function getNoCaseSetting()
-    {
-        return end($this->noCaseSetting);
-    }
-
-    public function buildParser(string $class, array $options = [])
+    public function buildParser(string $class, array $options = null)
     {
         return $this->parserManager->build($class, $options);
+    }
+
+    public function registerRule(Rule $r)
+    {
+        $this->rulePool[] = $r;
+        end($this->rulePool);
+        return key($this->rulePool);
+    }
+
+    public function getRule($ruleId)
+    {
+        $result = $this->rulePool[$ruleId];
+        if (! $result instanceof Rule) {
+            throw new UnknownRuleException(sprintf('Domain: No rule for ruleId %s.', $ruleId));
+        }
+        return $result;
     }
 
     public function enterContext(Grammar $context)
@@ -97,8 +66,16 @@ class Domain
         return $lastContext;
     }
 
+    public function getContext()
+    {
+        if (empty($this->contextStack)) {
+            throw new NoRuleContextException('Domain: No rule context set.');
+        }
+        return end($this->contextStack);
+    }
+
     public function __debugInfo()
     {
-        return ['Domain'];
+        return ['domain' => $this->name];
     }
 }

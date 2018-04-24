@@ -6,21 +6,22 @@ use Mxc\Parsec\Qi\BinaryParser;
 
 class DifferenceOperator extends BinaryParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $lhs = $this->subject[0];
         $rhs = $this->subject[1];
 
-        $iterator->try();
-        if ($rhs->parse($iterator, null, null, $skipper)) {
-            $iterator->reject();
+        $this->iterator->try();
+        if ($rhs->parse($skipper)) {
+            $this->iterator->reject();
             return false;
         }
-        $iterator->reject();
-        if (! $lhs->parse($iterator, null, null, $skipper)) {
+        $this->iterator->reject();
+        if (! $lhs->parse($skipper)) {
             return false;
         }
 
-        return $this->validate($expectedValue, $lhs->getAttribute(), $attributeType);
+        $this->attribute = $lhs->getAttribute();
+        return true;
     }
 }

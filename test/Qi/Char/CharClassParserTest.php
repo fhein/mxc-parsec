@@ -28,7 +28,6 @@ class CharClassParserTest extends ParserTestBed
         $charClass,
         $input,
         $expectedResult,
-        $expectedValue = null,
         $expectedAttribute = null
     ) {
         $cfg = $this->getParserConfig(CharClassParser::class, $charClass, $negate);
@@ -39,7 +38,7 @@ class CharClassParserTest extends ParserTestBed
             $parser,            // parser to test
             $input,             // parser input
             $expectedResult,    // expected result
-            $expectedValue,     // expected value
+            null,               // expected value (not applicable)
             $expectedAttribute  // expected attribute value
         );
     }
@@ -73,17 +72,13 @@ class CharClassParserTest extends ParserTestBed
                 $ch = $input[$l];
                 if ($cp->isvalid($ch)) {
                     if (IntlChar::$method($ch)) {
-                        $tests[] = [ false, $cc, $ch, true, $ch, $ch ];
-                        $tests[] = [ false, $cc, $ch, true, null, $ch ];
-                        $tests[] = [ false, $cc, $ch, false, $ch === 'a' ? 'b' : 'a' ];
+                        $tests[] = [ false, $cc, $ch, true, $ch ];
+                        $tests[] = [ false, $cc, $ch, true, $ch ];
                         $tests[] = [ true, $cc, $ch, false ];
                     } else {
                         $tests[] = [ false, $cc, $ch, false ];
-                        $tests[] = [ false, $cc, $ch, false ];
-                        $tests[] = [ false, $cc, $ch, false, $ch === 'a' ? 'b' : 'a' ];
-                        $tests[] = [ true, $cc, $ch, true, $ch, $ch ];
-                        $tests[] = [ true, $cc, $ch, true, null, $ch ];
-                        $tests[] = [ false, $cc, $ch, false, $ch === 'a' ? 'b' : 'a' ];
+                        $tests[] = [ true, $cc, $ch, true, $ch ];
+                        $tests[] = [ false, $cc, $ch, false];
                     }
                 }
             }

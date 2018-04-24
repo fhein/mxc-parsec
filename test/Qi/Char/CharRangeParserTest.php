@@ -29,7 +29,6 @@ class CharRangeParserTest extends ParserTestBed
         $max,
         $input,
         $expectedResult,
-        $expectedValue = null,
         $expectedAttribute = null
     ) {
         $cfg = $this->getParserConfig(CharRangeParser::class, $min, $max, $negate);
@@ -40,8 +39,8 @@ class CharRangeParserTest extends ParserTestBed
             $parser,            // parser to test
             $input,             // parser input
             $expectedResult,    // expected result
-            $expectedValue,     // expected value
-            $expectedAttribute  // expected attribute value
+            null,               // expected value (not applicable)
+            $expectedAttribute  // expected attribute
         );
     }
 
@@ -49,13 +48,10 @@ class CharRangeParserTest extends ParserTestBed
     {
         return [
             // parser accepts all characters in the set
-            [ false, 'a', 'z',  'a', true, 'a', 'a' ],
-            [ false, 'a', 'z',  'a', true, null, 'a' ],
-            [ false, 'a', 'z',  'd', true, 'd', 'd' ],
-            [ false, 'a', 'z',  'd', false, 'e' ],
-            [ false, 'a', 'z',  'd', true, null, 'd' ],
+            [ false, 'a', 'z',  'a', true],
+            [ false, 'a', 'z',  'd', true, 'd' ],
             [ false, 'a', 'z',  'z', true, 'z', 'z' ],
-            [ false, 'a', 'z',  'z', true, null, 'z' ],
+            [ false, 'a', 'z',  'z', true ],
             [ false, 'a', 'z',  'A', false ],
             [ false, 'a', 'z',  'Z', false ],
             [ false, 'a', 'z',  '[', false ],
@@ -65,13 +61,9 @@ class CharRangeParserTest extends ParserTestBed
             [ true, 'a', 'z',  'a', false ],
             [ true, 'a', 'z',  'd', false ],
             [ true, 'a', 'z',  'z', false ],
-            [ true, 'a', 'z',  'A', true, 'A', 'A' ],
-            [ true, 'a', 'z',  'A', true, null, 'A' ],
-            [ true, 'a', 'z',  'Z', true, null, 'Z' ],
-            [ true, 'a', 'z',  'Z', true, 'Z', 'Z' ],
-            [ true, 'a', 'z',  '[', true, null, '[' ],
-            [ true, 'a', 'z',  '[', true, '[', '[' ],
-            [ true, 'a', 'z',  '[', false, ']' ],
+            [ true, 'a', 'z',  'A', true, 'A' ],
+            [ true, 'a', 'z',  'Z', true, 'Z' ],
+            [ true, 'a', 'z',  '[', true, '[' ],
         ];
     }
 }

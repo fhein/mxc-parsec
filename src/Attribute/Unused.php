@@ -1,6 +1,6 @@
 <?php
 
-namespace Mxc\Parsec\Qi;
+namespace Mxc\Parsec\Attribute;
 
 class Unused
 {

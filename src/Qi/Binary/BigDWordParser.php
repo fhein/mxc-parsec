@@ -7,10 +7,10 @@ use Mxc\Parsec\Qi\Domain;
 class BigDWordParser extends BinParser
 {
 
-    public function __construct(Domain $domain, int $value = null)
+    public function __construct(Domain $domain, int $expectedValue = null)
     {
         $this->endianness = 'N';
         $this->size = 4;
-        parent::__construct($domain, $value);
+        parent::__construct($domain, $expectedValue);
     }
 }

@@ -24,8 +24,8 @@ class LitParser extends DelegatingParser
         }
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        return $this->subject->parse($iterator, $expectedValue, 'unused', $skipper);
+        return $this->subject->parse($skipper);
     }
 }

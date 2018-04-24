@@ -6,12 +6,12 @@ use Mxc\Parsec\Qi\UnaryParser;
 
 class KleeneOperator extends UnaryParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        $this->attr = [];
+        $this->attribute = [];
         $subject = $this->subject;
-        while ($subject->parse($iterator, $expectedValue, $attributeType, $skipper)) {
-            $this->assignTo($subject->getAttribute(), $attributeType);
+        while ($subject->parse($skipper)) {
+            $this->attribute[] = $subject->getAttribute();
         }
         return true;
     }

@@ -63,9 +63,9 @@ class LazyParserTest extends ParserTestBed
     {
         $tests = [
             [ 'c', CharParser::class, ['c'], true, 'c' ],
-            [ '123', IntParser::class, [1,2], false ],
-            [ '12 3', IntParser::class, [1,2], true, 12 ],
-            [ '12 3', 'IntParser', [1,2] ],
+            [ '123', IntParser::class, [null, 1,2], false ],
+            [ '12 3', IntParser::class, [null, 1,2], true, 12 ],
+            [ '12 3', 'IntParser', [null, 1,2] ],
         ];
         return $tests;
     }

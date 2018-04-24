@@ -8,24 +8,24 @@ class ListOperator extends BinaryParser
 {
     protected $parsers;
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $lhs = $this->subject[0];
 
-        if (! $lhs->parse($iterator, $expectedValue, $attributeType, $skipper)) {
+        if (! $lhs->parse($skipper)) {
             return false;
         }
         $this->attribute[] = $lhs->getAttribute();
         $rhs = $this->subject[1];
 
         while (true) {
-            $save = $iterator->key();
-            if ($rhs->parse($iterator, $skipper, null)
-                && $this->subject[1]->parse($iterator, $expectedValue, $attributeType, $skipper)) {
-                    $this->assignTo($lhs->getAttribute(), $attributeType);
+            $save = $this->iterator->key();
+            if ($rhs->parse($skipper)
+                && $lhs->parse($skipper)) {
+                    $this->attribute[] = $lhs->getAttribute();
                     continue;
             }
-            $iterator->setPos($save);
+            $this->iterator->setPos($save);
             break;
         }
         return true;

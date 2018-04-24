@@ -6,8 +6,8 @@ use Mxc\Parsec\Qi\PredicateParser;
 
 class NotPredicate extends PredicateParser
 {
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        return ! $this->subject->parse($iterator, null, null, $skipper);
+        return ! $this->subject->parse($skipper);
     }
 }

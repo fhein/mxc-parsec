@@ -7,7 +7,7 @@ use Mxc\Parsec\Exception\NotSupported32Exception;
 
 class LittleQWordParser extends BinParser
 {
-    public function __construct(Domain $domain)
+    public function __construct(Domain $domain, $expectedValue = null)
     {
         $this->endianness = 'P';
         $this->size = 8;
@@ -16,6 +16,6 @@ class LittleQWordParser extends BinParser
                 sprintf("%s not supported in 32-bit PHP builds.", $this->what())
             );
         }
-        parent::__construct($domain);
+        parent::__construct($domain, $expectedValue);
     }
 }

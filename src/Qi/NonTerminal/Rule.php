@@ -3,6 +3,7 @@
 namespace Mxc\Parsec\Qi\NonTerminal;
 
 use Mxc\Parsec\Qi\DelegatingParser;
+use Mxc\Parsec\Qi\Parser;
 
 class Rule extends DelegatingParser
 {
@@ -10,14 +11,25 @@ class Rule extends DelegatingParser
 
     public function __construct($domain, $name, $subject, string $attributeType = null)
     {
-        parent::construct($domain, $subject);
+        parent::__construct($domain, $subject);
         $this->name = $name;
         $this->attributeType = $attributeType;
         $this->poolId = $this->domain->registerRule($this);
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
-        return $this->subject->parse($iterator, $expectedValue, $this->attributeType, $skipper);
+//         print("\n".'Parsing rule '.$this->getName().". Attribute type: ".$this->attributeType. ". ");
+
+        if ($this->subject->parse($skipper)) {
+            $this->assignTo($this->subject->getAttribute(), $this->attributeType);
+            return true;
+        }
+        return false;
+    }
+
+    public function getAttribute()
+    {
+        return Parser::getAttribute();
     }
 }

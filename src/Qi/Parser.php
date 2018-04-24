@@ -6,20 +6,22 @@ use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 use Mxc\Parsec\Exception\UnknownCastException;
 use Mxc\Parsec\Attribute\Optional;
+use Mxc\Parsec\Attribute\Unused;
+use Mxc\Parsec\Support\NamedObject;
 
-abstract class Parser
+abstract class Parser extends NamedObject
 {
     protected $domain;
     protected $attribute;
-    protected $defaultType;
-    protected $name = 'unnamed';
+    protected $iterator;
 
     public function __construct(Domain $domain)
     {
         $this->domain = $domain;
+        $this->iterator = $domain->getInputIterator();
     }
 
-    abstract public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null);
+    abstract public function parse($skipper = null);
 
     /**
      * Return and reset the current attribute value.
@@ -37,10 +39,11 @@ abstract class Parser
     // the new source gets applied to ALL parsers
     public function setSource($source)
     {
-        return $this->domain->setSource($source);
+        $this->iterator->setData($source);
+        return $this->iterator;
     }
 
-    protected function validate($expectedValue, $value, $attributeType)
+    protected function validate($expectedValue, $value)
     {
         if ($expectedValue === null || $expectedValue === $value) {
             $this->assignTo($value, $attributeType);
@@ -51,21 +54,20 @@ abstract class Parser
 
     protected function validateChar($expectedValue, $value, $attributeType)
     {
-        $iterator = $this->domain->getInputIterator();
-        if ($expectedValue === null || $iterator->compareChar($expectedValue, $value)) {
+        if ($expectedValue === null || $this->iterator->compareChar($expectedValue, $value)) {
             $this->assignTo($value, $attributeType);
-            $iterator->next();
+            $this->iterator->next();
             return true;
         }
         return false;
     }
 
-    protected function skipOver($iterator, $skipper = null)
+    protected function skipOver($skipper = null)
     {
         if ($skipper === null || $skipper instanceof UnusedSkipper) {
             return;
         }
-        while ($iterator->valid() && $skipper->doParse($iterator, null, null, null)) {
+        while ($this->iterator->valid() && $skipper->doParse(null)) {
             /***/ ;
         }
     }
@@ -106,16 +108,13 @@ abstract class Parser
                 ) {
                     return strval($value);
                 }
-                if (is_array($value)) {
-                    $result = '';
-                    foreach ($value as $val) {
-                        $result .= $this->castTo($val, $targetType);
-                    }
-                    return $result;
-                }
                 break;
 
             default:
+                if (is_object($targetType)) {
+                    print(get_class($targetType)."\n");
+                    die();
+                }
                 if (class_exists($targetType)) {
                     return new $targetType($value);
                 }
@@ -174,11 +173,21 @@ abstract class Parser
                 return;
 
             case 'string':
+                if (is_array($value)) {
+                    foreach ($value as $entry) {
+                        $this->assignTo($entry, 'string');
+                    }
+                    return;
+                }
                 $this->attribute .= $value;
                 return;
 
             case 'array':
-                $this->attribute [] = $value;
+                if (! is_array($value)) {
+                    $this->attribute [] = $value;
+                    return;
+                }
+                $this->attribute = $value;
                 return;
 
             case 'optional':
@@ -212,22 +221,11 @@ abstract class Parser
         return substr(strrchr(get_class($this), '\\'), 1);
     }
 
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function __debugInfo()
     {
         return [
             'name'      => $this->name,
             'attribute' => $this->attribute ?? 'n/a',
-            'defaultType' => $this->defaultType ?? 'n/a',
         ];
     }
 }

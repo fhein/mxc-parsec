@@ -4,9 +4,9 @@ namespace Mxc\Parsec\Qi;
 
 abstract class PrimitiveParser extends Parser
 {
-    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function parse($skipper = null)
     {
-        $iterator->try();
-        return $iterator->done($this->doParse($iterator, $expectedValue, $attributeType, $skipper));
+        $this->iterator->try();
+        return $this->iterator->done($this->doParse($skipper));
     }
 }

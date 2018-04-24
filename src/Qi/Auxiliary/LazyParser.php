@@ -49,9 +49,9 @@ class LazyParser extends Parser
      * {@inheritDoc}
      * @see \Mxc\Parsec\Qi\Parser::parse()
      */
-    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function parse($skipper = null)
     {
-        return $this->getSubject()->parse($iterator, $expectedValue, $attributeType, $skipper);
+        return $this->getSubject()->parse($skipper);
     }
 
     /**

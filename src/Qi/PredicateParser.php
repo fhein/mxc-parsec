@@ -4,12 +4,12 @@ namespace Mxc\Parsec\Qi;
 
 class PredicateParser extends UnaryParser
 {
-    public function parse($iterator, $expectedValue = null, $attributeType = null, $skipper = null)
+    public function parse($skipper = null)
     {
         // predicate parser do not consume any input
-        $iterator->try();
-        $result = $this->doParse($iterator, $expectedValue, $attributeType, $skipper);
-        $iterator->reject();
+        $this->iterator->try();
+        $result = $this->doParse($skipper);
+        $this->iterator->reject();
         return $result;
     }
 }

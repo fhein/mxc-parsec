@@ -15,11 +15,11 @@ class MockPreSkipperString extends PreSkipper
         $this->expectedValue = $expectedValue ?? 'abc';
     }
 
-    public function doParse($iterator, $expectedValue, $attributeType, $skipper)
+    public function doParse($skipper)
     {
         $s = new StringParser($this->domain, $this->expectedValue);
-        if ($s->doParse($iterator, $this->expectedValue, $attributeType)) {
-            $this->assignTo($s->getAttribute(), $attributeType);
+        if ($s->doParse($skipper)) {
+            $this->attribute = $s->getAttribute();
             return true;
         }
         return false;
