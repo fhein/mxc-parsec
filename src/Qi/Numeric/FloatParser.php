@@ -10,7 +10,7 @@ class FloatParser extends PreSkipper
 {
     protected $char;
 
-    public function __construct(Domain $domain)
+    public function __construct(Domain $domain, float $expectedValue = null)
     {
         parent::__construct($domain);
         $this->symbols = new SymbolsParser(

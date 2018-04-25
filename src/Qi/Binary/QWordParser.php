@@ -7,7 +7,7 @@ use Mxc\Parsec\Exception\NotSupported32Exception;
 
 class QWordParser extends BinParser
 {
-    public function __construct(Domain $domain, $expectedValue = null)
+    public function __construct(Domain $domain, int $expectedValue = null)
     {
         if (PHP_INT_SIZE < 8) {
             throw new NotSupported32Exception(

@@ -26,7 +26,9 @@ class Integer extends PreSkipper
         IntegerPolicy $policy,
         int $expectedValue = null,
         int $minDigits = 1,
-        int $maxDigits = 0
+        int $maxDigits = 0,
+        int $minValue = null,
+        int $maxValue = null
     ) {
         if (($minDigits < 1) || (($maxDigits > 0) && ($minDigits > $maxDigits))) {
             $msg = sprintf(

@@ -31,7 +31,8 @@
 	"prefer-stable" : true,
 	"autoload-dev" : {
 		"psr-4" : {
-			"Mxc\\Test\\Parsec\\" : "test/"
+			"Mxc\\Test\\Parsec\\" : "test/",
+			"Mxc\\Dev\\Parsec\\"  : "dev/"
 		}
 	},
 	"scripts" : {

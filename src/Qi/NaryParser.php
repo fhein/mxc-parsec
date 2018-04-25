@@ -9,7 +9,7 @@ abstract class NaryParser extends PrimitiveParser
     protected $subject;
     protected $flat;
 
-    public function __construct(Domain $domain, array $subject = [], bool $flatten = false)
+    public function __construct(Domain $domain, array $subject, bool $flatten = false)
     {
         $count = count($subject);
         if ($count < 2) {

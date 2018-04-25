@@ -6,7 +6,7 @@ use Mxc\Parsec\Qi\Domain;
 
 class WordParser extends BinParser
 {
-    public function __construct(Domain $domain, $expectedValue = null)
+    public function __construct(Domain $domain, int $expectedValue = null)
     {
         $this->endianness = 'S';
         $this->size = 2;

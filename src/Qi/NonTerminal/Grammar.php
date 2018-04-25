@@ -6,14 +6,14 @@ use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Exception\UnknownRuleException;
 use Mxc\Parsec\Qi\NaryParser;
 use Mxc\Parsec\Exception\InvalidArgumentException;
+use Mxc\Parsec\Qi\Domain;
 
 class Grammar extends NaryParser
 {
-    protected $name;
     protected $rules;
     protected $startRule;
 
-    public function __construct($domain, $name, array $rules = [], string $startRule = null)
+    public function __construct(Domain $domain, string $name, array $rules = [], string $startRule = null)
     {
         parent::__construct($domain, $rules);
         $this->name = $name;

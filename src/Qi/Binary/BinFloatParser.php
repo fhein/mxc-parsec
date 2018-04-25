@@ -6,7 +6,7 @@ use Mxc\Parsec\Qi\Domain;
 
 class BinFloatParser extends BinParser
 {
-    public function __construct(Domain $domain, $expectedValue = null)
+    public function __construct(Domain $domain, float $expectedValue = null)
     {
         $this->endianness = 'f';
         $this->size = 4;

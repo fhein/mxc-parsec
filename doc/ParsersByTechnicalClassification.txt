@@ -1,0 +1,106 @@
+List of all parsers by technical classification (25. April 2018)
+------------------------------------------------------------------
+Parser Class 'Primitive Parsers'
+    [
+        EolParser
+        AttrParser
+        EoiParser
+        EpsParser
+        LitParser
+        ByteParser
+        WordParser
+        DWordParser
+        QWordParser
+        BigWordParser
+        BigDWordParser
+        BigQWordParser
+        LittleWordParser
+        LittleDWordParser
+        LittleQWordParser
+        BinDoubleParser
+        BigBinDoubleParser
+        LittleBinDoubleParser
+        BinFloatParser
+        BigBinFloatParser
+        LittleBinFloatParser
+        CharClassParser
+        CharParser
+        CharRangeParser
+        CharSetParser
+        AlphaParser
+        AlnumParser
+        DigitParser
+        XDigitParser
+        CntrlParser
+        PrintParser
+        PunctParser
+        GraphParser
+        BlankParser
+        SpaceParser
+        UpperParser
+        LowerParser
+        BinaryParser
+        BoolParser
+        TrueParser
+        FalseParser
+        HexParser
+        OctParser
+        ShortParser
+        IntParser
+        LongParser
+        LongLongParser
+        UShortParser
+        UIntParser
+        ULongParser
+        ULongLongParser
+        FloatParser
+        DoubleParser
+        LongDoubleParser
+        StringParser
+        SymbolsParser
+        AdvanceParser
+    ]
+------------------------------------------------------------------
+Parser Class 'Unary Parsers'
+    [
+        LazyParser
+        ExpectDirective
+        HoldDirective
+        LexemeDirective
+        MatchesDirective
+        NoCaseDirective
+        NoSkipDirective
+        OmitDirective
+        RawDirective
+        RepeatDirective
+        SkipDirective
+        AsStringDirective
+        RuleReference
+        AndPredicate
+        KleeneOperator
+        NotPredicate
+        OptionalOperator
+        PlusOperator
+    ]
+------------------------------------------------------------------
+Parser Class 'NonTerminal'
+    [
+        Rule
+        Grammar
+    ]
+------------------------------------------------------------------
+Parser Class 'Nary Parsers'
+    [
+        AlternativeOperator
+        ExpectOperator
+        PermutationOperator
+        SequenceOperator
+        SequentialOrOperator
+    ]
+------------------------------------------------------------------
+Parser Class 'Binary Parsers'
+    [
+        DifferenceOperator
+        ListOperator
+        DistinctDirective
+    ]

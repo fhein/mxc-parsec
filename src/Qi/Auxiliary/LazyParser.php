@@ -36,11 +36,10 @@ class LazyParser extends Parser
      * @param string $class
      * @param array ...$args
      */
-    public function __construct(Domain $domain, string $class, array $args = [])
+    public function __construct(Domain $domain, array $parserDefinition)
     {
         parent::__construct($domain);
-        $this->args = $args;
-        $this->class = $class;
+        $this->lazy = $parserDefinition;
     }
 
     /**
@@ -65,8 +64,8 @@ class LazyParser extends Parser
         if ($this->subject !== null) {
             return $this->subject;
         }
-        if (is_string($this->class) && class_exists($this->class)) {
-            $this->subject = $this->domain->buildParser($this->class, $this->args);
+        if (is_string($this->lazy[0]) && class_exists($this->lazy[0]) && is_array($this->lazy[1])) {
+            $this->subject = $this->domain->buildParser($this->lazy[0], $this->lazy[1]);
         } else {
             throw new InvalidArgumentException('Provided class is not a string or class does not exist.');
         }
@@ -81,8 +80,7 @@ class LazyParser extends Parser
         return array_merge_recursive(
             parent::__debugInfo(),
             [
-                'class' => $this->class ?? 'n/a',
-                'args'  => $this->args ?? 'n/a',
+                'parser_definition' => $this->lazy ?? 'n/a',
                 'subject' => $this->subject ?? 'n/a',
             ]
         );

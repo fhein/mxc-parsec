@@ -1,0 +1,300 @@
+List of all parsers by parameter set (25. April 2018)
+------------------------------------------------------------------
+Parameter Set:
+    [
+        -no_type- $attribute <mandatory>
+    ]
+Used By:
+    [
+        AttrParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        -no_type- $callable <optional, default: null>
+    ]
+Used By:
+    [
+        EpsParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        array $parserDefinition <mandatory>
+    ]
+Used By:
+    [
+        LazyParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        -no_type- $expectedValue <mandatory>
+    ]
+Used By:
+    [
+        LitParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        int $expectedValue <optional, default: null>
+    ]
+Used By:
+    [
+        ByteParser
+        WordParser
+        DWordParser
+        QWordParser
+        BigWordParser
+        BigDWordParser
+        BigQWordParser
+        LittleWordParser
+        LittleDWordParser
+        LittleQWordParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        float $expectedValue <optional, default: null>
+    ]
+Used By:
+    [
+        BinDoubleParser
+        BigBinDoubleParser
+        LittleBinDoubleParser
+        BinFloatParser
+        BigBinFloatParser
+        LittleBinFloatParser
+        FloatParser
+        DoubleParser
+        LongDoubleParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        string $class <mandatory>
+        bool $negate <optional, default: false>
+    ]
+Used By:
+    [
+        CharClassParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        string $c <optional, default: null>
+        bool $negate <optional, default: false>
+    ]
+Used By:
+    [
+        CharParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        string $min <mandatory>
+        string $max <mandatory>
+        bool $negate <optional, default: false>
+    ]
+Used By:
+    [
+        CharRangeParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        -no_type- $charset <mandatory>
+        bool $negate <optional, default: false>
+    ]
+Used By:
+    [
+        CharSetParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        bool $negate <optional, default: false>
+    ]
+Used By:
+    [
+        AlphaParser
+        AlnumParser
+        DigitParser
+        XDigitParser
+        CntrlParser
+        PrintParser
+        PunctParser
+        GraphParser
+        BlankParser
+        SpaceParser
+        UpperParser
+        LowerParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        Mxc\Parsec\Qi\Parser $subject <mandatory>
+    ]
+Used By:
+    [
+        ExpectDirective
+        HoldDirective
+        LexemeDirective
+        MatchesDirective
+        NoCaseDirective
+        NoSkipDirective
+        RawDirective
+        SkipDirective
+        AsStringDirective
+        AndPredicate
+        KleeneOperator
+        NotPredicate
+        OptionalOperator
+        PlusOperator
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        Mxc\Parsec\Qi\Parser $parser <mandatory>
+    ]
+Used By:
+    [
+        OmitDirective
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        Mxc\Parsec\Qi\Parser $subject <mandatory>
+        int $min <optional, default: null>
+        int $max <optional, default: null>
+    ]
+Used By:
+    [
+        RepeatDirective
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        string $name <mandatory>
+        Mxc\Parsec\Qi\Parser $subject <mandatory>
+        string $attributeType <optional, default: null>
+    ]
+Used By:
+    [
+        Rule
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        string $name <mandatory>
+        int $ruleId <optional, default: 0>
+    ]
+Used By:
+    [
+        RuleReference
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        string $name <mandatory>
+        array $rules <optional, default: []>
+        string $startRule <optional, default: null>
+    ]
+Used By:
+    [
+        Grammar
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        int $expectedValue <optional, default: null>
+        int $minDigits <optional, default: 1>
+        int $maxDigits <optional, default: 0>
+        int $minValue <optional, default: null>
+        int $maxValue <optional, default: null>
+    ]
+Used By:
+    [
+        BinaryParser
+        HexParser
+        OctParser
+        ShortParser
+        IntParser
+        LongParser
+        LongLongParser
+        UShortParser
+        UIntParser
+        ULongParser
+        ULongLongParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        Mxc\Parsec\Qi\Numeric\Detail\BoolPolicy $policy <optional, default: null>
+    ]
+Used By:
+    [
+        BoolParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        array $subject <mandatory>
+        bool $flatten <optional, default: false>
+    ]
+Used By:
+    [
+        AlternativeOperator
+        ExpectOperator
+        PermutationOperator
+        SequenceOperator
+        SequentialOrOperator
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        Mxc\Parsec\Qi\Parser $subject1 <mandatory>
+        Mxc\Parsec\Qi\Parser $subject2 <mandatory>
+    ]
+Used By:
+    [
+        DifferenceOperator
+        ListOperator
+        DistinctDirective
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        string $string <mandatory>
+    ]
+Used By:
+    [
+        StringParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        array $symbols <optional, default: []>
+    ]
+Used By:
+    [
+        SymbolsParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        int $advance <mandatory>
+    ]
+Used By:
+    [
+        AdvanceParser
+    ]
+------------------------------------------------------------------
+Parser Without Parameters:
+    [
+        EolParser
+        EoiParser
+        TrueParser
+        FalseParser
+    ]

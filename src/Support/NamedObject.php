@@ -4,7 +4,12 @@ namespace Mxc\Parsec\Support;
 
 class NamedObject
 {
-    protected $name = 'unnamed';
+    protected $name;
+
+    public function __construct(string $name = null)
+    {
+        $this->name = $name ?? 'unnamed';
+    }
 
     public function setName($name)
     {
@@ -19,7 +24,7 @@ class NamedObject
     public function __debugInfo()
     {
         return [
-            'name'      => $this->name,
+            'name'  => $this->name,
         ];
     }
 }

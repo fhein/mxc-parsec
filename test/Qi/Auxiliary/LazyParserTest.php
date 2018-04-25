@@ -13,7 +13,7 @@ use Mxc\Parsec\Service\ParserFactory;
 
 class LazyParserTest extends ParserTestBed
 {
-    protected function getParserConfig(string $parser, $class, $options)
+    protected function getParserConfig(string $parser, $pd)
     {
         return sprintf(
             "Test of %s:\n"
@@ -21,31 +21,27 @@ class LazyParserTest extends ParserTestBed
             . "    class: %s\n"
             . "    options: %s\n",
             $parser,
-            $class,
-            var_export($options, true)
+            var_export($pd[0], true),
+            var_export($pd[1], true)
         );
     }
 
     /** @dataProvider lazyParserDataProvider */
     public function testLazyParser(
         string $input,
-        string $class,
-        array $opt = [],
+        array $parserDefinition,
         bool $expectedResult = false,
         $expectedAttribute = null
     ) {
 
-        $cfg = $this->getParserConfig(LazyParser::class, $class, $opt);
+        $cfg = $this->getParserConfig(LazyParser::class, $parserDefinition);
         $domain = $this->pm->get(Domain::class);
         $options[] = $domain;
-        foreach ($opt as $value) {
-            $options[] = $value;
-        }
         $pf = new ParserFactory();
 
-        $parser = $pf($this->pm, LazyParser::class, [ $class, $opt ]);
+        $parser = $pf($this->pm, LazyParser::class, [ $parserDefinition ]);
 
-        if (! class_exists($class)) {
+        if (! class_exists($parserDefinition[0])) {
             self::expectException(InvalidArgumentException::class);
         }
 
@@ -62,10 +58,10 @@ class LazyParserTest extends ParserTestBed
     public function lazyParserDataProvider()
     {
         $tests = [
-            [ 'c', CharParser::class, ['c'], true, 'c' ],
-            [ '123', IntParser::class, [null, 1,2], false ],
-            [ '12 3', IntParser::class, [null, 1,2], true, 12 ],
-            [ '12 3', 'IntParser', [null, 1,2] ],
+            [ 'c', [ CharParser::class, ['c']], true, 'c' ],
+            [ '123', [ IntParser::class, [null, 1,2]], false ],
+            [ '12 3', [ IntParser::class, [null, 1,2]], true, 12 ],
+            [ '12 3', [ 'IntParser', [null, 1,2]] ],
         ];
         return $tests;
     }

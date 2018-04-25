@@ -6,7 +6,7 @@ use Mxc\Parsec\Qi\Domain;
 
 class BigBinDoubleParser extends BinParser
 {
-    public function __construct(Domain $domain, $expectedValue = null)
+    public function __construct(Domain $domain, float $expectedValue = null)
     {
         $this->endianness = 'E';
         $this->size = 8;

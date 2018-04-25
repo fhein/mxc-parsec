@@ -2,8 +2,7 @@
 
 namespace Mxc\Parsec\Service;
 
-use ReflectionClass;
-use Mxc\Parsec\Qi\Domain;
+use Mxc\Parsec\Attribute\Unused;
 use Mxc\Parsec\Encoding\CharacterClassifier;
 use Mxc\Parsec\Encoding\Utf8Decoder;
 use Mxc\Parsec\Exception\InvalidArgumentException;
@@ -12,6 +11,8 @@ use Mxc\Parsec\Qi\Auxiliary\EoiParser;
 use Mxc\Parsec\Qi\Auxiliary\EolParser;
 use Mxc\Parsec\Qi\Auxiliary\EpsParser;
 use Mxc\Parsec\Qi\Auxiliary\LazyParser;
+use Mxc\Parsec\Qi\Auxiliary\LitParser;
+use Mxc\Parsec\Qi\Auxiliary\RuleReference;
 use Mxc\Parsec\Qi\Binary\BigBinDoubleParser;
 use Mxc\Parsec\Qi\Binary\BigBinFloatParser;
 use Mxc\Parsec\Qi\Binary\BigDWordParser;
@@ -28,10 +29,24 @@ use Mxc\Parsec\Qi\Binary\LittleQWordParser;
 use Mxc\Parsec\Qi\Binary\LittleWordParser;
 use Mxc\Parsec\Qi\Binary\QWordParser;
 use Mxc\Parsec\Qi\Binary\WordParser;
+use Mxc\Parsec\Qi\Char\AlnumParser;
+use Mxc\Parsec\Qi\Char\AlphaParser;
+use Mxc\Parsec\Qi\Char\BlankParser;
 use Mxc\Parsec\Qi\Char\CharClassParser;
 use Mxc\Parsec\Qi\Char\CharParser;
 use Mxc\Parsec\Qi\Char\CharRangeParser;
 use Mxc\Parsec\Qi\Char\CharSetParser;
+use Mxc\Parsec\Qi\Char\CntrlParser;
+use Mxc\Parsec\Qi\Char\DigitParser;
+use Mxc\Parsec\Qi\Char\GraphParser;
+use Mxc\Parsec\Qi\Char\LowerParser;
+use Mxc\Parsec\Qi\Char\PrintParser;
+use Mxc\Parsec\Qi\Char\PunctParser;
+use Mxc\Parsec\Qi\Char\SpaceParser;
+use Mxc\Parsec\Qi\Char\UpperParser;
+use Mxc\Parsec\Qi\Char\XDigitParser;
+use Mxc\Parsec\Qi\DelegatingParser;
+use Mxc\Parsec\Qi\Directive\AsStringDirective;
 use Mxc\Parsec\Qi\Directive\ExpectDirective;
 use Mxc\Parsec\Qi\Directive\HoldDirective;
 use Mxc\Parsec\Qi\Directive\LexemeDirective;
@@ -42,14 +57,27 @@ use Mxc\Parsec\Qi\Directive\OmitDirective;
 use Mxc\Parsec\Qi\Directive\RawDirective;
 use Mxc\Parsec\Qi\Directive\RepeatDirective;
 use Mxc\Parsec\Qi\Directive\SkipDirective;
-use Mxc\Parsec\Qi\NonTerminal\Rule;
+use Mxc\Parsec\Qi\Domain;
+use Mxc\Parsec\Qi\NaryParser;
 use Mxc\Parsec\Qi\NonTerminal\Grammar;
+use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Qi\Numeric\BinaryParser;
 use Mxc\Parsec\Qi\Numeric\BoolParser;
+use Mxc\Parsec\Qi\Numeric\DoubleParser;
+use Mxc\Parsec\Qi\Numeric\FalseParser;
+use Mxc\Parsec\Qi\Numeric\FloatParser;
 use Mxc\Parsec\Qi\Numeric\HexParser;
 use Mxc\Parsec\Qi\Numeric\IntParser;
+use Mxc\Parsec\Qi\Numeric\LongDoubleParser;
+use Mxc\Parsec\Qi\Numeric\LongLongParser;
+use Mxc\Parsec\Qi\Numeric\LongParser;
 use Mxc\Parsec\Qi\Numeric\OctParser;
+use Mxc\Parsec\Qi\Numeric\ShortParser;
+use Mxc\Parsec\Qi\Numeric\TrueParser;
 use Mxc\Parsec\Qi\Numeric\UIntParser;
+use Mxc\Parsec\Qi\Numeric\ULongLongParser;
+use Mxc\Parsec\Qi\Numeric\ULongParser;
+use Mxc\Parsec\Qi\Numeric\UShortParser;
 use Mxc\Parsec\Qi\Operator\AlternativeOperator;
 use Mxc\Parsec\Qi\Operator\AndPredicate;
 use Mxc\Parsec\Qi\Operator\DifferenceOperator;
@@ -61,35 +89,18 @@ use Mxc\Parsec\Qi\Operator\OptionalOperator;
 use Mxc\Parsec\Qi\Operator\PermutationOperator;
 use Mxc\Parsec\Qi\Operator\PlusOperator;
 use Mxc\Parsec\Qi\Operator\SequenceOperator;
+use Mxc\Parsec\Qi\Operator\SequentialOrOperator;
+use Mxc\Parsec\Qi\PredicateParser;
+use Mxc\Parsec\Qi\PreSkipper;
+use Mxc\Parsec\Qi\PrimitiveParser;
+use Mxc\Parsec\Qi\Repository\Auxiliary\AdvanceParser;
+use Mxc\Parsec\Qi\Repository\Directive\DistinctDirective;
 use Mxc\Parsec\Qi\String\StringParser;
 use Mxc\Parsec\Qi\String\SymbolsParser;
-use Mxc\Parsec\Attribute\Unused;
-use Mxc\Parsec\Service\ParserFactory;
-use Zend\ServiceManager\ServiceManager;
-use Mxc\Parsec\Qi\Numeric\UShortParser;
 use Mxc\Parsec\Qi\UnaryParser;
-use Mxc\Parsec\Qi\PrimitiveParser;
-use Mxc\Parsec\Qi\NaryParser;
-use Mxc\Parsec\Qi\PreSkipper;
-use Mxc\Parsec\Qi\DelegatingParser;
-use Mxc\Parsec\Qi\PredicateParser;
-use Mxc\Parsec\Qi\Numeric\ShortParser;
-use Mxc\Parsec\Qi\Numeric\ULongParser;
-use Mxc\Parsec\Qi\Numeric\ULongLongParser;
-use Mxc\Parsec\Qi\Numeric\FloatParser;
-use Mxc\Parsec\Qi\Numeric\LongParser;
-use Mxc\Parsec\Qi\Numeric\LongLongParser;
-use Mxc\Parsec\Qi\Numeric\DoubleParser;
-use Mxc\Parsec\Qi\Numeric\LongDoubleParser;
-use Mxc\Parsec\Qi\Numeric\TrueParser;
-use Mxc\Parsec\Qi\Numeric\FalseParser;
-use Mxc\Parsec\Qi\Repository\Directive\DistinctDirective;
-use Mxc\Parsec\Qi\Operator\SequentialOrOperator;
-use Mxc\Parsec\Qi\Directive\AsStringDirective;
-use Mxc\Parsec\Qi\Repository\Auxiliary\AdvanceParser;
-use Mxc\Parsec\Qi\Auxiliary\LitParser;
-use Mxc\Parsec\Qi\Char\SpaceParser;
-use Mxc\Parsec\Qi\Auxiliary\RuleReference;
+use Mxc\Parsec\Service\ParserFactory;
+use ReflectionClass;
+use Zend\ServiceManager\ServiceManager;
 
 class ParserManager extends ServiceManager
 {
@@ -141,7 +152,18 @@ class ParserManager extends ServiceManager
         '~' . CharParser::class         => NegatedCharParserFactory::class,
         '~' . CharRangeParser::class    => NegatedCharParserFactory::class,
         '~' . CharSetParser::class      => NegatedCharParserFactory::class,
+        AlphaParser::class              => ParserFactory::class,
+        AlnumParser::class              => ParserFactory::class,
+        DigitParser::class              => ParserFactory::class,
+        XDigitParser::class             => ParserFactory::class,
+        CntrlParser::class              => ParserFactory::class,
+        PrintParser::class              => ParserFactory::class,
+        PunctParser::class              => ParserFactory::class,
+        GraphParser::class              => ParserFactory::class,
+        BlankParser::class              => ParserFactory::class,
         SpaceParser::class              => ParserFactory::class,
+        UpperParser::class              => ParserFactory::class,
+        LowerParser::class              => ParserFactory::class,
 
         // directive
         ExpectDirective::class          => ParserFactory::class,
@@ -203,78 +225,6 @@ class ParserManager extends ServiceManager
         // non parsers
         Domain::class                   => DomainFactory::class,
     ];
-
-//     protected $delegators = [
-//         EolParser::class                => [ ParserDelegatorFactory::class, ],
-//         AttrParser::class               => [ ParserDelegatorFactory::class, ],
-//         EoiParser::class                => [ ParserDelegatorFactory::class, ],
-//         EpsParser::class                => [ ParserDelegatorFactory::class, ],
-//         LazyParser::class               => [ ParserDelegatorFactory::class, ],
-//         // binary
-//         ByteParser::class               => [ ParserDelegatorFactory::class, ],
-//         WordParser::class               => [ ParserDelegatorFactory::class, ],
-//         DWordParser::class              => [ ParserDelegatorFactory::class, ],
-//         QWordParser::class              => [ ParserDelegatorFactory::class, ],
-//         BigWordParser::class            => [ ParserDelegatorFactory::class, ],
-//         BigDWordParser::class           => [ ParserDelegatorFactory::class, ],
-//         BigQWordParser::class           => [ ParserDelegatorFactory::class, ],
-//         LittleWordParser::class         => [ ParserDelegatorFactory::class, ],
-//         LittleDWordParser::class        => [ ParserDelegatorFactory::class, ],
-//         LittleQWordParser::class        => [ ParserDelegatorFactory::class, ],
-//         BinDoubleParser::class          => [ ParserDelegatorFactory::class, ],
-//         BigBinDoubleParser::class       => [ ParserDelegatorFactory::class, ],
-//         LittleBinDoubleParser::class    => [ ParserDelegatorFactory::class, ],
-//         BinFloatParser::class           => [ ParserDelegatorFactory::class, ],
-//         BigBinFloatParser::class        => [ ParserDelegatorFactory::class, ],
-//         LittleBinFloatParser::class     => [ ParserDelegatorFactory::class, ],
-//         // char
-//         CharClassParser::class          => [ ParserDelegatorFactory::class, ],
-//         CharParser::class               => [ ParserDelegatorFactory::class, ],
-//         CharRangeParser::class          => [ ParserDelegatorFactory::class, ],
-//         CharSetParser::class            => [ ParserDelegatorFactory::class, ],
-//         '~' . CharClassParser::class    => [ ParserDelegatorFactory::class, ],
-//         '~' . CharParser::class         => [ ParserDelegatorFactory::class, ],
-//         '~' . CharRangeParser::class    => [ ParserDelegatorFactory::class, ],
-//         '~' . CharSetParser::class      => [ ParserDelegatorFactory::class, ],
-
-//         // directive
-//         ExpectDirective::class          => [ ParserDelegatorFactory::class, ],
-//         HoldDirective::class            => [ ParserDelegatorFactory::class, ],
-//         LexemeDirective::class          => [ ParserDelegatorFactory::class, ],
-//         MatchesDirective::class         => [ ParserDelegatorFactory::class, ],
-//         NoCaseDirective::class          => [ ParserDelegatorFactory::class, ],
-//         NoSkipDirective::class          => [ ParserDelegatorFactory::class, ],
-//         OmitDirective::class            => [ ParserDelegatorFactory::class, ],
-//         RawDirective::class             => [ ParserDelegatorFactory::class, ],
-//         RepeatDirective::class          => [ ParserDelegatorFactory::class, ],
-//         SkipDirective::class            => [ ParserDelegatorFactory::class, ],
-//         // nonterminal
-//         Rule::class                     => [ ParserDelegatorFactory::class, ],
-//         Grammar::class                  => [ ParserDelegatorFactory::class, ],
-//         // numeric
-//         BinaryParser::class             => [ ParserDelegatorFactory::class, ],
-//         BoolParser::class               => [ ParserDelegatorFactory::class, ],
-//         HexParser::class                => [ ParserDelegatorFactory::class, ],
-//         IntParser::class                => [ ParserDelegatorFactory::class, ],
-//         OctParser::class                => [ ParserDelegatorFactory::class, ],
-//         UIntParser::class               => [ ParserDelegatorFactory::class, ],
-//         UShortParser::class             => [ ParserDelegatorFactory::class, ],
-//         //operator
-//         AlternativeOperator::class      => [ ParserDelegatorFactory::class, ],
-//         AndPredicate::class             => [ ParserDelegatorFactory::class, ],
-//         DifferenceOperator::class       => [ ParserDelegatorFactory::class, ],
-//         ExpectOperator::class           => [ ParserDelegatorFactory::class, ],
-//         KleeneOperator::class           => [ ParserDelegatorFactory::class, ],
-//         ListOperator::class             => [ ParserDelegatorFactory::class, ],
-//         NotPredicate::class             => [ ParserDelegatorFactory::class, ],
-//         OptionalOperator::class         => [ ParserDelegatorFactory::class, ],
-//         PermutationOperator::class      => [ ParserDelegatorFactory::class, ],
-//         PlusOperator::class             => [ ParserDelegatorFactory::class, ],
-//         SequenceOperator::class         => [ ParserDelegatorFactory::class, ],
-//         // string
-//         StringParser::class             => [ ParserDelegatorFactory::class, ],
-//         SymbolsParser::class            => [ ParserDelegatorFactory::class, ],
-//     ];
 
     protected $invokables = [
         CharacterClassifier::class  => CharacterClassifier::class,
@@ -430,114 +380,6 @@ class ParserManager extends ServiceManager
         $this->services['input_encoding'] = $this->get($config['input_encoding']);
         $this->services['internal_encoding'] = $this->get($config['internal_encoding']);
         $this->shortNames = array_flip($this->aliases);
-    }
-
-    public function getShortName(string $class)
-    {
-        return $this->shortNames[$class] ?? $class;
-    }
-
-    /**
-     * This function generates a list of all parsers categorized by
-     * parser class
-     * @return string[]
-     */
-    public function getParsersByClass()
-    {
-        $di = [];
-        $tagged = [];
-        foreach (array_keys($this->factories) as $name) {
-            if ($name[0] === '~' || $name === Domain::class) {
-                continue;
-            }
-            $rc = new ReflectionClass($name);
-            $classes = [    NaryParser::class => 'Nary Parsers',
-                            BinaryParser::class => 'Binary Parsers',
-                            UnaryParser::class => 'Unary Parsers',
-                            PredicateParser::class => 'Unary Parsers',
-                            DelegatingParser::class => 'Unary Parsers',
-                            PrimitiveParser::class => 'Primitive Parsers',
-                            PreSkipper::class => 'Primitive Parsers'];
-            $dname = substr(strrchr($name, '\\'), 1);
-            foreach ($classes as $class => $idx) {
-                if ($tagged[$dname]) {
-                    continue;
-                }
-                if ($name === Rule::class || $name === Grammar::class) {
-                    if (! $tagged[$dname]) {
-                        $di['NonTerminal'][] = $dname;
-                        $tagged[$dname] = true;
-                    }
-                } elseif ($name === BoolParser::class
-                    || $name === TrueParser::class
-                    || $name === FalseParser::class
-                    || $name === LitParser::class
-                ) {
-                    $di['Primitive Parsers'][] = $dname;
-                    $tagged[$dname] = true;
-                } elseif ($rc->isSubClassOf($class)) {
-                    $di[$idx][] = $dname;
-                    $tagged[$dname] = true;
-                }
-            }
-            if (! $tagged[$dname]) {
-                $di['Unknown'] = $dname;
-                $tagged[$dname] = true;
-            }
-        }
-        return $di;
-    }
-    /**
-     * This function generates a list of all parsers categorized by
-     * parser category
-     * @return string[]
-     */
-    public function getParsersByCategory()
-    {
-        $di = [];
-        $tagged = [];
-        foreach (array_keys($this->factories) as $name) {
-            if ($name[0] === '~' || $name === Domain::class) {
-                continue;
-            }
-            $rc = new ReflectionClass($name);
-            $ns = $rc->getNamespaceName();
-            $dname = substr(strrchr($name, '\\'), 1);
-            $dns = substr(strrchr($ns, '\\'), 1);
-            $di[$dns][] = $dname;
-        }
-        return $di;
-    }
-
-    public function findShareableParsers()
-    {
-        $di = [];
-        foreach (array_keys($this->factories) as $name) {
-            if ($name[0] === '~' || $name === Domain::class) {
-                continue;
-            }
-            $rc = new ReflectionClass($name);
-            $m = $rc->getMethod('__construct');
-            $params = $m->getNumberOfParameters();
-            if ($params === 1) {
-                $dname = substr(strrchr($name, '\\'), 1);
-                $di[] = "        $dname::class => true,\n";
-            }
-        }
-        return $di;
-    }
-
-    public function getFQCN()
-    {
-        $di = [];
-        foreach (array_keys($this->factories) as $name) {
-            if ($name[0] === '~' || $name === Domain::class) {
-                continue;
-            }
-            $dname = substr(strrchr($name, '\\'), 1);
-            $di[$dname] = $name;
-        }
-        return $di;
     }
 
     public function __debugInfo()

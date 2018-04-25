@@ -11,7 +11,7 @@ class BinParser extends PrimitiveParser
     protected $size = null;
     protected $expectedValue = null;
 
-    public function __construct(Domain $domain, $expectedValue)
+    public function __construct(Domain $domain, $expectedValue = null)
     {
         parent::__construct($domain);
         $this->expectedValue = $expectedValue;

@@ -2,6 +2,6 @@
 
 namespace Mxc\Parsec\Qi\Numeric;
 
-class LongParser extends Integer
+class LongParser extends IntParser
 {
 }

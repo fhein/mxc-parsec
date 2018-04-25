@@ -4,12 +4,13 @@ namespace Mxc\Parsec\Qi\NonTerminal;
 
 use Mxc\Parsec\Qi\DelegatingParser;
 use Mxc\Parsec\Qi\Parser;
+use Mxc\Parsec\Qi\Domain;
 
 class Rule extends DelegatingParser
 {
     protected $poolId = null;
 
-    public function __construct($domain, $name, $subject, string $attributeType = null)
+    public function __construct(Domain $domain, string $name, Parser $subject, string $attributeType = null)
     {
         parent::__construct($domain, $subject);
         $this->name = $name;
