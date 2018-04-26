@@ -1,0 +1,1573 @@
+[
+    {
+        "type": "eolparser",
+        "message0": "end of line",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_AUX_HUE}",
+        "tooltip": "Matches line separators. No attribute returned.",
+        "helpUrl": ""
+    },
+    {
+        "type": "attrparser",
+        "message0": "attribute",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_AUX_HUE}",
+        "tooltip": "Succeeds allways and returns %1.",
+        "helpUrl": ""
+    },
+    {
+        "type": "eoiparser",
+        "message0": "end of input",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_AUX_HUE}",
+        "tooltip": "Matches end of input. No attribute returned.",
+        "helpUrl": ""
+    },
+    {
+        "type": "epsparser",
+        "message0": "epsilon",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_AUX_HUE}",
+        "tooltip": "Zero length match. No attribute returned.",
+        "helpUrl": ""
+    },
+    {
+        "type": "litparser",
+        "message0": "literal",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_AUX_HUE}",
+        "tooltip": "Match literal char, string or number. No attribute returned.",
+        "helpUrl": ""
+    },
+    {
+        "type": "byteparser",
+        "message0": "byte",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match byte (native endian).",
+        "helpUrl": ""
+    },
+    {
+        "type": "wordparser",
+        "message0": "word",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match word (native endian).",
+        "helpUrl": ""
+    },
+    {
+        "type": "dwordparser",
+        "message0": "double word",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match double word (native endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "qwordparser",
+        "message0": "quad word",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match quad word (native endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "bigwordparser",
+        "message0": "word (BE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match word (big endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "bigdwordparser",
+        "message0": "double word (BE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match double word (big endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "bigqwordparser",
+        "message0": "quad word (BE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match quad word (big endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "littlewordparser",
+        "message0": "word (LE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match word (little endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "littledwordparser",
+        "message0": "double word (LE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match double word (little endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "littleqwordparser",
+        "message0": "quad word (LE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match quad word (little endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "bindoubleparser",
+        "message0": "binary double",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match binary encoded double (native endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "bigbindoubleparser",
+        "message0": "binary double (BE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match binary encoded double (big endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "littlebindoubleparser",
+        "message0": "binary double (LE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match binary encoded double (little endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "binfloatparser",
+        "message0": "binary float",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match binary encoded float (native endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "bigbinfloatparser",
+        "message0": "binary float (BE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match binary encoded float (big endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "littlebinfloatparser",
+        "message0": "binary float (LE)",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_BIN_HUE}",
+        "tooltip": "Match binary encoded float (little endian byte order).",
+        "helpUrl": ""
+    },
+    {
+        "type": "charclassparser",
+        "message0": "char class",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match characters belonging to a particular character class.",
+        "helpUrl": ""
+    },
+    {
+        "type": "charparser",
+        "message0": "char",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match all or a particular character.",
+        "helpUrl": ""
+    },
+    {
+        "type": "charrangeparser",
+        "message0": "char range",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match all characters in a given range.",
+        "helpUrl": ""
+    },
+    {
+        "type": "charsetparser",
+        "message0": "charset",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match all characters in a given character set (POSIX style definition).",
+        "helpUrl": ""
+    },
+    {
+        "type": "alphaparser",
+        "message0": "alpha",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match alphabetic characters.",
+        "helpUrl": ""
+    },
+    {
+        "type": "alnumparser",
+        "message0": "alnum",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match alphanumeric characters.",
+        "helpUrl": ""
+    },
+    {
+        "type": "digitparser",
+        "message0": "digit",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match digits.",
+        "helpUrl": ""
+    },
+    {
+        "type": "xdigitparser",
+        "message0": "xdigit",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match hexadecimal digits.",
+        "helpUrl": ""
+    },
+    {
+        "type": "cntrlparser",
+        "message0": "cntrl",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match control characters.",
+        "helpUrl": ""
+    },
+    {
+        "type": "printparser",
+        "message0": "print",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match printable characters.",
+        "helpUrl": ""
+    },
+    {
+        "type": "punctparser",
+        "message0": "punct",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match punctuation characters",
+        "helpUrl": ""
+    },
+    {
+        "type": "graphparser",
+        "message0": "graph",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match graphical characters.",
+        "helpUrl": ""
+    },
+    {
+        "type": "blankparser",
+        "message0": "blank",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match blanks without line breaks.",
+        "helpUrl": ""
+    },
+    {
+        "type": "spaceparser",
+        "message0": "space",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match blanks and line breaks.",
+        "helpUrl": ""
+    },
+    {
+        "type": "upperparser",
+        "message0": "upper",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match upper case characters.",
+        "helpUrl": ""
+    },
+    {
+        "type": "lowerparser",
+        "message0": "lower",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_CHAR_HUE}",
+        "tooltip": "Match lower case characters",
+        "helpUrl": ""
+    },
+    {
+        "type": "binaryparser",
+        "message0": "binary number",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on binary numbers.",
+        "helpUrl": ""
+    },
+    {
+        "type": "boolparser",
+        "message0": "boolean",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on boolean values.",
+        "helpUrl": ""
+    },
+    {
+        "type": "trueparser",
+        "message0": "true",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on the string 'true'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "falseparser",
+        "message0": "false",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on the string 'false'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "hexparser",
+        "message0": "hex number",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on hexadecimal numbers.",
+        "helpUrl": ""
+    },
+    {
+        "type": "octparser",
+        "message0": "octal number",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on octal numbers.",
+        "helpUrl": ""
+    },
+    {
+        "type": "shortparser",
+        "message0": "short int",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'short'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "intparser",
+        "message0": "int",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'int'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "longparser",
+        "message0": "long",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'long'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "longlongparser",
+        "message0": "long long",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'longlong'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "ushortparser",
+        "message0": "unsigned short",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'unsigned short'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "uintparser",
+        "message0": "unsigned int",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'unsigned int'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "ulongparser",
+        "message0": "unsigned long",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'unsigned long'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "ulonglongparser",
+        "message0": "unsigned long long",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'unsigned long long'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "floatparser",
+        "message0": "float",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'float'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "doubleparser",
+        "message0": "double",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'double'.",
+        "helpUrl": ""
+    },
+    {
+        "type": "longdoubleparser",
+        "message0": "long double",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_NUM_HUE}",
+        "tooltip": "Succeeds on numbers which match type 'long double'. Only available on 64 bit PHP versions.",
+        "helpUrl": ""
+    },
+    {
+        "type": "stringparser",
+        "message0": "string",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_STR_HUE}",
+        "tooltip": "Matches a given string.",
+        "helpUrl": ""
+    },
+    {
+        "type": "symbolsparser",
+        "message0": "keywords",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_STR_HUE}",
+        "tooltip": "Given a map of keywords to associated results this parser succeeds if the input matches the keywords and returns the associated result as attribute.",
+        "helpUrl": ""
+    },
+    {
+        "type": "advanceparser",
+        "message0": "advance",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "param",
+                "check": [
+                    "char",
+                    "charset"
+                ]
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_AUX_HUE}",
+        "tooltip": "Advances the input iterator.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "lazy",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_AUX_HUE}",
+        "tooltip": "Lazily instantiate %1",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "expect",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Throw exception if %1 fails.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "hold",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Restore attribute if %1 fails.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "lexeme",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Turn of skipper for embraced parser. Does preskipping.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "matches",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Allways succeeds. Returns success of embraced as attribute.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "ignore case",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Ignore case.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "do not skip",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Turn off skipper.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "omit",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Do not return an attribute, if embraced parser succeeds.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "raw",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Transduction Parser. Returns the covered text from source, if embraced parser succeeds.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "repeat",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Repeat embraced parser.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "enable skipper",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Reenable or change skipper.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "as string",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": "Convert attribute of embraced parser to string.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "rule reference",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_AUX_HUE}",
+        "tooltip": "Reference to a rule.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "matches (unused attr)",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Succeeds if embraced parser succeeds. No attribute returned.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "0 or more of %1",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Kleene Operator. Succeeds if embraced parser succeeds 0 or more times. Returns an array of attributes of embraced parsers.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "not",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Succeeds if embraced parser fails. Fails, if embraced parser succeeds. Does not alter position in source text. Does not return an attribute.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "optional",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Always succeeds. Returns an attribute of type 'optional', which does not get set if embraced parser fails.",
+        "helpUrl": ""
+    },
+    {
+        "type": "plusoperator",
+        "message0": "one or more of %1",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Succeeds if embraced parser succeeds at least one time. Returns an array of attributes.",
+        "helpUrl": ""
+    },
+    {
+        "type": "alternativeoperator",
+        "message0": "one of",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Sequentially tries embraced parsers. Succeeds, if currently tried parser succeeds.",
+        "helpUrl": ""
+    },
+    {
+        "type": "expectoperator",
+        "message0": "expect",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Throw exception if second embraced parser fails.",
+        "helpUrl": ""
+    },
+    {
+        "type": "permutationoperator",
+        "message0": "permutation",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Permutation -> todo",
+        "helpUrl": ""
+    },
+    {
+        "type": "sequenceoperator",
+        "message0": "sequence",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Executes embraced parsers on by one. Succeeds if all parsers succeed. Returns a tuple of attributes.",
+        "helpUrl": ""
+    },
+    {
+        "type": "sequentialoroperator",
+        "message0": "sequential or",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "param",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Sequential or -> todo.",
+        "helpUrl": ""
+    },
+    {
+        "type": "differenceoperator",
+        "message0": "%1 without %2",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "paramLeft",
+                "check": "parser"
+            },
+            {
+                "type": "input_statement",
+                "name": "paramRight",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Succeeds if first parser succeeds and second parser fails. Returns attribute of first parser.",
+        "helpUrl": ""
+    },
+    {
+        "type": "listoperator",
+        "message0": "list of %1 separated by %2",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "paramLeft",
+                "check": "parser"
+            },
+            {
+                "type": "input_statement",
+                "name": "paramRight",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_OP_HUE}",
+        "tooltip": "Succeeds, if first parser succeeds once. If second parser succeeds, first parser is tried again. Returns an array of attributes of first parser.",
+        "helpUrl": ""
+    },
+    {
+        "type": "distinctdirective",
+        "message0": "distinct",
+        "args0": [
+            {
+                "type": "input_statement",
+                "name": "paramLeft",
+                "check": "parser"
+            },
+            {
+                "type": "input_statement",
+                "name": "paramRight",
+                "check": "parser"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": "%{BKY_DIR_HUE}",
+        "tooltip": null,
+        "helpUrl": ""
+    }
+]

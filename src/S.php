@@ -8,6 +8,7 @@ use Mxc\Parsec\Qi\Operator\PlusOperator;
 use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Qi\Char\CharParser;
 use Mxc\Parsec\Service\ParserBuilder;
+use Mxc\Parsec\Parser\SpiritQiParser;
 
 include __DIR__.'/../autoload.php';
 
@@ -24,9 +25,8 @@ $definitions = [
 ];
 
 $pm = new ParserManagerInfo();
-$pm->updateInfoFiles();
+$sqp = new SpiritQiParser($pm, '');
 
-
-$pb = new ParserBuilder($pm, $definitions);
-$parser = $pb->get('rule_1');
-var_dump($parser);
+// $pb = new ParserBuilder($pm, h$definitions);
+// $parser = $pb->get('rule_1');
+// var_dump($parser);

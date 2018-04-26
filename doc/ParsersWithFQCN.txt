@@ -1,4 +1,5 @@
-List of parser fully qualified class names (25. April 2018)
+List of parser fully qualified class names (26. April 2018)
+------------------------------------------------------------------
 AttrParser               : Mxc\Parsec\Qi\Auxiliary\AttrParser
 EoiParser                : Mxc\Parsec\Qi\Auxiliary\EoiParser
 EolParser                : Mxc\Parsec\Qi\Auxiliary\EolParser

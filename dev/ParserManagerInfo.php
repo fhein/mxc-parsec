@@ -22,6 +22,117 @@ use Mxc\Parsec\Qi\Auxiliary\LazyParser;
 
 class ParserManagerInfo extends ParserManager
 {
+    protected $colours = [
+        'Auxiliary' => 'AUX',
+        'Binary' => 'BIN',
+        'Char' => 'CHAR',
+        'Directive' => 'DIR',
+        'NonTerminal' => 'NT',
+        'Numeric' => 'NUM',
+        'Operator' => 'OP',
+        'String' => 'STR',
+    ];
+
+    protected $messages = [
+        'EolParser' => [ 'end of line', 'Matches line separators. No attribute returned.'],
+        'AttrParser' => [ 'attribute',  'Succeeds allways and returns %1.'],
+        'EoiParser' => [ 'end of input', 'Matches end of input. No attribute returned.'],
+        'EpsParser' => [ 'epsilon', 'Zero length match. No attribute returned.'],
+        'LazyParser' => [ 'lazy',  'Lazily instantiate %1'],
+        'LitParser' => [ 'literal', 'Match literal char, string or number. No attribute returned.' ],
+        // binary
+        'ByteParser' => [ 'byte', 'Match byte (native endian).' ],
+        'WordParser' => [ 'word', 'Match word (native endian).' ],
+        'DWordParser' => [ 'double word', 'Match double word (native endian byte order).' ],
+        'QWordParser' => [ 'quad word', 'Match quad word (native endian byte order).' ],
+        'BigWordParser' => [ 'word (BE)', 'Match word (big endian byte order).' ],
+        'BigDWordParser' => [ 'double word (BE)', 'Match double word (big endian byte order).' ],
+        'BigQWordParser' => [ 'quad word (BE)', 'Match quad word (big endian byte order).' ],
+        'LittleWordParser' => [ 'word (LE)', 'Match word (little endian byte order).' ],
+        'LittleDWordParser' => [ 'double word (LE)', 'Match double word (little endian byte order).' ],
+        'LittleQWordParser' => [ 'quad word (LE)', 'Match quad word (little endian byte order).' ],
+        'BinDoubleParser' => [ 'binary double', 'Match binary encoded double (native endian byte order).' ],
+        'BigBinDoubleParser' => [ 'binary double (BE)', 'Match binary encoded double (big endian byte order).' ],
+        'LittleBinDoubleParser' => [ 'binary double (LE)', 'Match binary encoded double (little endian byte order).' ],
+        'BinFloatParser' => ['binary float', 'Match binary encoded float (native endian byte order).' ],
+        'BigBinFloatParser' => [ 'binary float (BE)', 'Match binary encoded float (big endian byte order).' ],
+        'LittleBinFloatParser' => ['binary float (LE)', 'Match binary encoded float (little endian byte order).' ],
+        // char
+        'CharClassParser' => [ 'char class', 'Match characters belonging to a particular character class.'],
+        'CharParser' => [ 'char', 'Match all or a particular character.'],
+        'CharRangeParser' => [ 'char range', 'Match all characters in a given range.'],
+        'CharSetParser' => [ 'charset', 'Match all characters in a given character set (POSIX style definition).'],
+        'AlphaParser' => [ 'alpha', 'Match alphabetic characters.' ],
+        'AlnumParser' => [ 'alnum', 'Match alphanumeric characters.'],
+        'DigitParser' => [ 'digit', 'Match digits.'],
+        'XDigitParser' => [ 'xdigit', 'Match hexadecimal digits.'],
+        'CntrlParser' => [ 'cntrl', 'Match control characters.'],
+        'PrintParser' => [ 'print', 'Match printable characters.'],
+        'PunctParser' => [ 'punct', 'Match punctuation characters'],
+        'GraphParser' => [ 'graph', 'Match graphical characters.'],
+        'BlankParser' => [ 'blank', 'Match blanks without line breaks.'],
+        'SpaceParser' => [ 'space', 'Match blanks and line breaks.'],
+        'UpperParser' => [ 'upper', 'Match upper case characters.'],
+        'LowerParser' => [ 'lower', 'Match lower case characters'],
+
+        // directive
+        'ExpectDirective' => [ 'expect', 'Throw exception if %1 fails.' ],
+        'HoldDirective' => [ 'hold', 'Restore attribute if %1 fails.' ],
+        'LexemeDirective' => [ 'lexeme', 'Turn of skipper for embraced parser. Does preskipping.' ],
+        'MatchesDirective' => [ 'matches', 'Allways succeeds. Returns success of embraced as attribute.' ],
+        'NoCaseDirective' => [ 'ignore case', 'Ignore case.' ],
+        'NoSkipDirective' => [ 'do not skip', 'Turn off skipper.'],
+        'OmitDirective' => [ 'omit' , 'Do not return an attribute, if embraced parser succeeds.' ],
+        'RawDirective' => [ 'raw' , 'Transduction Parser. Returns the covered text from source, if embraced parser succeeds.'],
+        'RepeatDirective' => [ 'repeat' , 'Repeat embraced parser.'],
+        'SkipDirective' => [ 'enable skipper' , 'Reenable or change skipper.'],
+        'AsStringDirective' => [ 'as string', 'Convert attribute of embraced parser to string.' ],
+        // nonterminal
+        'Rule' => [ 'rule', 'Named parser with attribute type casting capabilities.'],
+        'RuleReference' => [ 'rule reference', 'Reference to a rule.'],
+        'Grammar' => [ 'grammar', 'Container for rules with an explicitly named start rule.'],
+        // numeric
+        'BinaryParser' => [ 'binary number', 'Succeeds on binary numbers.'],
+        'BoolParser' => [ 'boolean', 'Succeeds on boolean values.'],
+        'TrueParser' => [ 'true',  'Succeeds on the string \'true\'.'],
+        'FalseParser' => [ 'false', 'Succeeds on the string \'false\'.'],
+        'HexParser' => [ 'hex number', 'Succeeds on hexadecimal numbers.'],
+        'OctParser' => [ 'octal number', 'Succeeds on octal numbers.' ],
+        'ShortParser' => [ 'short int', 'Succeeds on numbers which match type \'short\'.'],
+        'IntParser' => [ 'int', 'Succeeds on numbers which match type \'int\'.'],
+        'LongParser' => [ 'long', 'Succeeds on numbers which match type \'long\'.'],
+        'LongLongParser' => [ 'long long', 'Succeeds on numbers which match type \'longlong\'.'],
+        'UShortParser' => [ 'unsigned short', 'Succeeds on numbers which match type \'unsigned short\'.'],
+        'UIntParser' => [ 'unsigned int', 'Succeeds on numbers which match type \'unsigned int\'.'],
+        'ULongParser' => [ 'unsigned long', 'Succeeds on numbers which match type \'unsigned long\'.'],
+        'ULongLongParser' => [ 'unsigned long long', 'Succeeds on numbers which match type \'unsigned long long\'.'],
+        'FloatParser' => [ 'float', 'Succeeds on numbers which match type \'float\'.'],
+        'DoubleParser' => [ 'double', 'Succeeds on numbers which match type \'double\'.'],
+        'LongDoubleParser' => [ 'long double', 'Succeeds on numbers which match type \'long double\'. Only available on 64 bit PHP versions.' ],
+        //operator
+        'AlternativeOperator' => [ 'one of', 'Sequentially tries embraced parsers. Succeeds, if currently tried parser succeeds.'],
+        'AndPredicate' => [ 'matches (unused attr)', 'Succeeds if embraced parser succeeds. No attribute returned.'],
+        'DifferenceOperator' => [ '%1 without %2', 'Succeeds if first parser succeeds and second parser fails. Returns attribute of first parser.'],
+        'ExpectOperator' => [ 'expect', 'Throw exception if second embraced parser fails.'],
+        'KleeneOperator' => [ '0 or more of %1', 'Kleene Operator. Succeeds if embraced parser succeeds 0 or more times. Returns an array of attributes of embraced parsers.'],
+        'ListOperator' => [ 'list of %1 separated by %2', 'Succeeds, if first parser succeeds once. If second parser succeeds, first parser is tried again. Returns an array of attributes of first parser.'],
+        'NotPredicate' => [ 'not', 'Succeeds if embraced parser fails. Fails, if embraced parser succeeds. Does not alter position in source text. Does not return an attribute.'],
+        'OptionalOperator' => [ 'optional', 'Always succeeds. Returns an attribute of type \'optional\', which does not get set if embraced parser fails.'],
+        'PermutationOperator' => [ 'permutation', 'Permutation -> todo'],
+        'PlusOperator' => [ 'one or more of %1', 'Succeeds if embraced parser succeeds at least one time. Returns an array of attributes.'],
+        'SequenceOperator' => [ 'sequence', 'Executes embraced parsers on by one. Succeeds if all parsers succeed. Returns a tuple of attributes.'],
+        'SequentialOrOperator' => [ 'sequential or', 'Sequential or -> todo.'],
+        // string
+        'StringParser' => [ 'string', 'Matches a given string.'],
+        'SymbolsParser' => [ 'keywords', 'Given a map of keywords to associated results this parser succeeds if the input matches the keywords and returns the associated result as attribute.' ],
+
+        // Repository
+        // directives
+        'DistinctDirective' => [ 'distinct' ],
+        // auxiliary
+        'AdvanceParser' => [ 'advance', 'Advances the input iterator.' ],
+    ];
+
     /**
      * This function generates a list of all parsers categorized by
      * parser class
@@ -82,7 +193,7 @@ class ParserManagerInfo extends ParserManager
      * parser category
      * @return string[]
      */
-    protected function getParsersByCat()
+    public function getParsersByCat()
     {
         $di = [];
         $tagged = [];
@@ -256,6 +367,144 @@ class ParserManagerInfo extends ParserManager
         return $output;
     }
 
+    public function getAllParsersJSObject()
+    {
+        //parser types: p:primitive, u:unary, b:binary, n:nary, nT:nonTerminal
+        //qName: fully qualified name
+        //         var allParsers = {'advanceparser':{'name':'AdvanceParser','parserType':'p','qName':'Mxc\\Parsec\\Qi\\Repository\\Auxiliary\\AdvanceParser'},
+        //         'alternativeoperator':{'name':'AlternativeOperator','parserType':'n','qName':'Mxc\\Parsec\\Qi\\Operator\\AlternativeOperator'},
+        //         'wordparser':{'name':'WordParser','parserType':'p','qName':'Mxc\\Parsec\\Qi\\Binary\\WordParser'},
+
+        $types = [
+            'Primitive Parsers' => 'p',
+            'Unary Parsers' => 'u',
+            'Binary Parsers' => 'b',
+            'Nary Parsers'  => 'n',
+            'NonTerminal'   => 'nT',
+        ];
+        $di = $this->getParsersByClss();
+        $fqcn = $this->getFQCN();
+
+        foreach ($di as $class => $parsers) {
+            $type = $types[$class];
+            foreach ($parsers as $parser) {
+                $obj[strtolower($parser)] = [
+                    'name' => $parser,
+                    'parserType' => $type,
+                    'qName' => $fqcn[$parser],
+                ];
+            }
+        }
+        ksort($obj);
+        return 'var allParsers = '. str_replace('},', "},\n", json_encode($obj)) . ';';
+    }
+
+    public function getBlocklyBlocks()
+    {
+        $di = $this->getParsersByClss();
+        $gui = $this->getParsersByCat();
+        foreach ($gui as $cat => $parsers) {
+            foreach ($parsers as $parser) {
+                $colour[$parser] = $this->colours[$cat];
+            }
+        }
+        foreach ($di as $class => $parsers) {
+            foreach ($parsers as $parser) {
+                switch ($class) {
+                    case 'Primitive Parsers':
+                        $blocks[] = [
+                            'type' => strtolower($parser),
+                            'message0' => $this->messages[$parser][0],
+                            'args0' => [
+                                [
+                                    'type' => 'input_value',
+                                    'name' => 'param',
+                                    'check' => [
+                                        'char',
+                                        'charset',
+                                    ],
+                                ],
+                            ],
+                            'inputsInline' => true,
+                            'previousStatement' => null,
+                            'nextStatement' => null,
+                            'colour' => '%{BKY_'. $colour[$parser] .'_HUE}',
+                            'tooltip' => $this->messages[$parser][1],
+                            'helpUrl' => '',
+                        ];
+                        break;
+                    case 'Unary Parsers':
+                        $blocks[] = [
+                            'type' => 'plusoperator',
+                            'message0' => $this->messages[$parser][0],
+                            'args0' => [
+                                [
+                                    'type' => 'input_statement',
+                                    'name' => 'param',
+                                    'check' => 'parser',
+                                ],
+                            ],
+                            'previousStatement' => null,
+                            'nextStatement' => null,
+                            'colour' => '%{BKY_'. $colour[$parser] .'_HUE}',
+                            'tooltip' => $this->messages[$parser][1],
+                            'helpUrl' => '',
+                        ];
+                        break;
+                    case 'Binary Parsers':
+                        $blocks[] = [
+                            'type' => strtolower($parser),
+                            'message0' => $this->messages[$parser][0],
+                            'args0' => [
+                                [
+                                    'type' => 'input_statement',
+                                    'name' => 'paramLeft',
+                                    'check' => 'parser',
+                                ],
+                                [
+                                    'type' => 'input_statement',
+                                    'name' => 'paramRight',
+                                    'check' => 'parser',
+                                ]
+                            ],
+                            'previousStatement' => null,
+                            'nextStatement' => null,
+                            'colour' => '%{BKY_'. $colour[$parser] .'_HUE}',
+                            'tooltip' => $this->messages[$parser][1],
+                            'helpUrl' => '',
+                        ];
+                        break;
+                    case 'NonTerminal':
+                        break;
+                    case 'Nary Parsers':
+                        $blocks[] = [
+                            'type' => strtolower($parser),
+                            'message0' => $this->messages[$parser][0],
+                            'args0' => [
+                                [
+                                    'type' => 'input_statement',
+                                    'name' => 'param',
+                                    'check' => 'parser',
+                                ],
+                            ],
+                            'previousStatement' => null,
+                            'nextStatement' => null,
+                            'colour' => '%{BKY_'. $colour[$parser] .'_HUE}',
+                            'tooltip' => $this->messages[$parser][1],
+                            'helpUrl' => '',
+                        ];
+                        break;
+                }
+            }
+        }
+        return json_encode($blocks, JSON_PRETTY_PRINT);
+    }
+
+    public function createArrayFromJson(string $json)
+    {
+        return json_decode($json, JSON_OBJECT_AS_ARRAY);
+    }
+
     public function updateInfoFiles()
     {
         $output = $this->getParsersByClass();
@@ -266,5 +515,7 @@ class ParserManagerInfo extends ParserManager
         file_put_contents(__DIR__.'/../doc/ParsersByParameterSet.txt', $output);
         $output = $this->getParsersFQCN();
         file_put_contents(__DIR__.'/../doc/ParsersWithFQCN.txt', $output);
+        $output = $this->getAllParsersJSObject();
+        file_put_contents(__DIR__.'/../doc/AllParsersJSObject.txt', $output);
     }
 }
