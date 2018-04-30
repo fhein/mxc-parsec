@@ -8,7 +8,7 @@ use Mxc\Parsec\Support\Uuid;
 class ParserBuilder extends ServiceManager
 {
     protected $abstractFactories = [
-        ComplexParserFactory::class
+        JsonParserFactory::class
     ];
 
     public function __construct(ParserManager $pm, array $options = [])
