@@ -11,8 +11,8 @@ abstract class NaryParser extends PrimitiveParser
 
     public function __construct(Domain $domain, array $subject, bool $flatten = false)
     {
-        $count = count($subject);
-        if ($count < 2) {
+        $this->count = count($subject);
+        if ($this->count < 2) {
             throw new InvalidArgumentException(
                 sprintf(
                     '%s: At least two parser operands expected. Got %u',
@@ -36,9 +36,10 @@ abstract class NaryParser extends PrimitiveParser
     protected function flatten($subjects = null)
     {
         $sub = [];
-        foreach ($subjects as $subject) {
+        for ($i = 0; $i < $this->count; $i++) {
+            $subject = getSubject($i);
             if (get_class($this) === get_class($subject) && $subject->flat) {
-                $downWeGo = $this->flatten($subject->getSubject());
+                $downWeGo = $this->flatten($subject->getSubjects());
                 $sub = empty($sub) ? $downWeGo : array_splice($sub, 0, 0, $downWeGo);
             } else {
                 $sub[] = $subject;
@@ -47,19 +48,26 @@ abstract class NaryParser extends PrimitiveParser
         return $sub;
     }
 
-    public function getSubject()
+    protected function getSubjects()
     {
         return $this->subject;
+    }
+
+    protected function getSubject(int $idx)
+    {
+        if (is_string($this->subject[$idx])) {
+            $this->subject[$idx] = $this->domain->getParser($this->subject[$idx]);
+        }
+        return $this->subject[$idx];
     }
 
     public function what()
     {
         $i = 0;
-        foreach ($this->subject as $parser) {
-            $what = parent::what() . '(' . $parser->what();
-            break;
-        }
-        foreach (array_slice($this->subject, 1) as $parser) {
+        $subject = $this->getSubject(0);
+        $what = parent::what() . '(' . $subject->what();
+        for ($i = 1; $i < $this->count; $i++) {
+            $parser = $this->getSubject($i);
             $what .= ', ' . $parser->what();
         };
         $what .= ')';
@@ -70,8 +78,9 @@ abstract class NaryParser extends PrimitiveParser
     {
         $i = 0;
         $di = [];
-        foreach ($this->subject as $idx => $parser) {
-            $di[is_string($idx) ? $idx : 'parser' . $i++] = $parser->what();
+        for ($idx = 0; $idx < $this->count; $idx++) {
+            $subject = $this->getSubject($idx);
+            $di[is_string($idx) ? $idx : 'parser' . $i++] = $subject->what();
         }
         return array_merge_recursive(
             parent::__debugInfo(),

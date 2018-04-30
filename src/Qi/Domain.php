@@ -7,6 +7,7 @@ use Mxc\Parsec\Exception\UnknownRuleException;
 use Mxc\Parsec\Qi\NonTerminal\Grammar;
 use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Support\NamedObject;
+use Mxc\Parsec\Service\ParserBuilder;
 
 class Domain extends NamedObject
 {
@@ -20,8 +21,9 @@ class Domain extends NamedObject
     {
         $this->inputEncoding = $inputEncoding;
         $this->internalEncoding = $internalEncoding;
-        $this->inputIterator = $parserManager->get($inputEncoding);
         $this->parserManager = $parserManager;
+        $this->inputIterator = $parserManager->get($inputEncoding);
+        $this->parserBuilder = $parserManager->get('parser_builder');
     }
 
     public function getInternalIterator(string $arg)
@@ -39,6 +41,21 @@ class Domain extends NamedObject
         return $this->parserManager->build($class, $options);
     }
 
+    public function getParser(string $definition)
+    {
+        return $this->parserBuilder->getParser($definition);
+    }
+
+    public function setDefinitions($definitions)
+    {
+        return $this->parserBuilder->setDefinitions($definitions);
+    }
+
+    public function getRule(string $definition)
+    {
+        return $this->parserBuilder->getRule($definition);
+    }
+
     public function registerRule(Rule $r)
     {
         $this->rulePool[] = $r;
@@ -46,7 +63,7 @@ class Domain extends NamedObject
         return key($this->rulePool);
     }
 
-    public function getRule($ruleId)
+    public function getRuleFromPool($ruleId)
     {
         $result = $this->rulePool[$ruleId];
         if (! $result instanceof Rule) {

@@ -83,7 +83,8 @@ class ParserManagerInfo extends ParserManager
         'NoCaseDirective' => [ 'ignore case', 'Ignore case.' ],
         'NoSkipDirective' => [ 'do not skip', 'Turn off skipper.'],
         'OmitDirective' => [ 'omit' , 'Do not return an attribute, if embraced parser succeeds.' ],
-        'RawDirective' => [ 'raw' , 'Transduction Parser. Returns the covered text from source, if embraced parser succeeds.'],
+        'RawDirective' => [ 'raw' , 'Transduction Parser. Returns the covered text from source,' .
+            ' if embraced parser succeeds.'],
         'RepeatDirective' => [ 'repeat' , 'Repeat embraced parser.'],
         'SkipDirective' => [ 'enable skipper' , 'Reenable or change skipper.'],
         'AsStringDirective' => [ 'as string', 'Convert attribute of embraced parser to string.' ],
@@ -108,27 +109,40 @@ class ParserManagerInfo extends ParserManager
         'ULongLongParser' => [ 'unsigned long long', 'Succeeds on numbers which match type \'unsigned long long\'.'],
         'FloatParser' => [ 'float', 'Succeeds on numbers which match type \'float\'.'],
         'DoubleParser' => [ 'double', 'Succeeds on numbers which match type \'double\'.'],
-        'LongDoubleParser' => [ 'long double', 'Succeeds on numbers which match type \'long double\'. Only available on 64 bit PHP versions.' ],
+        'LongDoubleParser' => [ 'long double', 'Succeeds on numbers which match type \'long double\'. '
+            . 'Only available on 64 bit PHP versions.' ],
         //operator
-        'AlternativeOperator' => [ 'one of', 'Sequentially tries embraced parsers. Succeeds, if currently tried parser succeeds.'],
+        'AlternativeOperator' => [ 'one of', 'Sequentially tries embraced parsers. '
+            . 'Succeeds, if currently tried parser succeeds.'],
         'AndPredicate' => [ 'matches (unused attr)', 'Succeeds if embraced parser succeeds. No attribute returned.'],
-        'DifferenceOperator' => [ '%1 without %2', 'Succeeds if first parser succeeds and second parser fails. Returns attribute of first parser.'],
+        'DifferenceOperator' => [ '%1 without %2', 'Succeeds if first parser succeeds and second parser fails. '
+            . 'Returns attribute of first parser.'],
         'ExpectOperator' => [ 'expect', 'Throw exception if second embraced parser fails.'],
-        'KleeneOperator' => [ '0 or more of %1', 'Kleene Operator. Succeeds if embraced parser succeeds 0 or more times. Returns an array of attributes of embraced parsers.'],
-        'ListOperator' => [ 'list of %1 separated by %2', 'Succeeds, if first parser succeeds once. If second parser succeeds, first parser is tried again. Returns an array of attributes of first parser.'],
-        'NotPredicate' => [ 'not', 'Succeeds if embraced parser fails. Fails, if embraced parser succeeds. Does not alter position in source text. Does not return an attribute.'],
-        'OptionalOperator' => [ 'optional', 'Always succeeds. Returns an attribute of type \'optional\', which does not get set if embraced parser fails.'],
+        'KleeneOperator' => [ '0 or more of %1', 'Kleene Operator.'
+            . ' Succeeds if embraced parser succeeds 0 or more times.'
+            . ' Returns an array of attributes of embraced parsers.'],
+        'ListOperator' => [ 'list of %1 separated by %2', 'Succeeds, if first parser succeeds once.'
+            . ' If second parser succeeds, first parser is tried again.'
+            . ' Returns an array of attributes of first parser.'],
+        'NotPredicate' => [ 'not', 'Succeeds if embraced parser fails.'
+            . ' Fails, if embraced parser succeeds. Does not alter position in source text.'
+            . ' Does not return an attribute.'],
+        'OptionalOperator' => [ 'optional', 'Always succeeds. Returns an attribute of type \'optional\','
+            . ' which does not get set if embraced parser fails.'],
         'PermutationOperator' => [ 'permutation', 'Permutation -> todo'],
-        'PlusOperator' => [ 'one or more of %1', 'Succeeds if embraced parser succeeds at least one time. Returns an array of attributes.'],
-        'SequenceOperator' => [ 'sequence', 'Executes embraced parsers on by one. Succeeds if all parsers succeed. Returns a tuple of attributes.'],
+        'PlusOperator' => [ 'one or more of %1', 'Succeeds if embraced parser succeeds at least one time.'
+            . ' Returns an array of attributes.'],
+        'SequenceOperator' => [ 'sequence', 'Executes embraced parsers on by one. Succeeds if all parsers succeed.'
+            . ' Returns a tuple of attributes.'],
         'SequentialOrOperator' => [ 'sequential or', 'Sequential or -> todo.'],
         // string
         'StringParser' => [ 'string', 'Matches a given string.'],
-        'SymbolsParser' => [ 'keywords', 'Given a map of keywords to associated results this parser succeeds if the input matches the keywords and returns the associated result as attribute.' ],
+        'SymbolsParser' => [ 'keywords', 'Given a map of keywords to associated results this parser succeeds'
+            . ' if the input matches the keywords and returns the associated result as attribute.' ],
 
         // Repository
         // directives
-        'DistinctDirective' => [ 'distinct' ],
+        'DistinctDirective' => [ 'distinct', 'todo'],
         // auxiliary
         'AdvanceParser' => [ 'advance', 'Advances the input iterator.' ],
     ];

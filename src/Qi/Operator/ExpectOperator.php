@@ -10,7 +10,7 @@ class ExpectOperator extends NaryParser
     public function doParse($skipper)
     {
         $subject = $this->subject;
-        $lhs = $subject[0];
+        $lhs = $this->getSubject(0);
 
         if (! $lhs->parse($skipper)) {
             return false;
@@ -20,7 +20,7 @@ class ExpectOperator extends NaryParser
         $this->attribute = $lhs->getAttribute();
 
         for ($idx = 1; $idx < $last; $idx++) {
-            $rhs = $subject[$idx];
+            $rhs = $this->getSubject($idx);
             if (! $rhs->parse($skipper)) {
                 $info = $this->what();
                 throw new ExpectationFailedException(sprintf(" %s, %s: Expectation failed.", $info[0], $info[1]));

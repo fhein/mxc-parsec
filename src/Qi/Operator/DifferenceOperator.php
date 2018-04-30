@@ -8,8 +8,8 @@ class DifferenceOperator extends BinaryParser
 {
     public function doParse($skipper)
     {
-        $lhs = $this->subject[0];
-        $rhs = $this->subject[1];
+        $lhs = $this->getSubject(0);
+        $rhs = $this->getSubject(1);
 
         $this->iterator->try();
         if ($rhs->parse($skipper)) {

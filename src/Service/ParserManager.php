@@ -45,7 +45,6 @@ use Mxc\Parsec\Qi\Char\PunctParser;
 use Mxc\Parsec\Qi\Char\SpaceParser;
 use Mxc\Parsec\Qi\Char\UpperParser;
 use Mxc\Parsec\Qi\Char\XDigitParser;
-use Mxc\Parsec\Qi\DelegatingParser;
 use Mxc\Parsec\Qi\Directive\AsStringDirective;
 use Mxc\Parsec\Qi\Directive\ExpectDirective;
 use Mxc\Parsec\Qi\Directive\HoldDirective;
@@ -58,7 +57,6 @@ use Mxc\Parsec\Qi\Directive\RawDirective;
 use Mxc\Parsec\Qi\Directive\RepeatDirective;
 use Mxc\Parsec\Qi\Directive\SkipDirective;
 use Mxc\Parsec\Qi\Domain;
-use Mxc\Parsec\Qi\NaryParser;
 use Mxc\Parsec\Qi\NonTerminal\Grammar;
 use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Qi\Numeric\BinaryParser;
@@ -90,17 +88,13 @@ use Mxc\Parsec\Qi\Operator\PermutationOperator;
 use Mxc\Parsec\Qi\Operator\PlusOperator;
 use Mxc\Parsec\Qi\Operator\SequenceOperator;
 use Mxc\Parsec\Qi\Operator\SequentialOrOperator;
-use Mxc\Parsec\Qi\PredicateParser;
-use Mxc\Parsec\Qi\PreSkipper;
-use Mxc\Parsec\Qi\PrimitiveParser;
 use Mxc\Parsec\Qi\Repository\Auxiliary\AdvanceParser;
 use Mxc\Parsec\Qi\Repository\Directive\DistinctDirective;
 use Mxc\Parsec\Qi\String\StringParser;
 use Mxc\Parsec\Qi\String\SymbolsParser;
-use Mxc\Parsec\Qi\UnaryParser;
 use Mxc\Parsec\Service\ParserFactory;
-use ReflectionClass;
 use Zend\ServiceManager\ServiceManager;
+use Mxc\Parsec\Parser\SpiritQiParser;
 
 class ParserManager extends ServiceManager
 {
@@ -222,6 +216,8 @@ class ParserManager extends ServiceManager
         // auxiliary
         AdvanceParser::class            => ParserFactory::class,
 
+        SpiritQiParser::class           => ParserFactory::class,
+
         // non parsers
         Domain::class                   => DomainFactory::class,
     ];
@@ -231,46 +227,48 @@ class ParserManager extends ServiceManager
         Unused::class => Unused::class,
     ];
 
-    protected $shortNames = [];
-
-    protected $aliases =
-    [
-        // auxiliary
+    //protected $shortNames = [];
+    protected $aliases = [
         'eol'               => EolParser::class,
         'attr'              => AttrParser::class,
         'eoi'               => EoiParser::class,
         'eps'               => EpsParser::class,
         'lazy'              => LazyParser::class,
         'lit'               => LitParser::class,
-        // binary
+        'ref'               => RuleReference::class,
         'byte'              => ByteParser::class,
-        'word'              => WordParser::class,
-        'dword'             => DWordParser::class,
-        'qword'             => QWordParser::class,
         'big_word'          => BigWordParser::class,
         'big_dword'         => BigDWordParser::class,
         'big_qword'         => BigQWordParser::class,
         'little_word'       => LittleWordParser::class,
         'little_dword'      => LittleDWordParser::class,
         'little_qword'      => LittleQWordParser::class,
-        'bin_double'        => BinDoubleParser::class,
-        'bin_float'         => BinFloatParser::class,
+        'dword'             => DWordParser::class,
+        'qword'             => QWordParser::class,
+        'word'              => WordParser::class,
         'big_bin_double'    => BigBinDoubleParser::class,
         'big_bin_float'     => BigBinFloatParser::class,
         'little_bin_double' => LittleBinDoubleParser::class,
         'little_bin_float'  => LittleBinFloatParser::class,
-
-        // char
-        'char_class'        => CharClassParser::class,
-        'char'              => CharParser::class,
+        'bin_double'        => BinDoubleParser::class,
+        'bin_float'         => BinFloatParser::class,
         'char_range'        => CharRangeParser::class,
         'char_set'          => CharSetParser::class,
-        '~char_class'       => '~' . CharClassParser::class,
-        '~char'             => '~' . CharParser::class,
-        '~char_range'       => '~' . CharRangeParser::class,
-        '~char_set'         => '~' . CharSetParser::class,
-        // directive
-        'expect'            => ExpectDirective::class,
+        'char_class'        => CharClassParser::class,
+        'char'              => CharParser::class,
+        'alpha'             => AlphaParser::class,
+        'alnum'             => AlnumParser::class,
+        'xdigit'            => XDigitParser::class,
+        'digit'             => DigitParser::class,
+        'graph'             => GraphParser::class,
+        'print'             => PrintParser::class,
+        'punct'             => PunctParser::class,
+        'blank'             => BlankParser::class,
+        'cntrl'             => CntrlParser::class,
+        'space'             => SpaceParser::class,
+        'lower'             => LowerParser::class,
+        'upper'             => UpperParser::class,
+        'expect_directive'  => ExpectDirective::class,
         'hold'              => HoldDirective::class,
         'lexeme'            => LexemeDirective::class,
         'matches'           => MatchesDirective::class,
@@ -281,48 +279,40 @@ class ParserManager extends ServiceManager
         'repeat'            => RepeatDirective::class,
         'skip'              => SkipDirective::class,
         'as_string'         => AsStringDirective::class,
-        // nonterminal
         'rule'              => Rule::class,
         'grammar'           => Grammar::class,
-        // numeric
-        'binary'            => BinaryParser::class,
+        'bin'               => BinaryParser::class,
         'bool'              => BoolParser::class,
-        'true_'             => TrueParser::class,
-        'false_'            => FalseParser::class,
+        'true'              => TrueParser::class,
+        'false'             => FalseParser::class,
         'hex'               => HexParser::class,
         'oct'               => OctParser::class,
-        'short_'            => ShortParser::class,
-        'int_'              => IntParser::class,
-        'long_'             => LongParser::class,
-        'long_long'         => LongLongParser::class,
-        'ushort_'           => UShortParser::class,
-        'uint_'             => UIntParser::class,
-        'ulong_'            => ULongParser::class,
+        'ushort'            => UShortParser::class,
+        'uint'              => UIntParser::class,
         'ulong_long'        => ULongLongParser::class,
-        'float_'            => FloatParser::class,
-        'double_'           => DoubleParser::class,
-        'long_double'       => DoubleParser::class,
-        //operator
-        '|'                 => AlternativeOperator::class,
-        '&'                 => AndPredicate::class,
-        '-'                 => DifferenceOperator::class,
-        '>'                 => ExpectOperator::class,
-        '*'                 => KleeneOperator::class,
-        '%'                 => ListOperator::class,
-        '!'                 => NotPredicate::class,
-        'minus'             => OptionalOperator::class,
-        '^'                 => PermutationOperator::class,
-        '+'                 => PlusOperator::class,
-        '>>'                => SequenceOperator::class,
-        '||'                => SequentialOrOperator::class,
-        // string
+        'ulong'             => ULongParser::class,
+        'short'             => ShortParser::class,
+        'int'               => IntParser::class,
+        'long_long'         => LongLongParser::class,
+        'long'              => LongParser::class,
+        'float'             => FloatParser::class,
+        'long_double'       => LongDoubleParser::class,
+        'double'            => DoubleParser::class,
+        'expect'            => ExpectOperator::class,
+        'alternative'       => AlternativeOperator::class,
+        'and'               => AndPredicate::class,
+        'difference'        => DifferenceOperator::class,
+        'kleene'            => KleeneOperator::class,
+        'list'              => ListOperator::class,
+        'not'               => NotPredicate::class,
+        'optional'          => OptionalOperator::class,
+        'permutation'       => PermutationOperator::class,
+        'plus'              => PlusOperator::class,
+        'sequence'          => SequenceOperator::class,
+        'sequential_or'     => SequentialOrOperator::class,
         'string'            => StringParser::class,
         'symbols'           => SymbolsParser::class,
-
-        // Repository
-        // directives
         'distinct'          => DistinctDirective::class,
-        // auxiliary
         'advance'           => AdvanceParser::class,
     ];
 
@@ -339,25 +329,6 @@ class ParserManager extends ServiceManager
         CharacterClassifier::class      => true,
         Domain::class                   => true,
         'input_encoding'                => true,
-        EolParser::class                => true,
-        EoiParser::class                => true,
-        ByteParser::class               => true,
-        WordParser::class               => true,
-        DWordParser::class              => true,
-        QWordParser::class              => true,
-        BigWordParser::class            => true,
-        BigQWordParser::class           => true,
-        LittleWordParser::class         => true,
-        LittleDWordParser::class        => true,
-        LittleQWordParser::class        => true,
-        BinDoubleParser::class          => true,
-        BigBinDoubleParser::class       => true,
-        LittleBinDoubleParser::class    => true,
-        BinFloatParser::class           => true,
-        BigBinFloatParser::class        => true,
-        LittleBinFloatParser::class     => true,
-        TrueParser::class               => true,
-        FalseParser::class              => true,
     ];
 
     public function __construct(array $options = [])
@@ -376,6 +347,9 @@ class ParserManager extends ServiceManager
         }
         $inputEncoding = $this->encodings[$config['input_encoding']];
         parent::__construct();
+
+        $parserBuilder = new ParserBuilder($this);
+        $this->services['parser_builder'] = $parserBuilder;
 
         $this->services['input_encoding'] = $this->get($config['input_encoding']);
         $this->services['internal_encoding'] = $this->get($config['internal_encoding']);

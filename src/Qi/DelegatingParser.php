@@ -6,11 +6,11 @@ abstract class DelegatingParser extends UnaryParser
 {
     public function doParse($skipper)
     {
-        return $this->subject->parse($skipper);
+        return $this->getSubject()->parse($skipper);
     }
 
     public function getAttribute()
     {
-        return $this->subject->getAttribute();
+        return $this->getSubject()->getAttribute();
     }
 }

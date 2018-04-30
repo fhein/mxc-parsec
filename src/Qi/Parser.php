@@ -17,6 +17,7 @@ abstract class Parser extends NamedObject
 
     public function __construct(Domain $domain)
     {
+        parent::__construct();
         $this->domain = $domain;
         $this->iterator = $domain->getInputIterator();
     }
@@ -224,7 +225,7 @@ abstract class Parser extends NamedObject
     public function __debugInfo()
     {
         return [
-            'name'      => $this->name,
+            'name'      => $this->name ?? 'n/a',
             'attribute' => $this->attribute ?? 'n/a',
         ];
     }

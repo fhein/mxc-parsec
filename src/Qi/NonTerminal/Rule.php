@@ -10,7 +10,7 @@ class Rule extends DelegatingParser
 {
     protected $poolId = null;
 
-    public function __construct(Domain $domain, string $name, Parser $subject, string $attributeType = null)
+    public function __construct(Domain $domain, string $name, $subject, string $attributeType = null)
     {
         parent::__construct($domain, $subject);
         $this->name = $name;
@@ -22,7 +22,7 @@ class Rule extends DelegatingParser
     {
 //         print("\n".'Parsing rule '.$this->getName().". Attribute type: ".$this->attributeType. ". ");
 
-        if ($this->subject->parse($skipper)) {
+        if ($this->getSubject()->parse($skipper)) {
             $this->assignTo($this->subject->getAttribute(), $this->attributeType);
             return true;
         }

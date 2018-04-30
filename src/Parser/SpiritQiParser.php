@@ -6,9 +6,105 @@ use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Qi\Parser;
 use Mxc\Parsec\Service\ParserBuilder;
+use Mxc\Parsec\Qi\Domain;
 
 class SpiritQiParser
 {
+    // These are not aliases but qi token
+    //     protected $aliases =
+    //     [
+        //         // auxiliary
+        //         'eol'               => EolParser::class,
+        //         'attr'              => AttrParser::class,
+        //         'eoi'               => EoiParser::class,
+        //         'eps'               => EpsParser::class,
+        //         'lazy'              => LazyParser::class,
+        //         'lit'               => LitParser::class,
+        //         // binary
+        //         'byte'              => ByteParser::class,
+        //         'word'              => WordParser::class,
+        //         'dword'             => DWordParser::class,
+        //         'qword'             => QWordParser::class,
+        //         'big_word'          => BigWordParser::class,
+        //         'big_dword'         => BigDWordParser::class,
+        //         'big_qword'         => BigQWordParser::class,
+        //         'little_word'       => LittleWordParser::class,
+        //         'little_dword'      => LittleDWordParser::class,
+        //         'little_qword'      => LittleQWordParser::class,
+        //         'bin_double'        => BinDoubleParser::class,
+        //         'bin_float'         => BinFloatParser::class,
+        //         'big_bin_double'    => BigBinDoubleParser::class,
+        //         'big_bin_float'     => BigBinFloatParser::class,
+        //         'little_bin_double' => LittleBinDoubleParser::class,
+        //         'little_bin_float'  => LittleBinFloatParser::class,
+
+        //         // char
+        //         'char_class'        => CharClassParser::class,
+        //         'char'              => CharParser::class,
+        //         'char_range'        => CharRangeParser::class,
+        //         'char_set'          => CharSetParser::class,
+        //         '~char_class'       => '~' . CharClassParser::class,
+        //         '~char'             => '~' . CharParser::class,
+        //         '~char_range'       => '~' . CharRangeParser::class,
+        //         '~char_set'         => '~' . CharSetParser::class,
+        //         // directive
+        //         'expect'            => ExpectDirective::class,
+        //         'hold'              => HoldDirective::class,
+        //         'lexeme'            => LexemeDirective::class,
+        //         'matches'           => MatchesDirective::class,
+        //         'no_case'           => NoCaseDirective::class,
+        //         'no_skip'           => NoSkipDirective::class,
+        //         'omit'              => OmitDirective::class,
+        //         'raw'               => RawDirective::class,
+        //         'repeat'            => RepeatDirective::class,
+        //         'skip'              => SkipDirective::class,
+        //         'as_string'         => AsStringDirective::class,
+        //         // nonterminal
+        //         'rule'              => Rule::class,
+        //         'grammar'           => Grammar::class,
+        //         // numeric
+        //         'binary'            => BinaryParser::class,
+        //         'bool'              => BoolParser::class,
+        //         'true_'             => TrueParser::class,
+        //         'false_'            => FalseParser::class,
+        //         'hex'               => HexParser::class,
+        //         'oct'               => OctParser::class,
+        //         'short_'            => ShortParser::class,
+        //         'int_'              => IntParser::class,
+        //         'long_'             => LongParser::class,
+        //         'long_long'         => LongLongParser::class,
+        //         'ushort_'           => UShortParser::class,
+        //         'uint_'             => UIntParser::class,
+        //         'ulong_'            => ULongParser::class,
+        //         'ulong_long'        => ULongLongParser::class,
+        //         'float_'            => FloatParser::class,
+        //         'double_'           => DoubleParser::class,
+        //         'long_double'       => DoubleParser::class,
+        //         //operator
+        //         '|'                 => AlternativeOperator::class,
+        //         '&'                 => AndPredicate::class,
+        //         '-'                 => DifferenceOperator::class,
+        //         '>'                 => ExpectOperator::class,
+        //         '*'                 => KleeneOperator::class,
+        //         '%'                 => ListOperator::class,
+        //         '!'                 => NotPredicate::class,
+        //         'minus'             => OptionalOperator::class,
+        //         '^'                 => PermutationOperator::class,
+        //         '+'                 => PlusOperator::class,
+        //         '>>'                => SequenceOperator::class,
+        //         '||'                => SequentialOrOperator::class,
+        //         // string
+        //         'string'            => StringParser::class,
+        //         'symbols'           => SymbolsParser::class,
+
+        //         // Repository
+        //         // directives
+        //         'distinct'          => DistinctDirective::class,
+        //         // auxiliary
+        //         'advance'           => AdvanceParser::class,
+        //     ];
+
+
     protected $pm;
     protected $rules = [
         'directives' => ['rule', [
@@ -797,13 +893,17 @@ class SpiritQiParser
         ]],
     ];
 
-    public function __construct(ParserManager $pm, string $source)
+    public function __construct(Domain $domain, array $rules = null, string $source = null)
     {
-        $this->pm = $pm;
-        $parserBuilder = new ParserBuilder($pm, $this->rules);
+        $this->domain = $domain;
+        $this->rules = $rules ?? $this->rules;
+        $this->domain->setDefinitions($this->rules);
         foreach ($this->rules as $name => $_) {
-            $parser[$name] = $parserBuilder->get($name);
+            $parser[$name] = $domain->getRule($name);
         }
+        $parser = $parser['directives'];
+        $parser->setSource('repeat');
+        var_export($parser->parse(null));
     }
 
     public function createParser(string $class, array $args)

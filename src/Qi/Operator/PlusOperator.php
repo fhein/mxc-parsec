@@ -8,7 +8,7 @@ class PlusOperator extends UnaryParser
 {
     public function doParse($skipper)
     {
-        $subject = $this->subject;
+        $subject = $this->getSubject();
         if (! $subject->parse($skipper)) {
             return false;
         }

@@ -41,8 +41,8 @@ class TrueFalseParsersTest extends ParserTestBed
         $tests = [
             [TrueParser::class, 'true', true, true],
             [TrueParser::class, 'false', false],
-            [FalseParser::class, 'true', false],
-            [FalseParser::class, 'false', true, false],
+             [FalseParser::class, 'true', false],
+             [FalseParser::class, 'false', true, false],
         ];
 
         return $tests;

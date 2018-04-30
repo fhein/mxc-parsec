@@ -4,8 +4,9 @@ namespace Mxc\Parsec\Qi\Auxiliary;
 
 use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\DynamicDelegatingParser;
+use Mxc\Parsec\Qi\DelegatingParser;
 
-class RuleReference extends DynamicDelegatingParser
+class RuleReference extends DelegatingParser
 {
     protected $name = null;
     protected $ruleId = null;
@@ -18,7 +19,7 @@ class RuleReference extends DynamicDelegatingParser
         $this->ruleId = $ruleId;
     }
 
-    protected function getSubject()
+    public function getSubject()
     {
         if (! $this->subject) {
             // Allthough rule references can get created in any

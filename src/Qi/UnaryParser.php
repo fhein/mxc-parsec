@@ -8,7 +8,7 @@ abstract class UnaryParser extends PrimitiveParser
 {
     protected $subject;
 
-    public function __construct(Domain $domain, Parser $subject)
+    public function __construct(Domain $domain, $subject)
     {
         parent::__construct($domain);
         $this->subject = $subject;
@@ -22,5 +22,13 @@ abstract class UnaryParser extends PrimitiveParser
                 'subject' => $this->subject ?? 'n/a',
             ]
         );
+    }
+
+    public function getSubject()
+    {
+        if (is_string($this->subject)) {
+            $this->subject = $this->domain->getParser($this->subject);
+        }
+        return $this->subject;
     }
 }
