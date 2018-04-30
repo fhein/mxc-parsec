@@ -5,7 +5,7 @@ namespace Mxc\Parsec\Service;
 use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 use Interop\Container\ContainerInterface;
 
-class ComplexParserFactory implements AbstractFactoryInterface
+class JsonParserFactory implements AbstractFactoryInterface
 {
 
     /**
