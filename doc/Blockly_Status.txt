@@ -1,0 +1,200 @@
+Signature 1
+    Parameters:
+        0 any type          $subject                                 
+    used by:
+
+        attr                any type
+        lit                 int, string
+
+x        expect_directive    parser
+x        hold                parser
+x        lexeme              parser
+x        matches             parser
+x        no_case             parser
+x        no_skip             parser
+x        omit                parser
+x        raw                 parser
+x        skip                parser
+x        as_string           parser
+x        and                 parser
+x        kleene              parser
+x        not                 parser
+x        optional            parser
+x        plus                parser
+
+Signature 2
+    Parameters:
+        0 na       $callable             null
+    used by:
+        eps
+
+Signature 3
+    Parameters:
+        0 parser    $parser                        
+    used by:
+        lazy
+
+Signature 4
+    Parameters:
+        0 string   $name                                    
+        1 int      $ruleId              0                   
+    used by:
+        ruleref
+
+Signature 5
+    Parameters:
+        0 int      $expectedValue       null                       
+    used by:
+        byte
+        big_word
+        big_dword
+        big_qword
+        little_word
+        little_dword
+        little_qword
+        dword
+        qword
+        word
+
+Signature 6
+    Parameters:
+        0 float    $expectedValue      null                      
+    used by:
+        big_bin_double
+        big_bin_float
+        little_bin_double
+        little_bin_float
+        bin_double
+        bin_float
+        float
+        long_double
+        double
+
+Signature 7
+    Parameters:
+        0 string   $min                                     
+        1 string   $max                                     
+        2 bool     $negate              false               
+    used by:
+        char_range
+
+Signature 8
+    Parameters:
+        0 string   $class/$charSet                                   
+        1 bool     $negate              false               
+    used by:
+        char_class
+        char_set
+
+Signature 9
+    Parameters:
+        0 string   $c                                       
+        1 bool     $negate              false               
+    used by:
+        char
+
+Signature 10
+    Parameters:
+        0 bool     $negate              false               
+    used by:
+ x       alpha
+ x       alnum
+ x       xdigit
+ x       digit
+ x       graph
+ x       print
+ x       punct
+ x       blank
+ x       cntrl
+ x       space
+ x       lower
+ x       upper
+
+Signature 11
+    Parameters:
+        0 parser   $subject                                 
+        1 int      $min                                     
+        2 int      $max                                     
+    used by:
+        repeat
+
+Signature 12
+    Parameters:
+        0 string   $name                                    
+        1 parser   $subject                                 
+        2 string   $attributeType                           
+    used by:
+        rule
+
+Signature 13
+    Parameters:
+        0 string   $name                                    
+        1 array    $rules               []                  
+        2 string   $startRule                               
+    used by:
+        grammar
+
+Signature 14
+    Parameters:
+        0 int      $expectedValue                           
+        1 int      $minDigits           1                   
+        2 int      $maxDigits           0                   
+        3 int      $minValue                                
+        4 int      $maxValue                                
+    used by:
+        bin
+        hex
+        oct
+        ushort
+        uint
+        ulong_long
+        ulong
+        short
+        int
+        long_long
+        long
+
+Signature 15
+    Parameters:
+        0 Mxc\Parsec\Qi\Numeric\Detail\BoolPolicy $policy   (todo)
+    used by:
+        bool
+
+Signature 16
+    Parameters:
+        0 array    $subject                            
+        1 bool     $flatten             false               
+    used by:
+        expect
+        alternative
+        permutation
+        sequence
+        sequential_or
+
+Signature 17
+    Parameters:
+        0 parser   $subject1                                
+        1 parser   $subject2                                
+    used by:
+x        difference
+x        list
+x        distinct
+
+Signature 18
+    Parameters:
+        0 string   $string                                  
+    used by:
+        string
+
+Signature 19
+    Parameters:
+        0 array    $symbols             []                  
+    used by:
+        symbols
+
+Signature 20
+    Parameters:
+        0 int      $advance                                 
+    used by:
+        advance
+
