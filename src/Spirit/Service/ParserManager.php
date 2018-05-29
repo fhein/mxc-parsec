@@ -80,12 +80,12 @@ use Mxc\Parsec\Qi\Operator\AlternativeOperator;
 use Mxc\Parsec\Qi\Operator\AndPredicate;
 use Mxc\Parsec\Qi\Operator\DifferenceOperator;
 use Mxc\Parsec\Qi\Operator\ExpectOperator;
-use Mxc\Parsec\Qi\Operator\KleeneOperator;
+use Mxc\Parsec\Qi\Operator\KleeneStarOperator;
 use Mxc\Parsec\Qi\Operator\ListOperator;
 use Mxc\Parsec\Qi\Operator\NotPredicate;
 use Mxc\Parsec\Qi\Operator\OptionalOperator;
 use Mxc\Parsec\Qi\Operator\PermutationOperator;
-use Mxc\Parsec\Qi\Operator\PlusOperator;
+use Mxc\Parsec\Qi\Operator\KleenePlusOperator;
 use Mxc\Parsec\Qi\Operator\SequenceOperator;
 use Mxc\Parsec\Qi\Operator\SequentialOrOperator;
 use Mxc\Parsec\Qi\Repository\Auxiliary\AdvanceParser;
@@ -198,12 +198,12 @@ class ParserManager extends ServiceManager
         AndPredicate::class             => ParserFactory::class,
         DifferenceOperator::class       => ParserFactory::class,
         ExpectOperator::class           => ParserFactory::class,
-        KleeneOperator::class           => ParserFactory::class,
+        KleeneStarOperator::class           => ParserFactory::class,
         ListOperator::class             => ParserFactory::class,
         NotPredicate::class             => ParserFactory::class,
         OptionalOperator::class         => ParserFactory::class,
         PermutationOperator::class      => ParserFactory::class,
-        PlusOperator::class             => ParserFactory::class,
+        KleenePlusOperator::class             => ParserFactory::class,
         SequenceOperator::class         => ParserFactory::class,
         SequentialOrOperator::class     => ParserFactory::class,
         // string
@@ -235,7 +235,7 @@ class ParserManager extends ServiceManager
         'eps'               => EpsParser::class,
         'lazy'              => LazyParser::class,
         'lit'               => LitParser::class,
-        'ref'               => RuleReference::class,
+        'ruleref'           => RuleReference::class,
         'byte'              => ByteParser::class,
         'big_word'          => BigWordParser::class,
         'big_dword'         => BigDWordParser::class,
@@ -268,7 +268,7 @@ class ParserManager extends ServiceManager
         'space'             => SpaceParser::class,
         'lower'             => LowerParser::class,
         'upper'             => UpperParser::class,
-        'expect_directive'  => ExpectDirective::class,
+        'expect_d'          => ExpectDirective::class,
         'hold'              => HoldDirective::class,
         'lexeme'            => LexemeDirective::class,
         'matches'           => MatchesDirective::class,
@@ -302,12 +302,12 @@ class ParserManager extends ServiceManager
         'alternative'       => AlternativeOperator::class,
         'and'               => AndPredicate::class,
         'difference'        => DifferenceOperator::class,
-        'kleene'            => KleeneOperator::class,
+        'kleene_star'       => KleeneStarOperator::class,
         'list'              => ListOperator::class,
         'not'               => NotPredicate::class,
         'optional'          => OptionalOperator::class,
         'permutation'       => PermutationOperator::class,
-        'plus'              => PlusOperator::class,
+        'kleene_plus'       => KleenePlusOperator::class,
         'sequence'          => SequenceOperator::class,
         'sequential_or'     => SequentialOrOperator::class,
         'string'            => StringParser::class,

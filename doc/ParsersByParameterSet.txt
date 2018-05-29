@@ -1,4 +1,4 @@
-List of all parsers by parameter set (26. April 2018)
+List of all parsers by parameter set (2. May 2018)
 ------------------------------------------------------------------
 Parameter Set:
     [
@@ -134,7 +134,7 @@ Used By:
 ------------------------------------------------------------------
 Parameter Set:
     [
-        Mxc\Parsec\Qi\Parser $subject <mandatory>
+        -no_type- $subject <mandatory>
     ]
 Used By:
     [
@@ -177,7 +177,7 @@ Used By:
 Parameter Set:
     [
         string $name <mandatory>
-        Mxc\Parsec\Qi\Parser $subject <mandatory>
+        -no_type- $subject <mandatory>
         string $attributeType <optional, default: null>
     ]
 Used By:
@@ -254,8 +254,8 @@ Used By:
 ------------------------------------------------------------------
 Parameter Set:
     [
-        Mxc\Parsec\Qi\Parser $subject1 <mandatory>
-        Mxc\Parsec\Qi\Parser $subject2 <mandatory>
+        -no_type- $subject1 <mandatory>
+        -no_type- $subject2 <mandatory>
     ]
 Used By:
     [
@@ -289,6 +289,16 @@ Parameter Set:
 Used By:
     [
         AdvanceParser
+    ]
+------------------------------------------------------------------
+Parameter Set:
+    [
+        array $rules <optional, default: null>
+        string $source <optional, default: null>
+    ]
+Used By:
+    [
+        SpiritQiParser
     ]
 ------------------------------------------------------------------
 Parser Without Parameters:

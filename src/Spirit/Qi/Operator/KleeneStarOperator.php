@@ -4,15 +4,12 @@ namespace Mxc\Parsec\Qi\Operator;
 
 use Mxc\Parsec\Qi\UnaryParser;
 
-class PlusOperator extends UnaryParser
+class KleeneStarOperator extends UnaryParser
 {
     public function doParse($skipper)
     {
-        $subject = $this->getSubject();
-        if (! $subject->parse($skipper)) {
-            return false;
-        }
-        $this->attribute[] = $subject->getAttribute();
+        $this->attribute = [];
+        $subject = $this->subject;
         while ($subject->parse($skipper)) {
             $this->attribute[] = $subject->getAttribute();
         }

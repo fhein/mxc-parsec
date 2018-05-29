@@ -1,6 +1,6 @@
 {
-	"name" : "fhein/mxc-utf8-tools",
-	"description" : "provides facilities to validate and process utf8 strings",
+	"name" : "fhein/mxc-parsec",
+	"description" : "no description",
 	"license" : "BSD-3-Clause",
 	"keywords" : [
 		"maxence",
@@ -9,11 +9,11 @@
 		"compiler",
 		"php"
 	],
-	"homepage" : "https://github.com/fhein/mxc-utf8-tools",
+	"homepage" : "https://github.com/fhein/mxc-parsec",
 	"autoload" : {
 		"psr-4" : {
-			"Mxc\\Parsec\\" : "src/",
-			"Mxc\\Benchmark\\Parsec\\" : "benchmark/"
+			"Mxc\\Parsec\\" : "src/Spirit/",
+            "Mxc\\Blockly\\" : "src/Blockly/"
 		}
 	},
 	"require" : {
@@ -31,7 +31,9 @@
 	"prefer-stable" : true,
 	"autoload-dev" : {
 		"psr-4" : {
-			"Mxc\\Test\\Parsec\\" : "test/",
+			"Mxc\\Test\\Parsec\\" : "test/Spirit/",
+            "Mxc\\Benchmark\\Parsec\\" : "benchmark/Spirit",
+			"Mxc\\Test\\Blockly\\"  : "test/Blockly/",
 			"Mxc\\Dev\\Parsec\\"  : "dev/"
 		}
 	},

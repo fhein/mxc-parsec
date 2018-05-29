@@ -4,10 +4,10 @@ namespace Mxc\Test\Parsec\Qi\Operator;
 
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Parsec\Qi\Domain;
-use Mxc\Parsec\Qi\Operator\PlusOperator;
+use Mxc\Parsec\Qi\Operator\KleeneStarOperator;
 use Mxc\Test\Parsec\Qi\Assets\MockParserNResult;
 
-class PlusOperatorTest extends ParserTestBed
+class KleeneStarOperatorTest extends ParserTestBed
 {
     // @todo: Invalid __construct params
     // @todo: Attributes
@@ -23,15 +23,15 @@ class PlusOperatorTest extends ParserTestBed
         );
     }
 
-    /** @dataProvider plusOperatorDataProvider */
-    public function testPlusOperator(array $test)
+    /** @dataProvider kleeneStarOperatorDataProvider */
+    public function testKleeneStarOperator(array $test)
     {
-        $cfg = $this->getParserConfig(PlusOperator::class, $test);
+        $cfg = $this->getParserConfig(KleeneStarOperator::class, $test);
 
         $domain = $this->pm->get(Domain::class);
         $mock = new MockParserNResult($domain, $test[1], $test[0]);
 
-        $operator = $this->pm->build(PlusOperator::class, [ $mock ]);
+        $operator = $this->pm->build(KleeneStarOperator::class, [ $mock ]);
 
         $this->doTest(
             $cfg,                       // test configuration description
@@ -41,14 +41,14 @@ class PlusOperatorTest extends ParserTestBed
         );
     }
 
-    public function plusOperatorDataProvider()
+    public function kleeneStarOperatorDataProvider()
     {
         $tests = [
              [[ true, 3, true ]],
              [[ true, 2, true ]],
              [[ true, 1, true ]],
-             [[ true, 0, false ]],
-             [[ false, 1, false ]],
+             [[ true, 0, true ]],
+             [[ false, 1, true ]],
         ];
 
         return $tests;

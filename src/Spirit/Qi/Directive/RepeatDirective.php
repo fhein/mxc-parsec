@@ -11,7 +11,7 @@ class RepeatDirective extends DelegatingParser
     protected $gotMin;
     protected $gotMax;
 
-    public function __construct(Domain $domain, Parser $subject, int $min = null, int $max = null)
+    public function __construct(Domain $domain, $subject, int $min = null, int $max = null)
     {
         parent::__construct($domain, $subject);
 
@@ -28,7 +28,7 @@ class RepeatDirective extends DelegatingParser
             $this->gotMin = function ($i) {
                 return $i >= $min;
             };
-            if ($max === INF) {
+            if ($max === null || $max < $min) {
                 $this->gotMax = function ($i) {
                     return true;
                 };

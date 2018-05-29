@@ -118,7 +118,7 @@ class ParserManagerInfo extends ParserManager
         'DifferenceOperator' => [ '%1 without %2', 'Succeeds if first parser succeeds and second parser fails. '
             . 'Returns attribute of first parser.'],
         'ExpectOperator' => [ 'expect', 'Throw exception if second embraced parser fails.'],
-        'KleeneOperator' => [ '0 or more of %1', 'Kleene Operator.'
+        'KleeneStarOperator' => [ '0 or more of %1', 'Kleene Star Operator.'
             . ' Succeeds if embraced parser succeeds 0 or more times.'
             . ' Returns an array of attributes of embraced parsers.'],
         'ListOperator' => [ 'list of %1 separated by %2', 'Succeeds, if first parser succeeds once.'
@@ -272,7 +272,7 @@ class ParserManagerInfo extends ParserManager
                 if ($param->hasType()) {
                     $type = $param->getType();
                 } else {
-                    $type = '-no_type-';
+                    $type = '-any_type-';
                 }
                 $optional = $param->isOptional() ? 'optional' : 'mandatory';
                 $default = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
@@ -306,9 +306,12 @@ class ParserManagerInfo extends ParserManager
             $key = "    [\n".$key."    ]\n";
             $paramSets[$key][] = $name;
         }
-
         $output = "List of all parsers by parameter set ($date)\n";
+        $blockType = 'blocktype_';
+        $i = 0;
         foreach ($paramSets as $paramSet => $classes) {
+            $output .= "------------------------------------------------------------------\n";
+            $output .= $blockType . $i++ . "\n";
             $output .= "------------------------------------------------------------------\n";
             $output .= "Parameter Set:\n";
             $output .= $paramSet;
@@ -321,7 +324,11 @@ class ParserManagerInfo extends ParserManager
         $output .= "------------------------------------------------------------------\n";
 
         $noParams = $this->findShareableParsers();
-        $output .= "Parser Without Parameters:\n    [\n";
+        $output .= $blockType . $i++ . "\n";
+        $output .= "------------------------------------------------------------------\n";
+        $output .= "No Parameters\n";
+        $output .= "------------------------------------------------------------------\n";
+        $output .= "    [\n";
         foreach ($noParams as $parser) {
             $output .= '        ' . $parser . "\n";
         }
@@ -383,31 +390,26 @@ class ParserManagerInfo extends ParserManager
 
     public function getAllParsersJSObject()
     {
-        //parser types: p:primitive, u:unary, b:binary, n:nary, nT:nonTerminal
-        //qName: fully qualified name
-        //         var allParsers = {'advanceparser':{'name':'AdvanceParser','parserType':'p','qName':'Mxc\\Parsec\\Qi\\Repository\\Auxiliary\\AdvanceParser'},
-        //         'alternativeoperator':{'name':'AlternativeOperator','parserType':'n','qName':'Mxc\\Parsec\\Qi\\Operator\\AlternativeOperator'},
-        //         'wordparser':{'name':'WordParser','parserType':'p','qName':'Mxc\\Parsec\\Qi\\Binary\\WordParser'},
-
         $types = [
-            'Primitive Parsers' => 'p',
-            'Unary Parsers' => 'u',
-            'Binary Parsers' => 'b',
-            'Nary Parsers'  => 'n',
-            'NonTerminal'   => 'nT',
+            'Primitive Parsers' => 'primitive',
+            'Unary Parsers' => 'unary',
+            'Binary Parsers' => 'binary',
+            'Nary Parsers'  => 'nary',
+            'NonTerminal'   => 'nonterminal',
+            'no arguments'  => 'noargs'
         ];
         $di = $this->getParsersByClss();
         $fqcn = $this->getFQCN();
+        $aliases = array_flip($this->aliases);
 
         foreach ($di as $class => $parsers) {
             $type = $types[$class];
-            foreach ($parsers as $parser) {
-                $obj[strtolower($parser)] = [
-                    'name' => $parser,
-                    'parserType' => $type,
-                    'qName' => $fqcn[$parser],
-                ];
-            }
+            print_r($class."\n");
+            if (is_array($parsers)) {
+                foreach ($parsers as $parser) {
+                    $obj[$aliases[$fqcn[$parser]]] = $type;
+                }
+            };
         }
         ksort($obj);
         return 'var allParsers = '. str_replace('},', "},\n", json_encode($obj)) . ';';
@@ -422,9 +424,23 @@ class ParserManagerInfo extends ParserManager
                 $colour[$parser] = $this->colours[$cat];
             }
         }
+
         foreach ($di as $class => $parsers) {
             foreach ($parsers as $parser) {
                 switch ($class) {
+                    case 'No Arguments':
+                        $blocks[] = [
+                            'type' => strtolower($parser),
+                            'message0' => $this->messages[$parser][0],
+                            'inputsInline' => true,
+                            'previousStatement' => null,
+                            'nextStatement' => null,
+                            'colour' => '%{BKY_'. $colour[$parser] .'_HUE}',
+                            'tooltip' => $this->messages[$parser][1],
+                            'helpUrl' => '',
+                        ];
+                        break;
+
                     case 'Primitive Parsers':
                         $blocks[] = [
                             'type' => strtolower($parser),
@@ -531,5 +547,10 @@ class ParserManagerInfo extends ParserManager
         file_put_contents(__DIR__.'/../doc/ParsersWithFQCN.txt', $output);
         $output = $this->getAllParsersJSObject();
         file_put_contents(__DIR__.'/../doc/AllParsersJSObject.txt', $output);
+    }
+
+    public function getParsers()
+    {
+        return array_keys($this->aliases);
     }
 }
