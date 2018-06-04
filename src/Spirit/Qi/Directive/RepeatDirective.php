@@ -25,7 +25,7 @@ class RepeatDirective extends DelegatingParser
                 return true;
             };
         } else {
-            $this->gotMin = function ($i) {
+            $this->gotMin = function ($i) use ($min) {
                 return $i >= $min;
             };
             if ($max === null || $max < $min) {
@@ -33,7 +33,7 @@ class RepeatDirective extends DelegatingParser
                     return true;
                 };
             } else {
-                $this->gotMax = function ($i) {
+                $this->gotMax = function ($i) use ($max) {
                     return $i >= $max;
                 };
             }
@@ -44,15 +44,15 @@ class RepeatDirective extends DelegatingParser
     {
         $attr = null;
         $assignment = null;
-        $subject = $this->subject;
-        for ($i = 0; ! $this->gotMin($i); $i++) {
+        $subject = $this->getSubject();
+        for ($i = 0; ! ($this->gotMin)($i); $i++) {
             if (! $subject->parse($skipper)) {
                 return false;
             }
             $this->attribute[] = $subject->getAttribute();
         }
         $save = $this->iterator->getPos();
-        for (; ! $this->gotMax($i); $i++) {
+        for (; ! ($this->gotMax)($i); $i++) {
             if (! $this->subject->parse($skipper)) {
                 break;
             }

@@ -9,7 +9,7 @@ class KleeneStarOperator extends UnaryParser
     public function doParse($skipper)
     {
         $this->attribute = [];
-        $subject = $this->subject;
+        $subject = $this->getSubject();
         while ($subject->parse($skipper)) {
             $this->attribute[] = $subject->getAttribute();
         }

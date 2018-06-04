@@ -138,7 +138,7 @@ abstract class Parser extends NamedObject
 
     protected function assignTo($value, $attributeType)
     {
-        $attributeType = $attributeType ?? $this->defaultType;
+        $attributeType = $attributeType ?? $this->defaultType ?? null;
 
         // unused values can not be casted
         if ($value instanceof Unused) {

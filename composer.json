@@ -13,28 +13,29 @@
 	"autoload" : {
 		"psr-4" : {
 			"Mxc\\Parsec\\" : "src/Spirit/",
-            "Mxc\\Blockly\\" : "src/Blockly/"
+			"Mxc\\Blockly\\" : "src/Blockly/"
 		}
 	},
 	"require" : {
 		"php" : "^7.1",
-		"mxc-commons/mxc-servicemanager" : "~0.7"
+		"mxc-commons/mxc-servicemanager" : "~0.7",
+		"zendframework/zend-json-server" : "~3.1"
 	},
 	"require-dev" : {
 		"ext-phar" : "*",
 		"phpunit/phpunit" : "^6.4.4",
-        "phpbench/phpbench": "dev-master",
+		"phpbench/phpbench" : "dev-master",
 		"zendframework/zend-coding-standard" : "~1.0",
-        "mikey179/vfsStream": "^1.6.4"
+		"mikey179/vfsStream" : "^1.6.4"
 	},
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
 	"autoload-dev" : {
 		"psr-4" : {
 			"Mxc\\Test\\Parsec\\" : "test/Spirit/",
-            "Mxc\\Benchmark\\Parsec\\" : "benchmark/Spirit",
-			"Mxc\\Test\\Blockly\\"  : "test/Blockly/",
-			"Mxc\\Dev\\Parsec\\"  : "dev/"
+			"Mxc\\Benchmark\\Parsec\\" : "benchmark/Spirit",
+			"Mxc\\Test\\Blockly\\" : "test/Blockly/",
+			"Mxc\\Dev\\Parsec\\" : "dev/"
 		}
 	},
 	"scripts" : {

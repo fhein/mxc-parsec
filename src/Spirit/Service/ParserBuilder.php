@@ -7,6 +7,8 @@ use Mxc\Parsec\Support\Uuid;
 
 class ParserBuilder extends ServiceManager
 {
+    protected $definitions;
+
     protected $abstractFactories = [
         JsonParserFactory::class
     ];
@@ -20,10 +22,15 @@ class ParserBuilder extends ServiceManager
 
     public function setDefinitions($definitions)
     {
-        $this->services['parser_definitions'] = $definitions;
+        $this->definitions = $definitions;
         $this->getRootUuid();
         $this->setAllowOverride(true);
         $this->createParserMap($definitions);
+    }
+
+    public function getDefinitions()
+    {
+        return $this->definitions;
     }
 
     protected function prepareOptions(array $options)
@@ -70,10 +77,10 @@ class ParserBuilder extends ServiceManager
 
     protected function createParserMap(array $options)
     {
+        var_dump($options);
         foreach ($options as $name => $definition) {
             $this->rules[$name] = $this->registerParser($definition);
         }
-        $this->services['parser_definitions'] = $this->definitions;
         $this->setService('rules', $this->rules);
     }
 
