@@ -15,6 +15,6 @@ class SkipDirective extends DelegatingParser
         } elseif ($skipper instanceof UnusedSkipper) {
             $skipper = $skipper->getSkipper();
         }
-        return $this->subject->parse($skipper);
+        return $this->getSubject()->parse($skipper);
     }
 }

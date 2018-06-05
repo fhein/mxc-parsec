@@ -8,9 +8,9 @@ abstract class UnaryParser extends PrimitiveParser
 {
     protected $subject;
 
-    public function __construct(Domain $domain, $subject)
+    public function __construct(Domain $domain, string $uid, $subject)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
         $this->subject = $subject;
     }
 

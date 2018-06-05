@@ -8,6 +8,7 @@ use Mxc\Parsec\Qi\Numeric\Detail\DecimalIntPolicy;
 class IntParser extends Integer
 {
     public function __construct(
+        string $uid,
         Domain $domain,
         int $expectedValue = null,
         int $minDigits = 1,
@@ -16,6 +17,7 @@ class IntParser extends Integer
         int $maxValue = null
     ) {
         parent::__construct(
+            $uid,
             $domain,
             new DecimalIntPolicy(),
             $expectedValue,

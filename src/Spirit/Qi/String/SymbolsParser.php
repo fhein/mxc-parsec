@@ -11,9 +11,9 @@ class SymbolsParser extends PreSkipper
     protected $symbols;
     protected $map = [];
 
-    public function __construct(Domain $domain, array $symbols = [])
+    public function __construct(Domain $domain, string $uid, array $symbols = [])
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
         $this->symbols = $symbols;
         foreach ($symbols as $symbol => $value) {
             $this->add($symbol, $value);

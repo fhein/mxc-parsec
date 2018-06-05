@@ -7,7 +7,6 @@ use Interop\Container\ContainerInterface;
 
 class JsonParserFactory implements AbstractFactoryInterface
 {
-
     /**
      * {@inheritDoc}
      * @see \Zend\ServiceManager\Factory\AbstractFactoryInterface::canCreate()
@@ -25,7 +24,6 @@ class JsonParserFactory implements AbstractFactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $parser = $container->get('parser_manager')->build(...$this->request);
-        print_r($parser);
         return $parser;
     }
 }

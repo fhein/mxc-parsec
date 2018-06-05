@@ -10,8 +10,9 @@ class OptionalOperator extends UnaryParser
 {
     public function doParse($skipper)
     {
-        if ($this->subject->parse($skipper)) {
-            $this->attribute = new Optional($this->subject->getAttribute());
+        $subject = $this->getSubject();
+        if ($subject->parse($skipper)) {
+            $this->attribute = new Optional($subject->getAttribute());
         } else {
             $this->attribute = new Optional(new Unused());
         }

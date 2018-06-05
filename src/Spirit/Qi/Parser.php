@@ -15,10 +15,11 @@ abstract class Parser extends NamedObject
     protected $attribute;
     protected $iterator;
 
-    public function __construct(Domain $domain)
+    public function __construct(Domain $domain, string $uid)
     {
         parent::__construct();
         $this->domain = $domain;
+        $this->uid = $uid;
         $this->iterator = $domain->getInputIterator();
     }
 

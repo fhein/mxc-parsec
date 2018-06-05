@@ -8,7 +8,7 @@ class MatchesDirective extends UnaryParser
 {
     public function doParse($skipper)
     {
-        $this->attribute = $this->subject->parse($skipper);
+        $this->attribute = $this->getSubject()->parse($skipper);
         return true;
     }
 }

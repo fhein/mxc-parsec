@@ -13,11 +13,12 @@ class PermutationOperator extends NaryParser
         $matched = 0;
         do {
             cont:
-            foreach ($this->subject as $key => $parser) {
-                if (! isset($taken[$key]) && $parser->parse($skipper)) {
+            foreach ($this->subject as $idx => $_) {
+                $parser = $this->getSubject($idx);
+                if (! isset($taken[$idx]) && $parser->parse($skipper)) {
                     $this->attribute[] = $parser->getAttribute();
                     $matched++;
-                    $taken[$key] = true;
+                    $taken[$idx] = true;
                     $result = true;
                     continue 2;
                 }

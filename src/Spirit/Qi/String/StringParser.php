@@ -9,9 +9,9 @@ class StringParser extends PreSkipper
 {
     protected $string;
 
-    public function __construct(Domain $domain, string $string)
+    public function __construct(Domain $domain, string $uid, string $string)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
         $this->string = $string;
     }
 

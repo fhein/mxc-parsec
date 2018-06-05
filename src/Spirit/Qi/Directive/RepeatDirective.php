@@ -11,9 +11,9 @@ class RepeatDirective extends DelegatingParser
     protected $gotMin;
     protected $gotMax;
 
-    public function __construct(Domain $domain, $subject, int $min = null, int $max = null)
+    public function __construct(Domain $domain, string $uid, $subject, int $min = null, int $max = null)
     {
-        parent::__construct($domain, $subject);
+        parent::__construct($domain, $uid, $subject);
 
         // silently ignore additional args
 
@@ -53,7 +53,7 @@ class RepeatDirective extends DelegatingParser
         }
         $save = $this->iterator->getPos();
         for (; ! ($this->gotMax)($i); $i++) {
-            if (! $this->subject->parse($skipper)) {
+            if (! $subject->parse($skipper)) {
                 break;
             }
             $this->attribute[] = $subject->getAttribute();

@@ -6,10 +6,10 @@ use Mxc\Parsec\Qi\Domain;
 
 class DWordParser extends BinParser
 {
-    public function __construct(Domain $domain, int $expectedValue = null)
+    public function __construct(Domain $domain, string $uid, int $expectedValue = null)
     {
         $this->endianness = 'L';
         $this->size = 4;
-        parent::__construct($domain, $expectedValue);
+        parent::__construct($domain, $uid, $expectedValue);
     }
 }

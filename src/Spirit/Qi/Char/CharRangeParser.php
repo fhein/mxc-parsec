@@ -7,9 +7,9 @@ use Mxc\Parsec\Exception\InvalidArgumentException;
 
 class CharRangeParser extends Char
 {
-    public function __construct(Domain $domain, string $min, string $max, bool $negate = false)
+    public function __construct(Domain $domain, string $uid, string $min, string $max, bool $negate = false)
     {
-        parent::__construct($domain, $negate);
+        parent::__construct($domain, $uid, $negate);
 
         $cc = $this->iterator;
 

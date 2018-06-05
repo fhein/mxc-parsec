@@ -9,8 +9,8 @@ class SequenceOperator extends NaryParser
     public function doParse($skipper)
     {
         $result = true;
-        $i = 0;
-        foreach ($this->subject as $parser) {
+        foreach ($this->subject as $idx => $_) {
+            $parser = $this->getSubject($idx);
             $result = $result && $parser->parse($skipper);
 
             if ($result === false) {

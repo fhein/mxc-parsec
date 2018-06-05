@@ -9,7 +9,7 @@ abstract class NaryParser extends PrimitiveParser
     protected $subject;
     protected $flat;
 
-    public function __construct(Domain $domain, array $subject, bool $flatten = false)
+    public function __construct(Domain $domain, string $uid, array $subject, bool $flatten = false)
     {
         $this->count = count($subject);
         if ($this->count < 2) {
@@ -23,7 +23,7 @@ abstract class NaryParser extends PrimitiveParser
         }
         $flat = $flatten;
         $this->subject = $flatten ? $this->flatten($subject) : $subject;
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
     }
     // @todo: Should I respect or override a sub parser's
     // flatten setting?? Should I make this configurable??

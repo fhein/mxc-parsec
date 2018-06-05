@@ -6,8 +6,8 @@ use Mxc\Parsec\Qi\Domain;
 
 class DigitParser extends CharClassParser
 {
-    public function __construct(Domain $domain, bool $negate = false)
+    public function __construct(Domain $domain, string $uid, bool $negate = false)
     {
-        parent::__construct($domain, 'digit', $negate);
+        parent::__construct($domain, $uid, 'digit', $negate);
     }
 }

@@ -7,9 +7,9 @@ use Mxc\Parsec\Exception\InvalidArgumentException;
 
 class CharSetParser extends Char
 {
-    public function __construct(Domain $domain, $charset, bool $negate = false)
+    public function __construct(Domain $domain, string $uid, $charset, bool $negate = false)
     {
-        parent::__construct($domain, $negate);
+        parent::__construct($domain, $uid, $negate);
 
         if (is_string($charset)) {
             $charset = $this->parseCharset($domain->getInternalIterator($charset));

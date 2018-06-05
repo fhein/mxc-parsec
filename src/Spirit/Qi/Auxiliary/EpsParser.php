@@ -9,10 +9,10 @@ class EpsParser extends PrimitiveParser
 {
     protected $callable;
 
-    public function __construct(Domain $domain, $callable = null)
+    public function __construct(Domain $domain, string $uid, $callable = null)
     {
         $this->callable = $callable;
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
     }
 
     public function doParse($skipper)

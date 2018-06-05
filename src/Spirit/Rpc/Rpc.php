@@ -17,17 +17,41 @@ class Rpc
      * @param  array $parser
      * @param  array $skipper
      * @param  string $input
-     * @return array $log
+     * @return bool
      */
-    public function parse($parser, $skipper, $input)
+    public function parse($parser, $input = null, $skipper = null)
     {
         $pm = new ParserManager();
         $pb = $pm->get('parser_builder');
         $pb->setDefinitions($parser);
         $rule = $pb->getRule('rule1');
         $rule->setSource($input);
-        var_dump($rule);
-        $result = $rule->parse($pm->get('space'));
+        $this->setInput($input);
+
+        $skipper = $skipper ?? $pm->build('space', [ '42']);
+        $result = $rule->parse($skipper);
         return $result;
+    }
+
+    /**
+     * Set input
+     *
+     * @param  string $input
+     * @return bool
+     */
+    public function setInput($input)
+    {
+        file_put_contents(__DIR__. '/../../../config/input.txt', $input);
+        return true;
+    }
+
+    /**
+     * Get input
+     *
+     * @return string
+     */
+    public function getInput()
+    {
+        return file_get_contents(__DIR__. '/../../../config/input.txt');
     }
 }

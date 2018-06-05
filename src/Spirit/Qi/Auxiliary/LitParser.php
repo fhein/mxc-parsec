@@ -11,14 +11,14 @@ use Mxc\Parsec\Qi\String\StringParser;
 
 class LitParser extends DelegatingParser
 {
-    public function __construct(Domain $domain, $expectedValue)
+    public function __construct(Domain $domain, string $uid, $expectedValue)
     {
         if (is_string($expectedValue)) {
-            parent::__construct($domain, new StringParser($domain, $expectedValue));
+            parent::__construct($domain, $uid, new StringParser($domain, $expectedValue));
         } elseif (is_int($expectedValue)) {
-            parent::__construct($domain, new LongLongParser($domain, $expectedValue));
+            parent::__construct($domain, $uid, new LongLongParser($domain, $expectedValue));
         } elseif (is_float($expectedValue)) {
-            parent::__construct($domain, new LongDoubleParser($domain, $expectedValue));
+            parent::__construct($domain, $uid, new LongDoubleParser($domain, $expectedValue));
         } else {
             throw new InvalidArgumentException('Invalid argument for LitParser.');
         }
@@ -26,6 +26,6 @@ class LitParser extends DelegatingParser
 
     public function doParse($skipper)
     {
-        return $this->subject->parse($skipper);
+        return $this->getSubject()->parse($skipper);
     }
 }

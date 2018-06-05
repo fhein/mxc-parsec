@@ -12,7 +12,7 @@ class SequentialOrOperator extends NaryParser
     {
         $result = false;
         $current = 0;
-        $subject = $this->subject[$current];
+        $subject = $this->getSubject($current);
         $unused = new Unused();
         if ($subject->parse($skipper)) {
             $this->attribute[] = new Optional($subject->getAttribute());

@@ -22,6 +22,7 @@ class Integer extends PreSkipper
     protected $notmax;
 
     public function __construct(
+        string $uid,
         Domain $domain,
         IntegerPolicy $policy,
         int $expectedValue = null,
@@ -40,7 +41,7 @@ class Integer extends PreSkipper
             throw new InvalidArgumentException($msg);
         }
 
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
         $this->expectedValue = $expectedValue;
         $this->minDigits = $minDigits;
         $this->notmax = $maxDigits < $minDigits ? function ($i) {

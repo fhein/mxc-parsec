@@ -10,10 +10,10 @@ class Char extends PreSkipper
     protected $classifier;
     protected $negate;
 
-    public function __construct(Domain $domain, bool $negate = false)
+    public function __construct(Domain $domain, string $uid, bool $negate = false)
     {
         $this->negate = $negate;
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
     }
 
     public function doParse($skipper = null)

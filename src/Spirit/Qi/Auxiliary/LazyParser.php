@@ -36,9 +36,9 @@ class LazyParser extends Parser
      * @param string $class
      * @param array ...$args
      */
-    public function __construct(Domain $domain, array $parserDefinition)
+    public function __construct(Domain $domain, string $uid, array $parserDefinition)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
         $this->lazy = $parserDefinition;
     }
 

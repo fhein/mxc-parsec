@@ -8,6 +8,6 @@ class AsStringDirective extends DelegatingParser
 {
     public function doParse($skipper)
     {
-        return $this->subject->parse($skipper);
+        return $this->getSubject()->parse($skipper);
     }
 }

@@ -9,9 +9,9 @@ use Mxc\Parsec\Qi\Parser;
 
 class OmitDirective extends DelegatingParser
 {
-    public function __construct(Domain $domain, $parser)
+    public function __construct(Domain $domain, string $uid, $parser)
     {
-        parent::__construct($domain, $parser);
+        parent::__construct($domain, $uid, $parser);
         $this->attribute = new Unused;
     }
 

@@ -10,13 +10,13 @@ class ListOperator extends BinaryParser
 
     public function doParse($skipper)
     {
-        $lhs = $this->subject[0];
+        $lhs = $this->getSubject(0);
 
         if (! $lhs->parse($skipper)) {
             return false;
         }
         $this->attribute[] = $lhs->getAttribute();
-        $rhs = $this->subject[1];
+        $rhs = $this->getSubject(1);
 
         while (true) {
             $save = $this->iterator->key();

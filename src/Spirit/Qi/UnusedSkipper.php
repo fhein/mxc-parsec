@@ -8,9 +8,9 @@ class UnusedSkipper extends Parser
 {
     protected $skipper;
 
-    public function __construct(Domain $domain, Parser $skipper = null)
+    public function __construct(Domain $domain, string $uid, Parser $skipper = null)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
         $this->skipper = $skipper;
     }
 

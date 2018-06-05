@@ -7,9 +7,9 @@ use Mxc\Parsec\Qi\Numeric\Detail\BoolPolicy;
 
 class FalseParser extends BoolParser
 {
-    public function __construct(Domain $domain)
+    public function __construct(Domain $domain, string $uid)
     {
-        parent::__construct($domain, new BoolPolicy());
+        parent::__construct($domain, $uid, new BoolPolicy());
     }
 
     public function doParse($skipper)

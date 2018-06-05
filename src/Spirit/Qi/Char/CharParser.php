@@ -6,9 +6,9 @@ use Mxc\Parsec\Qi\Domain;
 
 class CharParser extends Char
 {
-    public function __construct(Domain $domain, string $c = null, bool $negate = false)
+    public function __construct(Domain $domain, string $uid, string $c = null, bool $negate = false)
     {
-        parent::__construct($domain, $negate);
+        parent::__construct($domain, $uid, $negate);
         if ($c !== null) {
             $this->classifier = function (string $ch) use ($c) {
                 return $ch === $c;

@@ -7,7 +7,7 @@ use Mxc\Parsec\Exception\NotSupported32Exception;
 
 class BigQWordParser extends BinParser
 {
-    public function __construct(Domain $domain, int $expectedValue = null)
+    public function __construct(Domain $domain, string $uid, int $expectedValue = null)
     {
         if (PHP_INT_SIZE < 8) {
             throw new NotSupported32Exception(
@@ -17,6 +17,6 @@ class BigQWordParser extends BinParser
 
         $this->endianness = 'J';
         $this->size = 8;
-        parent::__construct($domain, $expectedValue);
+        parent::__construct($domain, $uid, $expectedValue);
     }
 }

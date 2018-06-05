@@ -8,6 +8,6 @@ class AndPredicate extends PredicateParser
 {
     public function doParse($skipper)
     {
-        return $this->subject->parse($skipper);
+        return $this->getSubject()->parse($skipper);
     }
 }

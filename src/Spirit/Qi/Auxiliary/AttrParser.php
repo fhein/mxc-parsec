@@ -8,9 +8,9 @@ use Mxc\Parsec\Qi\Domain;
 class AttrParser extends PrimitiveParser
 {
 
-    public function __construct(Domain $domain, $attribute)
+    public function __construct(Domain $domain, string $uid, $attribute)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
         $this->attribute = $attribute;
     }
 

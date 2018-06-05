@@ -8,6 +8,7 @@ use Mxc\Parsec\Qi\Numeric\Detail\BinIntPolicy;
 class BinaryParser extends Integer
 {
     public function __construct(
+        string $uid,
         Domain $domain,
         int $expectedValue = null,
         int $minDigits = 1,
@@ -15,6 +16,6 @@ class BinaryParser extends Integer
         int $minValue = null,
         int $maxValue = null
     ) {
-        parent::__construct($domain, new BinIntPolicy(), $expectedValue, $minDigits, $maxDigits, $minValue, $maxValue);
+        parent::__construct($domain, $uid, new BinIntPolicy(), $expectedValue, $minDigits, $maxDigits, $minValue, $maxValue);
     }
 }

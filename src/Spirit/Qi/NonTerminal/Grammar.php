@@ -13,9 +13,9 @@ class Grammar extends NaryParser
     protected $rules;
     protected $startRule;
 
-    public function __construct(Domain $domain, string $name, array $rules = [], string $startRule = null)
+    public function __construct(Domain $domain, string $uid, string $name, array $rules = [], string $startRule = null)
     {
-        parent::__construct($domain, $rules);
+        parent::__construct($domain, $uid, $rules);
         $this->name = $name;
         $this->startRule = $startRule;
         foreach ($this->subject as $idx => $rule) {

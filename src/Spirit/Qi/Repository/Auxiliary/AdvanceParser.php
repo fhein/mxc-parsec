@@ -7,9 +7,9 @@ use Mxc\Parsec\Qi\PrimitiveParser;
 
 class AdvanceParser extends PrimitiveParser
 {
-    public function __construct(Domain $domain, int $advance)
+    public function __construct(Domain $domain, string $uid, int $advance)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, $uid);
         $this->advance = $advance;
     }
 

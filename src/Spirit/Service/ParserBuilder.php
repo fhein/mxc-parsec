@@ -26,6 +26,7 @@ class ParserBuilder extends ServiceManager
         $this->getRootUuid();
         $this->setAllowOverride(true);
         $this->createParserMap($definitions);
+//        var_dump($this->definitions);
     }
 
     public function getDefinitions()
@@ -77,7 +78,6 @@ class ParserBuilder extends ServiceManager
 
     protected function createParserMap(array $options)
     {
-        var_dump($options);
         foreach ($options as $name => $definition) {
             $this->rules[$name] = $this->registerParser($definition);
         }

@@ -9,7 +9,7 @@ class ExpectDirective extends DelegatingParser
 {
     public function doParse($skipper)
     {
-        if (! $this->subject->parse($skipper)) {
+        if (! $this->getSubject()->parse($skipper)) {
             $info = $this->what();
             throw new ExpectationFailedException(sprintf("Expecation failed: %s, %s", $info[0], $info[1]));
             return false;

@@ -11,9 +11,10 @@ class RuleReference extends DelegatingParser
     protected $name = null;
     protected $ruleId = null;
 
-    public function __construct(Domain $domain, string $name, int $ruleId = 0)
+    public function __construct(Domain $domain, string $uid, string $name, int $ruleId = 0)
     {
         $this->domain = $domain;
+        $this->uid = $uid;
         $this->iterator = $domain->getInputIterator();
         $this->name = $name;
         $this->ruleId = $ruleId;
