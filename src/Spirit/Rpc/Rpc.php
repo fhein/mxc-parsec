@@ -22,7 +22,7 @@ class Rpc
     public function parse($parser, $input = null, $skipper = null)
     {
         $pm = new ParserManager();
-        $pb = $pm->get('parser_builder');
+        $pb = $pm->get(ParserBuilder::class);
         $pb->setDefinitions($parser);
         $rule = $pb->getRule('rule1');
         $rule->setSource($input);
@@ -30,6 +30,13 @@ class Rpc
 
         $skipper = $skipper ?? $pm->build('space', [ '42']);
         $result = $rule->parse($skipper);
+
+        $result = [
+            'result' => $result,
+            'position' => $rule->getPos(),
+            'actions' => $rule->getLog()
+        ];
+
         return $result;
     }
 

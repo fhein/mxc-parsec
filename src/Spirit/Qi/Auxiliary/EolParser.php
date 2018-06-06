@@ -14,8 +14,8 @@ class EolParser extends PrimitiveParser
             if ($this->iterator->current() === "\n") {
                 return true;
             } else {
-                $this->iterator->reject();
-                $this->iterator->try();
+                $this->reject();
+                $this->try();
             }
         }
 

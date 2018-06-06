@@ -6,7 +6,7 @@ abstract class PrimitiveParser extends Parser
 {
     public function parse($skipper = null)
     {
-        $this->iterator->try();
-        return $this->iterator->done($this->doParse($skipper));
+        $this->try();
+        return $this->done($this->doParse($skipper));
     }
 }

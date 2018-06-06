@@ -6,9 +6,9 @@ abstract class PreSkipper extends Parser
 {
     public function parse($skipper = null)
     {
-        $this->iterator->try();
+        $this->try();
         $this->skipOver($skipper);
-        $result = $this->iterator->done($this->doParse($skipper));
+        $result = $this->done($this->doParse($skipper));
         return $result;
     }
 }

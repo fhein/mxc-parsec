@@ -8,6 +8,8 @@ use Mxc\Parsec\Qi\NonTerminal\Grammar;
 use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Support\NamedObject;
 use Mxc\Parsec\Service\ParserBuilder;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class Domain extends NamedObject
 {
@@ -16,6 +18,7 @@ class Domain extends NamedObject
     protected $inputIterator;
     protected $parserManager;
     protected $rulePool = [];
+    protected $log = [];
 
     public function __construct($parserManager, $inputEncoding = 'UTF-8', $internalEncoding = 'UTF-8')
     {
@@ -23,7 +26,17 @@ class Domain extends NamedObject
         $this->internalEncoding = $internalEncoding;
         $this->parserManager = $parserManager;
         $this->inputIterator = $parserManager->get($inputEncoding);
-        $this->parserBuilder = $parserManager->get('parser_builder');
+        $this->parserBuilder = $parserManager->get(ParserBuilder::class);
+    }
+
+    public function log($cmd)
+    {
+        $this->log[] = $cmd;
+    }
+
+    public function getLog()
+    {
+        return $this->log;
     }
 
     public function getInternalIterator(string $arg)

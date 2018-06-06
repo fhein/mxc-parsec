@@ -2,9 +2,6 @@
 
 namespace Mxc\Parsec\Encoding;
 
-use Mxc\Parsec\Exception\InvalidArgumentException;
-use Mxc\Parsec\Exception\BadMethodCallException;
-
 class Scanner extends CharacterClassifier
 {
     protected $data;
@@ -17,24 +14,12 @@ class Scanner extends CharacterClassifier
     protected $lastSize;
     protected $noCaseStack = [];
     protected $positionStack = [];
+    protected $logger;
 
-    public function __construct(string $s = '', $first = null, $last = null, bool $noCase = false, $binary = false)
+    public function __construct(string $s = '')
     {
         $this->setData($s);
         return;
-        $this->data = $s;
-
-        $first = $first ?? 0;
-        $last = $last ?? strlen($s);
-        $this->noCase = $noCase;
-        $this->binary = $binary;
-
-        if (($last > strlen($s)) || ($last < 0) || ($first < 0) || (($first !== 0) && ($first > $last))) {
-            throw new InvalidArgumentException('Scanner: Invalid arguments.');
-        }
-
-        $this->first = $first;
-        $this->last = $last;
     }
 
     /**
@@ -147,41 +132,6 @@ class Scanner extends CharacterClassifier
         unset($this->positionStack);
     }
 
-    public function try()
-    {
-        $this->positionStack[] = $this->first;
-        return $this;
-    }
-
-    public function done(bool $accept)
-    {
-        $accept ? $this->accept() : $this->reject();
-        return $accept;
-    }
-
-    public function accept()
-    {
-        if (empty($this->positionStack)) {
-            throw new BadMethodCallException('accept() called without try().');
-        }
-        array_pop($this->positionStack);
-        // if no further backtracking can happen
-        if (empty($this->positionStack)) {
-            // reset the cache
-            //print('Clearing cache. ');
-            $this->invalidCache = 0;
-            unset($this->cache);
-        }
-    }
-
-    public function reject()
-    {
-        if (empty($this->positionStack)) {
-            throw new BadMethodCallException('reject() called without try().');
-        }
-        $this->first = array_pop($this->positionStack);
-    }
-
     public function setNoCase(bool $noCase = null)
     {
         if ($noCase === true) {
@@ -196,6 +146,11 @@ class Scanner extends CharacterClassifier
     public function isNoCase()
     {
         return $this->noCase;
+    }
+
+    public function getLast()
+    {
+        return $this->last;
     }
 
     /**

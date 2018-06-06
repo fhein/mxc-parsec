@@ -23,9 +23,9 @@ class FloatParser extends PreSkipper
     {
         $fraction = false;
         $attr = '';
-        $this->iterator->try();
+        $this->try();
 
-        if ($this->iterator->done($this->symbols->doParse($skipper))) {
+        if ($this->done($this->symbols->doParse($skipper))) {
             $this->attribute = $this->symbols->getAttribute();
             return true;
         }

@@ -95,6 +95,7 @@ use Mxc\Parsec\Qi\String\SymbolsParser;
 use Mxc\Parsec\Service\ParserFactory;
 use Zend\ServiceManager\ServiceManager;
 use Mxc\Parsec\Parser\SpiritQiParser;
+use Zend\Log\Logger;
 
 class ParserManager extends ServiceManager
 {
@@ -220,6 +221,8 @@ class ParserManager extends ServiceManager
 
         // non parsers
         Domain::class                   => DomainFactory::class,
+        ParserBuilder::class            => ParserBuilderFactory::class,
+        Logger::class                   => LoggerFactory::class,
     ];
 
     protected $invokables = [
@@ -329,6 +332,8 @@ class ParserManager extends ServiceManager
         CharacterClassifier::class      => true,
         Domain::class                   => true,
         'input_encoding'                => true,
+        ParserBuilder::class            => true,
+        Logger::class                   => true,
     ];
 
     public function __construct(array $options = [])

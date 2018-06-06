@@ -11,12 +11,12 @@ class DifferenceOperator extends BinaryParser
         $lhs = $this->getSubject(0);
         $rhs = $this->getSubject(1);
 
-        $this->iterator->try();
+        $this->try();
         if ($rhs->parse($skipper)) {
-            $this->iterator->reject();
+            $this->reject();
             return false;
         }
-        $this->iterator->reject();
+        $this->reject();
         if (! $lhs->parse($skipper)) {
             return false;
         }

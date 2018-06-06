@@ -55,13 +55,13 @@ class SymbolsParser extends PreSkipper
             if (isset($m['accept'])) {
                 $result = true;
                 $attr = $symbol;
-                $this->iterator->accept();
-                $this->iterator->try();
+                $this->accept();
+                $this->try();
             }
         };
         if ($result === true) {
-            $this->iterator->reject();
-            $this->iterator->try();
+            $this->reject();
+            $this->try();
             $this->attribute = $this->symbols[$attr];
         }
         return $result;

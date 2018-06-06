@@ -45,6 +45,11 @@ abstract class Parser extends NamedObject
         return $this->iterator;
     }
 
+    public function getLog()
+    {
+        return $this->domain->getLog();
+    }
+
     protected function validate($expectedValue, $value)
     {
         if ($expectedValue === null || $expectedValue === $value) {
@@ -229,5 +234,55 @@ abstract class Parser extends NamedObject
             'name'      => $this->name ?? 'n/a',
             'attribute' => $this->attribute ?? 'n/a',
         ];
+    }
+
+    public function try()
+    {
+        $this->startPos = $this->iterator->key();
+        $cmd = [
+            'action' => "try",
+            'block' => $this->uid,
+            'from' => $this->startPos,
+            'to' => $this->iterator->getLast(),
+            'parser' => $this->what()
+        ];
+        $this->domain->log($cmd);
+        return $this;
+    }
+
+    public function done(bool $accept)
+    {
+        $accept ? $this->accept() : $this->reject();
+        return $accept;
+    }
+
+    public function accept()
+    {
+        $cmd = [
+            'action' => "accept",
+            'block' => $this->uid,
+            'from' => $this->startPos,
+            'to'   => $this->iterator->key(),
+            'parser' => $this->what()
+        ];
+        $this->domain->log($cmd);
+    }
+
+    public function reject()
+    {
+        $cmd = [
+            'action' => "reject",
+            'block' => $this->uid,
+            'from' => $this->startPos,
+            'to'   => $this->iterator->key(),
+            'parser' => $this->what()
+        ];
+        $this->iterator->setPos($this->startPos);
+        $this->domain->log($cmd);
+    }
+
+    public function getPos()
+    {
+        return $this->iterator->key();
     }
 }

@@ -19,7 +19,8 @@
 	"require" : {
 		"php" : "^7.1",
 		"mxc-commons/mxc-servicemanager" : "~0.7",
-		"zendframework/zend-json-server" : "~3.1"
+		"zendframework/zend-json-server" : "~3.1",
+		"zendframework/zend-log" : "~2.10"
 	},
 	"require-dev" : {
 		"ext-phar" : "*",
