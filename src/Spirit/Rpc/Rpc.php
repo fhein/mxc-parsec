@@ -15,16 +15,17 @@ class Rpc
      * Parse input using parser and skipper
      *
      * @param  array $parser
+     * @param  string $start
      * @param  array $skipper
      * @param  string $input
      * @return bool
      */
-    public function parse($parser, $input = null, $skipper = null)
+    public function parse($parser, $start, $input = null, $skipper = null)
     {
         $pm = new ParserManager();
         $pb = $pm->get(ParserBuilder::class);
         $pb->setDefinitions($parser);
-        $rule = $pb->getRule('rule1');
+        $rule = $pb->getRule($start);
         $rule->setSource($input);
         $this->setInput($input);
 

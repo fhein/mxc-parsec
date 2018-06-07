@@ -1,6 +1,7 @@
 <?php
 namespace Mxc\Parsec\Qi;
 
+use function count;
 use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Exception\InvalidArgumentException;
 
@@ -17,7 +18,7 @@ abstract class NaryParser extends PrimitiveParser
                 sprintf(
                     '%s: At least two parser operands expected. Got %u',
                     $this->what(),
-                    count
+                    $this->count
                 )
             );
         }
@@ -65,7 +66,7 @@ abstract class NaryParser extends PrimitiveParser
     {
         $i = 0;
         $subject = $this->getSubject(0);
-        $what = parent::what() . '(' . $subject->what();
+        $what = parent::what() . '(' . ($subject ? $subject->what() : '');
         for ($i = 1; $i < $this->count; $i++) {
             $parser = $this->getSubject($i);
             $what .= ', ' . $parser->what();

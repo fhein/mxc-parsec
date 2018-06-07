@@ -10,6 +10,8 @@ class ParserFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
+//         var_dump($options);
+//         var_dump($requestedName);
         return $options ? new $requestedName($container->get(Domain::class), ...$options)
             : new $requestedName($container->get(Domain::class));
     }
