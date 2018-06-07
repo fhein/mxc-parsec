@@ -244,7 +244,7 @@ abstract class Parser extends NamedObject
             'block' => $this->uid,
             'from' => $this->startPos,
             'to' => $this->iterator->getLast(),
-            'parser' => $this->what()
+            'output' => $this->what()
         ];
         $this->domain->log($cmd);
         return $this;
@@ -263,7 +263,7 @@ abstract class Parser extends NamedObject
             'block' => $this->uid,
             'from' => $this->startPos,
             'to'   => $this->iterator->key(),
-            'parser' => $this->what()
+            'output' => $this->what()
         ];
         $this->domain->log($cmd);
     }
@@ -275,7 +275,7 @@ abstract class Parser extends NamedObject
             'block' => $this->uid,
             'from' => $this->startPos,
             'to'   => $this->iterator->key(),
-            'parser' => $this->what()
+            'output' => $this->what()
         ];
         $this->iterator->setPos($this->startPos);
         $this->domain->log($cmd);
