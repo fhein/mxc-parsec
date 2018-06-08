@@ -9,7 +9,7 @@ class LexemeDirective extends DelegatingParser
 {
     public function doParse($skipper)
     {
-        $unused = new UnusedSkipper($this->domain, $skipper);
+        $unused = new UnusedSkipper($this->domain, '0', $skipper);
         $this->skipOver($skipper);
         return parent::doParse($unused);
     }

@@ -37,6 +37,11 @@ abstract class Parser extends NamedObject
         return $result;
     }
 
+    public function peekAttribute()
+    {
+        return $this->attribute;
+    }
+
     // you can set the input via any parser
     // the new source gets applied to ALL parsers
     public function setSource($source)
@@ -244,7 +249,7 @@ abstract class Parser extends NamedObject
             'block' => $this->uid,
             'from' => $this->startPos,
             'to' => $this->iterator->getLast(),
-            'output' => $this->what()
+            'output' => 'Trying ' . $this->shortClassName()
         ];
         $this->domain->log($cmd);
         return $this;
@@ -263,19 +268,24 @@ abstract class Parser extends NamedObject
             'block' => $this->uid,
             'from' => $this->startPos,
             'to'   => $this->iterator->key(),
-            'output' => $this->what()
+            'output' => 'Accepted '.$this->shortClassName(),
+            'attribute' => $this->peekAttribute()
         ];
         $this->domain->log($cmd);
     }
 
     public function reject()
     {
+        $key = $this->iterator->key();
+        if ($this->startPos === $key) {
+            $key++;
+        }
         $cmd = [
             'action' => "reject",
             'block' => $this->uid,
             'from' => $this->startPos,
-            'to'   => $this->iterator->key(),
-            'output' => $this->what()
+            'to'   => $key,
+            'output' => 'Rejected ' . $this->shortClassName()
         ];
         $this->iterator->setPos($this->startPos);
         $this->domain->log($cmd);

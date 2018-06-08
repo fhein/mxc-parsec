@@ -13,4 +13,9 @@ abstract class DelegatingParser extends UnaryParser
     {
         return $this->getSubject()->getAttribute();
     }
+
+    public function peekAttribute()
+    {
+        return $this->getSubject()->peekAttribute();
+    }
 }

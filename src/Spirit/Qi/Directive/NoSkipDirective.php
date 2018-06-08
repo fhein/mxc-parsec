@@ -10,6 +10,6 @@ class NoSkipDirective extends DelegatingParser
     public function doParse($skipper)
     {
         $this->skipOver($skipper);
-        return parent::doParse(new UnusedSkipper($skipper));
+        return parent::doParse(new UnusedSkipper($this->domain, '0', $skipper));
     }
 }

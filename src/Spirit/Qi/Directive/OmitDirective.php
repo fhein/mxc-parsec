@@ -22,6 +22,11 @@ class OmitDirective extends DelegatingParser
 
     public function getAttribute()
     {
-        return $this->attribute;
+        return Parser::getAttribute();
+    }
+
+    public function peekAttribute()
+    {
+        return Parser::peekAttribute();
     }
 }

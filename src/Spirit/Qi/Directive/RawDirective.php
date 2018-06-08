@@ -20,6 +20,11 @@ class RawDirective extends DelegatingParser
     // Revoke getAttribute redirection introduced by DelegatingParser
     public function getAttribute()
     {
-        return parent::getAttribute();
+        return Parser::getAttribute();
+    }
+
+    public function peekAttribute()
+    {
+        return Parser::peekAttribute();
     }
 }

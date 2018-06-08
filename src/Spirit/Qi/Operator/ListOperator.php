@@ -23,6 +23,7 @@ class ListOperator extends BinaryParser
             if ($rhs->parse($skipper)
                 && $lhs->parse($skipper)) {
                     $this->attribute[] = $lhs->getAttribute();
+                    $rhs->getAttribute();
                     continue;
             }
             $this->iterator->setPos($save);

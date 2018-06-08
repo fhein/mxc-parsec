@@ -22,6 +22,22 @@ class Rpc
      */
     public function parse($parser, $start, $input = null, $skipper = null)
     {
+        $result = $this->trace($parser, $start, $input, $skipper);
+        unset($result['actions']);
+        return $result;
+    }
+
+    /**
+     * Parse input using parser and skipper
+     *
+     * @param  array $parser
+     * @param  string $start
+     * @param  array $skipper
+     * @param  string $input
+     * @return bool
+     */
+    public function trace($parser, $start, $input = null, $skipper = null)
+    {
         $pm = new ParserManager();
         $pb = $pm->get(ParserBuilder::class);
         $pb->setDefinitions($parser);
@@ -29,13 +45,14 @@ class Rpc
         $rule->setSource($input);
         $this->setInput($input);
 
-        $skipper = $skipper ?? $pm->build('space', [ '42']);
+        $skipper = $skipper ?? $pm->build('space', ['42']);
         $result = $rule->parse($skipper);
 
         $result = [
             'result' => $result,
             'position' => $rule->getPos(),
-            'actions' => $rule->getLog()
+            'actions' => $rule->getLog(),
+            'attribute' => $rule->getAttribute()
         ];
 
         return $result;
