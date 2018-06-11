@@ -56,6 +56,7 @@ class Rpc
         $result = [
             'result' => $result,
             'position' => $rule->getPos(),
+            'bytesLeft' => $selectionEnd - $rule->getPos(),
             'actions' => $rule->getLog(),
             'attribute' => $rule->getAttribute()
         ];
