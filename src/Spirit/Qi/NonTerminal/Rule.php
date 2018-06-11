@@ -33,4 +33,9 @@ class Rule extends DelegatingParser
     {
         return Parser::getAttribute();
     }
+
+    public function peekAttribute()
+    {
+        return Parser::peekAttribute();
+    }
 }

@@ -16,9 +16,11 @@ class Scanner extends CharacterClassifier
     protected $positionStack = [];
     protected $logger;
 
-    public function __construct(string $s = '')
+    public function __construct(string $s = '', int $first = 0, int $last = null)
     {
         $this->setData($s);
+        $this->first = $first;
+        $this->last = $last ?? strlen($s);
         return;
     }
 
@@ -119,11 +121,11 @@ class Scanner extends CharacterClassifier
         return $this->last - $this->first;
     }
 
-    public function setData(string $data)
+    public function setData(string $data, $first = null, $last = null)
     {
         $this->data = $data;
-        $this->first = 0;
-        $this->last = strlen($data);
+        $this->first = $first ?? 0;
+        $this->last = $last ?? strlen($data);
         $this->noCase = false;
         $this->binary = false;
         $this->invalidCache = 0;

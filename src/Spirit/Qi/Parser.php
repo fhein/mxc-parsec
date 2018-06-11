@@ -44,9 +44,9 @@ abstract class Parser extends NamedObject
 
     // you can set the input via any parser
     // the new source gets applied to ALL parsers
-    public function setSource($source)
+    public function setSource($source, $first = 0, $last = null)
     {
-        $this->iterator->setData($source);
+        $this->iterator->setData($source, $first, $last);
         return $this->iterator;
     }
 
@@ -263,12 +263,14 @@ abstract class Parser extends NamedObject
 
     public function accept()
     {
+        $key = $this->iterator->key();
         $cmd = [
             'action' => "accept",
             'block' => $this->uid,
             'from' => $this->startPos,
-            'to'   => $this->iterator->key(),
-            'output' => 'Accepted '.$this->shortClassName(),
+            'to'   => $key,
+            'output' => $this->shortClassName() . ' accepted "'
+                . $this->iterator->getSubStr($this->startPos, $key - $this->startPos) . '"',
             'attribute' => $this->peekAttribute()
         ];
         $this->domain->log($cmd);
@@ -285,7 +287,8 @@ abstract class Parser extends NamedObject
             'block' => $this->uid,
             'from' => $this->startPos,
             'to'   => $key,
-            'output' => 'Rejected ' . $this->shortClassName()
+            'output' => $this->shortClassName() . ' rejected "'
+                . $this->iterator->getSubStr($this->startPos, $key - $this->startPos) . '"'
         ];
         $this->iterator->setPos($this->startPos);
         $this->domain->log($cmd);

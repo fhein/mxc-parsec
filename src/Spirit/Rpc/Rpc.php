@@ -16,13 +16,15 @@ class Rpc
      *
      * @param  array $parser
      * @param  string $start
-     * @param  array $skipper
      * @param  string $input
-     * @return bool
+     * @param  int $selectionEnd
+     * @param  int $selectionStart
+     * @param  array $skipper
+     * @return array
      */
-    public function parse($parser, $start, $input = null, $skipper = null)
+    public function parse($parser, $start, $input = null, $selectionStart = null, $selectionEnd = null, $skipper = null)
     {
-        $result = $this->trace($parser, $start, $input, $skipper);
+        $result = $this->trace($parser, $start, $input, $selectionStart, $selectionEnd, $skipper);
         unset($result['actions']);
         return $result;
     }
@@ -32,18 +34,21 @@ class Rpc
      *
      * @param  array $parser
      * @param  string $start
-     * @param  array $skipper
      * @param  string $input
-     * @return bool
+     * @param  int $selectionEnd
+     * @param  int $selectionStart
+     * @param  array $skipper
+     * @return array
      */
-    public function trace($parser, $start, $input = null, $skipper = null)
+    public function trace($parser, $start, $input = null, $selectionStart = null, $selectionEnd = null, $skipper = null)
     {
         $pm = new ParserManager();
         $pb = $pm->get(ParserBuilder::class);
         $pb->setDefinitions($parser);
         $rule = $pb->getRule($start);
-        $rule->setSource($input);
         $this->setInput($input);
+        //print($input);
+        $rule->setSource($input, $selectionStart, $selectionEnd);
 
         $skipper = $skipper ?? $pm->build('space', ['42']);
         $result = $rule->parse($skipper);
