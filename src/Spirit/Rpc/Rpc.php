@@ -49,19 +49,24 @@ class Rpc
         $this->setInput($input);
         //print($input);
         $rule->setSource($input, $selectionStart, $selectionEnd);
+        try {
+            $skipper = $skipper ?? $pm->build('space', ['42']);
+            $result = $rule->parse($skipper);
 
-        $skipper = $skipper ?? $pm->build('space', ['42']);
-        $result = $rule->parse($skipper);
+            $result = [
+                'result' => $result,
+                'position' => $rule->getPos(),
+                'bytesLeft' => $selectionEnd - $rule->getPos(),
+                'actions' => $rule->getLog(),
+                'attribute' => $rule->getAttribute()
+            ];
 
-        $result = [
-            'result' => $result,
-            'position' => $rule->getPos(),
-            'bytesLeft' => $selectionEnd - $rule->getPos(),
-            'actions' => $rule->getLog(),
-            'attribute' => $rule->getAttribute()
-        ];
-
-        return $result;
+            return $result;
+        } catch (Exception $e) {
+            return [
+                'result' => false
+            ];
+        }
     }
 
     /**
