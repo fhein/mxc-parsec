@@ -498,7 +498,7 @@ function intlChar(&$string)
         }
         return false;
         next:
-    }
+    };
     return true;
 }
 
@@ -530,7 +530,7 @@ function intlChar2(&$string)
             return false;
         }
         next:
-    }
+    };
     // explicitly check len for each byte
     // only for the last 4 bytes
     while ($i < $l) {
@@ -565,11 +565,9 @@ function intlChar2(&$string)
         }
         return false;
         next2:
-    }
+    };
     return true;
 }
-
-
 
 $ultimate = file_get_contents(__DIR__ . '/Asset/UTF-8-demo.txt');
 
