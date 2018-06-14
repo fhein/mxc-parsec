@@ -8,14 +8,11 @@ use Mxc\Parsec\Qi\Domain;
 
 class Rule extends DelegatingParser
 {
-    protected $poolId = null;
-
     public function __construct(Domain $domain, string $uid, string $name, $subject, string $attributeType = null)
     {
         parent::__construct($domain, $uid, $subject);
         $this->name = $name;
         $this->attributeType = $attributeType;
-        $this->poolId = $this->domain->registerRule($this);
     }
 
     public function doParse($skipper)

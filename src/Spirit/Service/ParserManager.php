@@ -238,7 +238,7 @@ class ParserManager extends ServiceManager
         'eps'               => EpsParser::class,
         'lazy'              => LazyParser::class,
         'lit'               => LitParser::class,
-        'ruleref'           => RuleReference::class,
+        'reference'         => RuleReference::class,
         'byte'              => ByteParser::class,
         'big_word'          => BigWordParser::class,
         'big_dword'         => BigDWordParser::class,

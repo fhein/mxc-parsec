@@ -69,41 +69,6 @@ class Domain extends NamedObject
         return $this->parserBuilder->getRule($definition);
     }
 
-    public function registerRule(Rule $r)
-    {
-        $this->rulePool[] = $r;
-        end($this->rulePool);
-        return key($this->rulePool);
-    }
-
-    public function getRuleFromPool($ruleId)
-    {
-        $result = $this->rulePool[$ruleId];
-        if (! $result instanceof Rule) {
-            throw new UnknownRuleException(sprintf('Domain: No rule for ruleId %s.', $ruleId));
-        }
-        return $result;
-    }
-
-    public function enterContext(Grammar $context)
-    {
-        $this->contextStack[] = $context;
-    }
-
-    public function leaveContext()
-    {
-        $lastContext = array_pop($this->contextStack);
-        return $lastContext;
-    }
-
-    public function getContext()
-    {
-        if (empty($this->contextStack)) {
-            throw new NoRuleContextException('Domain: No rule context set.');
-        }
-        return end($this->contextStack);
-    }
-
     public function __debugInfo()
     {
         return ['domain' => $this->name];
