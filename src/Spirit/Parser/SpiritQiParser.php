@@ -285,9 +285,9 @@ class SpiritQiParser
             'start',
             ['plus', [
                 ['alternative', [[
-                    ['ruleref', [ 'symboltable' ]],
-                    ['ruleref', [ 'assignment' ]],
-                    ['ruleref', [ 'symboltable_definition' ]],
+                    ['reference', [ 'symboltable' ]],
+                    ['reference', [ 'assignment' ]],
+                    ['reference', [ 'symboltable_definition' ]],
                 ]]],
             ]],
         ]],
@@ -298,8 +298,8 @@ class SpiritQiParser
             'assignment',
             ['expect', [[
                 [ 'sequence', [[
-                    ['ruleref', [ 'id' ]],
-                    ['ruleref', [ 'rule_operation' ]],
+                    ['reference', [ 'id' ]],
+                    ['reference', [ 'rule_operation' ]],
                 ]]],
                 [ 'lit', [';']],
             ]]],
@@ -309,8 +309,8 @@ class SpiritQiParser
         'rule_operation' => ['rule', [
             'rule_operation',
             ['expect', [[
-                ['ruleref', [ 'prec_15_op' ]],
-                ['ruleref', [ 'prec_14_expr' ]],
+                ['reference', [ 'prec_15_op' ]],
+                ['reference', [ 'prec_14_expr' ]],
             ]]],
         ]],
 
@@ -320,7 +320,7 @@ class SpiritQiParser
             ['sequence', [[
                 ['lit', ['.add']],
                 ['plus', [
-                    ['ruleref', [ 'symbol' ]],
+                    ['reference', [ 'symbol' ]],
                 ]],
                 ['lit', [';']],
             ]]],
@@ -340,7 +340,7 @@ class SpiritQiParser
                     ]],
                     ['lit', ['"']],
                 ]]],
-                ['ruleref', [ 'identifier', ]],
+                ['reference', [ 'identifier', ]],
             ]]],
         ]],
 
@@ -361,9 +361,9 @@ class SpiritQiParser
             ['expect', [[
                 ['sequence', [[
                     ['lit', ['(']],
-                    ['ruleref', ['name']],
+                    ['reference', ['name']],
                     ['lit', [',']],
-                    ['ruleref', ['value']],
+                    ['reference', ['value']],
                 ]]],
                 ['lit', [')']],
             ]]],
@@ -388,7 +388,7 @@ class SpiritQiParser
             'symdef_ids',
             ['plus', [
                 ['sequence', [[
-                    ['ruleref', ['id']],
+                    ['reference', ['id']],
                     ['lit', [',']],
                 ]]],
             ]],
@@ -403,8 +403,8 @@ class SpiritQiParser
                 ['lit', ['<']],
                 ['lit', ['char']],
                 ['lit', [',']],
-                ['ruleref', ['symbol_type']],
-                ['ruleref', ['symdef_ids']],
+                ['reference', ['symbol_type']],
+                ['reference', ['symdef_ids']],
                 ['lit', [';']],
             ]]],
         ]],
@@ -417,11 +417,11 @@ class SpiritQiParser
         'prec_14_expr' => ['rule', [
             'prec_14_expr',
             ['sequence', [[
-                ['ruleref', ['prec_12_expr']],
+                ['reference', ['prec_12_expr']],
                 ['kleene', [
                     ['expect', [[
-                        ['ruleref', ['prec_14_op']],
-                        ['ruleref', ['prec_12_expr']],
+                        ['reference', ['prec_14_op']],
+                        ['reference', ['prec_12_expr']],
                     ]]],
                 ]],
             ]]],
@@ -432,11 +432,11 @@ class SpiritQiParser
         'prec_12_expr' => ['rule', [
             'prec_12_expr',
             ['sequence', [[
-                ['ruleref', ['prec_11_expr']],
+                ['reference', ['prec_11_expr']],
                 ['kleene', [
                     ['expect', [[
-                        ['ruleref', ['prec_12_op']],
-                        ['ruleref', ['prec_11_expr']],
+                        ['reference', ['prec_12_op']],
+                        ['reference', ['prec_11_expr']],
                     ]]],
                 ]],
             ]]],
@@ -447,11 +447,11 @@ class SpiritQiParser
         'prec_11_expr' => ['rule', [
             'prec_11_expr',
             ['sequence', [[
-                ['ruleref', ['prec_8_expr']],
+                ['reference', ['prec_8_expr']],
                 ['kleene', [
                     ['expect', [[
-                        ['ruleref', ['prec_11_op']],
-                        ['ruleref', ['prec_8_expr']],
+                        ['reference', ['prec_11_op']],
+                        ['reference', ['prec_8_expr']],
                     ]]],
                 ]],
             ]]],
@@ -462,11 +462,11 @@ class SpiritQiParser
         'prec_8_expr' => ['rule', [
             'prec_8_expr',
             ['sequence', [[
-                ['ruleref', [ 'prec_7_expr' ]],
+                ['reference', [ 'prec_7_expr' ]],
                 ['kleene', [
                     ['expect', [[
-                        ['ruleref', [ 'prec_8_op' ]],
-                        ['ruleref', [ 'prec_7_expr' ]],
+                        ['reference', [ 'prec_8_op' ]],
+                        ['reference', [ 'prec_7_expr' ]],
                     ]]],
                 ]],
             ]]],
@@ -477,11 +477,11 @@ class SpiritQiParser
         'prec_7_expr' => ['rule', [
             'prec_7_expr',
             ['sequence', [[
-                ['ruleref', [ 'prec_6_expr' ]],
+                ['reference', [ 'prec_6_expr' ]],
                 ['kleene', [
                     ['expect', [[
-                        ['ruleref', [ 'prec_7_op' ]],
-                        ['ruleref', [ 'prec_6_expr' ]],
+                        ['reference', [ 'prec_7_op' ]],
+                        ['reference', [ 'prec_6_expr' ]],
                     ]]],
                 ]],
             ]]],
@@ -492,11 +492,11 @@ class SpiritQiParser
         'prec_6_expr' => ['rule', [
             'prec_6_expr',
             ['sequence', [[
-                ['ruleref', [ 'prec_5_expr' ]],
+                ['reference', [ 'prec_5_expr' ]],
                 ['kleene', [
                     ['expect', [[
-                        ['ruleref', [ 'prec_6_op' ]],
-                        ['ruleref', [ 'prec_5_expr' ]],
+                        ['reference', [ 'prec_6_op' ]],
+                        ['reference', [ 'prec_5_expr' ]],
                     ]]],
                 ]],
             ]]],
@@ -507,11 +507,11 @@ class SpiritQiParser
         'prec_5_expr' => ['rule', [
             'prec_5_expr',
             ['sequence', [[
-                ['ruleref', [ 'prec_3_expr' ]],
+                ['reference', [ 'prec_3_expr' ]],
                 ['kleene', [
                     ['expect', [[
-                        ['ruleref', [ 'prec_5_op' ]],
-                        ['ruleref', [ 'prec_3_expr' ]],
+                        ['reference', [ 'prec_5_op' ]],
+                        ['reference', [ 'prec_3_expr' ]],
                     ]]],
                 ]],
             ]]],
@@ -526,8 +526,8 @@ class SpiritQiParser
         'prec_3_expr' => ['rule', [
             'prec_3_expr',
             ['alternative', [[
-                ['ruleref', [ 'prec_2_expr' ]],
-                ['ruleref', [ 'unary_expr' ]],
+                ['reference', [ 'prec_2_expr' ]],
+                ['reference', [ 'unary_expr' ]],
             ]]],
         ]],
 
@@ -535,8 +535,8 @@ class SpiritQiParser
         'unary_expr' => ['rule', [
             'unary_expr',
             ['expect', [[
-                ['ruleref', [ 'prec_3_op' ]],
-                ['ruleref', [ 'prec_2_expr' ]],
+                ['reference', [ 'prec_3_op' ]],
+                ['reference', [ 'prec_2_expr' ]],
             ]]],
         ]],
 
@@ -552,13 +552,13 @@ class SpiritQiParser
         'prec_2_expr' => ['rule', [
             'prec_2_expr',
             ['alternative', [[
-                ['ruleref', [ 'parsers' ]],
-                ['ruleref', [ 'directives' ]],
-                ['ruleref', [ 'distinct_expr' ]],
-                ['ruleref', [ 'id' ]],
-                ['ruleref', [ 'quoted_string' ]],
-                ['ruleref', [ 'quoted_char' ]],
-                ['ruleref', [ 'paren_expr' ]],
+                ['reference', [ 'parsers' ]],
+                ['reference', [ 'directives' ]],
+                ['reference', [ 'distinct_expr' ]],
+                ['reference', [ 'id' ]],
+                ['reference', [ 'quoted_string' ]],
+                ['reference', [ 'quoted_char' ]],
+                ['reference', [ 'paren_expr' ]],
             ]]],
         ]],
 
@@ -595,7 +595,7 @@ class SpiritQiParser
         'id' => ['rule', [
             'id',
             ['sequence', [[
-                ['ruleref', ['identifier']],
+                ['reference', ['identifier']],
                 ['attr', ['identifier']],
             ]]],
         ]],
@@ -604,7 +604,7 @@ class SpiritQiParser
         'attr_id' => ['rule', [
             'attr_id',
             ['sequence', [[
-                ['ruleref', ['identifier']],
+                ['reference', ['identifier']],
                 ['attr', ['attr_id']],
             ]]],
         ]],
@@ -615,7 +615,7 @@ class SpiritQiParser
             'paren_8_expr',
             ['expect', [[
                 ['char', ['(']],
-                ['ruleref', [ 'prec_14_expr' ]],
+                ['reference', [ 'prec_14_expr' ]],
                 ['lit', [')']],
             ]]],
         ]],
@@ -626,9 +626,9 @@ class SpiritQiParser
             ['expect', [[
                 ['distinct', [
                     ['char_set', ['a-z_']],
-                    ['ruleref', [ 'parsers' ]],
+                    ['reference', [ 'parsers' ]],
                 ]],
-                ['ruleref', [ 'argument_list' ]],
+                ['reference', [ 'argument_list' ]],
             ]]],
         ]],
 
@@ -639,13 +639,13 @@ class SpiritQiParser
             ['expect', [[
                 ['distinct', [
                     ['char_set', ['a-z_']],
-                    ['ruleref', [ 'distinct_directive' ]],
+                    ['reference', [ 'distinct_directive' ]],
                 ]],
                 ['lit', ['(']],
-                ['ruleref', [ 'prec_14_expr' ]],
+                ['reference', [ 'prec_14_expr' ]],
                 ['lit', [')']],
                 ['lit', ['[']],
-                ['ruleref', [ 'prec_14_expr' ]],
+                ['reference', [ 'prec_14_expr' ]],
                 ['lit', [']']],
             ]]],
         ]],
@@ -656,11 +656,11 @@ class SpiritQiParser
             ['expect', [[
                 ['distinct', [
                     [ 'char_set', ['a-z_']],
-                    [ 'ruleref', ['directives']]
+                    [ 'reference', ['directives']]
                 ]],
-                ['ruleref', [ 'argument_list' ]],
+                ['reference', [ 'argument_list' ]],
                 ['lit', [ '[' ]],
-                ['ruleref', [ 'prec_14_expr' ]],
+                ['reference', [ 'prec_14_expr' ]],
                 ['lit', [ ']' ]],
             ]]],
         ]],
@@ -673,10 +673,10 @@ class SpiritQiParser
                     ['lit', ['(']],
                     ['list', [
                         ['alternative', [[
-                            ['ruleref', [ 'quoted_char' ]],
-                            ['ruleref', [ 'quoted_string' ]],
-                            ['ruleref', [ 'attr_id' ]],
-                            ['ruleref', [ 'number' ]],
+                            ['reference', [ 'quoted_char' ]],
+                            ['reference', [ 'quoted_string' ]],
+                            ['reference', [ 'attr_id' ]],
+                            ['reference', [ 'number' ]],
                         ]]],
                         ['lit', [ ',' ]],
                     ]],
@@ -875,18 +875,18 @@ class SpiritQiParser
         'number' => ['rule', [
             'number',
             ['alternative', [[
-                ['ruleref', [ 'ushort' ]],
-                ['ruleref', [ 'uint' ]],
-                ['ruleref', [ 'ulong' ]],
-                ['ruleref', [ 'ulonglong' ]],
-                ['ruleref', [ 'short' ]],
-                ['ruleref', [ 'int' ]],
-                ['ruleref', [ 'long' ]],
-                ['ruleref', [ 'longlong' ]],
-                ['ruleref', [ 'float' ]],
-                ['ruleref', [ 'double' ]],
-                ['ruleref', [ 'longdouble' ]],
-                ['ruleref', [ 'bool' ]],
+                ['reference', [ 'ushort' ]],
+                ['reference', [ 'uint' ]],
+                ['reference', [ 'ulong' ]],
+                ['reference', [ 'ulonglong' ]],
+                ['reference', [ 'short' ]],
+                ['reference', [ 'int' ]],
+                ['reference', [ 'long' ]],
+                ['reference', [ 'longlong' ]],
+                ['reference', [ 'float' ]],
+                ['reference', [ 'double' ]],
+                ['reference', [ 'longdouble' ]],
+                ['reference', [ 'bool' ]],
             ]]],
         ]],
     ];
