@@ -4,7 +4,7 @@ namespace Mxc\Parsec\Rpc;
 
 use Mxc\Parsec\Service\ParserManager;
 use Mxc\Parsec\Service\ParserBuilder;
-use Mxc\Parsec\Qi\Char\SpaceParser;
+use Mxc\Parsec\Qi\NonTerminal\Rule;
 
 /**
  * Rpc - class being exposed by RPC-server
@@ -47,26 +47,23 @@ class Rpc
         $pb->setDefinitions($parser);
         $rule = $pb->getRule($start);
         $this->setInput($input);
-        //print($input);
         $rule->setSource($input, $selectionStart, $selectionEnd);
-        try {
-            $skipper = $skipper ?? $pm->build('space', ['42']);
-            $result = $rule->parse($skipper);
 
-            $result = [
-                'result' => $result,
-                'position' => $rule->getPos(),
-                'bytesLeft' => $selectionEnd - $rule->getPos(),
-                'actions' => $rule->getLog(),
-                'attribute' => $rule->getAttribute()
-            ];
-
-            return $result;
-        } catch (Exception $e) {
-            return [
-                'result' => false
-            ];
+        if (! $skipper && $rule instanceof Rule) {
+            $skipper = $rule->skipper;
         }
+        $skipper = $skipper ?? $pm->build('space', ['42']);
+        $result = $rule->parse($skipper);
+
+        $result = [
+            'result' => $result,
+            'position' => $rule->getPos(),
+            'bytesLeft' => $selectionEnd - $rule->getPos(),
+            'actions' => $rule->getLog(),
+            'attribute' => $rule->getAttribute()
+        ];
+
+        return $result;
     }
 
     /**
