@@ -14,11 +14,11 @@ class LitParser extends DelegatingParser
     public function __construct(Domain $domain, string $uid, $expectedValue)
     {
         if (is_string($expectedValue)) {
-            parent::__construct($domain, $uid, new StringParser($domain, $expectedValue));
+            parent::__construct($domain, $uid, new StringParser($domain, $uid, $expectedValue));
         } elseif (is_int($expectedValue)) {
-            parent::__construct($domain, $uid, new LongLongParser($domain, $expectedValue));
+            parent::__construct($domain, $uid, new LongLongParser($domain, $uid, $expectedValue));
         } elseif (is_float($expectedValue)) {
-            parent::__construct($domain, $uid, new LongDoubleParser($domain, $expectedValue));
+            parent::__construct($domain, $uid, new LongDoubleParser($domain, $uid, $expectedValue));
         } else {
             throw new InvalidArgumentException('Invalid argument for LitParser.');
         }

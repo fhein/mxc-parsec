@@ -52,6 +52,9 @@ class ParserBuilder extends ServiceManager
 
     public function getRule($name)
     {
+//         var_dump($this->rules);
+//         var_dump($this->rules[$name]);
+//         var_dump($name);
         return $this->get($this->definitions[$this->rules[$name]]);
     }
 
