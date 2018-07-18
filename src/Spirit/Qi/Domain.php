@@ -2,14 +2,8 @@
 
 namespace Mxc\Parsec\Qi;
 
-use Mxc\Parsec\Exception\NoRuleContextException;
-use Mxc\Parsec\Exception\UnknownRuleException;
-use Mxc\Parsec\Qi\NonTerminal\Grammar;
-use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Support\NamedObject;
 use Mxc\Parsec\Service\ParserBuilder;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 
 class Domain extends NamedObject
 {

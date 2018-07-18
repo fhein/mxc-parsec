@@ -3,7 +3,6 @@
 namespace Mxc\Parsec\Qi\Auxiliary;
 
 use Mxc\Parsec\Qi\Domain;
-use Mxc\Parsec\Qi\DynamicDelegatingParser;
 use Mxc\Parsec\Qi\DelegatingParser;
 
 class RuleReference extends DelegatingParser

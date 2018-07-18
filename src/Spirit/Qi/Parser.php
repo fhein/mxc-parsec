@@ -55,15 +55,6 @@ abstract class Parser extends NamedObject
         return $this->domain->getLog();
     }
 
-    protected function validate($expectedValue, $value)
-    {
-        if ($expectedValue === null || $expectedValue === $value) {
-            $this->assignTo($value, $attributeType);
-            return true;
-        }
-        return false;
-    }
-
     protected function validateChar($expectedValue, $value, $attributeType)
     {
         if ($expectedValue === null || $this->iterator->compareChar($expectedValue, $value)) {

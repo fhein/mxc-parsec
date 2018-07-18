@@ -2,7 +2,6 @@
 
 use Mxc\Parsec\Qi\NonTerminal\Rule;
 use Mxc\Parsec\Service\ParserManager;
-use Mxc\Parsec\Service\ParserBuilder;
 
 include __DIR__.'/../autoload.php';
 

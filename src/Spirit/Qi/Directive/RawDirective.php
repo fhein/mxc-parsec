@@ -3,6 +3,7 @@
 namespace Mxc\Parsec\Qi\Directive;
 
 use Mxc\Parsec\Qi\DelegatingParser;
+use Mxc\Parsec\Qi\Parser;
 
 class RawDirective extends DelegatingParser
 {

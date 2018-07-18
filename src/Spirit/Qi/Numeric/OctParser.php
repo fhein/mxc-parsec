@@ -16,6 +16,15 @@ class OctParser extends Integer
         int $minValue = null,
         int $maxValue = null
     ) {
-        parent::__construct($domain, $uid, new OctIntPolicy(), $expectedValue, $minDigits, $maxDigits, $minValue, $maxValue);
+        parent::__construct(
+            $domain,
+            $uid,
+            new OctIntPolicy(),
+            $expectedValue,
+            $minDigits,
+            $maxDigits,
+            $minValue,
+            $maxValue
+        );
     }
 }

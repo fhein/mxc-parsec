@@ -8,8 +8,14 @@ use Mxc\Parsec\Qi\Domain;
 
 class Rule extends DelegatingParser
 {
-    public function __construct(Domain $domain, string $uid, string $name, $subject, $skipper, string $attributeType = null)
-    {
+    public function __construct(
+        Domain $domain,
+        string $uid,
+        string $name,
+        $subject,
+        $skipper,
+        string $attributeType = null
+    ) {
         parent::__construct($domain, $uid, $subject);
         $this->name = $name;
         $this->attributeType = $attributeType;

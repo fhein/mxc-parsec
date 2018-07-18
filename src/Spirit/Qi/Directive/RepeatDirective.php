@@ -3,7 +3,6 @@
 namespace Mxc\Parsec\Qi\Directive;
 
 use Mxc\Parsec\Qi\Domain;
-use Mxc\Parsec\Qi\Parser;
 use Mxc\Parsec\Qi\DelegatingParser;
 
 class RepeatDirective extends DelegatingParser
