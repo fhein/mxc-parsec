@@ -22,7 +22,9 @@ class LittleBinDoubleParserTest extends ParserTestBed
     public function testLittleBinDoubleParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(LittleBinDoubleParser::class, $expectedValue);
-        $parser = $this->pm->build(LittleBinDoubleParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(LittleBinDoubleParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

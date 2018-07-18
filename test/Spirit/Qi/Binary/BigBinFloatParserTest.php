@@ -22,7 +22,8 @@ class BigBinFloatParserTest extends ParserTestBed
     public function testBigBinFloatParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(BigBinFloatParser::class, $expectedValue);
-        $parser = $this->pm->build(BigBinFloatParser::class, [ $expectedValue ]);
+        $uid = 'test';
+        $parser = $this->pm->build(BigBinFloatParser::class, [ $uid, $expectedValue ]);
 
         $this->doTest(
             $cfg,               // test configuration description

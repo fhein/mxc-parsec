@@ -26,7 +26,8 @@ class RealParsersTest extends ParserTestBed
         $expectedAttribute
     ) {
         $cfg = $this->getParserConfig($class);
-        $parser = $this->pm->build($class);
+        $uid = 'test';
+        $parser = $this->pm->build($class, [$uid]);
 
         $this->doTest(
             $cfg,

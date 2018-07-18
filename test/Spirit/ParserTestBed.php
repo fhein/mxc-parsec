@@ -65,7 +65,7 @@ class ParserTestBed extends TestCase
     protected function getSkipper()
     {
         if (! $this->skipper) {
-            $this->skipper = $this->pm->build(CharClassParser::class, [ 'space' ]);
+            $this->skipper = $this->pm->build(CharClassParser::class, [ 'test', 'space' ]);
         }
         return $this->skipper;
     }
@@ -148,6 +148,7 @@ class ParserTestBed extends TestCase
                 "%s\n%s\n\n  Unexpected result of parse(): %s. Expected: %s\n",
                 $cfg,
                 $this->getTestDescription(
+                    $parser,
                     $iterator,
                     $input,
                     $expectedValue,
@@ -174,6 +175,7 @@ class ParserTestBed extends TestCase
                         "%s\n%s\n\n  Unexpected attribute type: %s. Expected: %s\n",
                         $cfg,
                         $this->getTestDescription(
+                            $parser,
                             $iterator,
                             $input,
                             $expectedValue,
@@ -207,6 +209,7 @@ class ParserTestBed extends TestCase
                             "%s\n%s\n\n  Unexpected attribute: %s. Expected: %s\n",
                             $cfg,
                             $this->getTestDescription(
+                                $parser,
                                 $iterator,
                                 $input,
                                 $expectedValue,
@@ -256,6 +259,7 @@ class ParserTestBed extends TestCase
                                 "%s\n%s\n\n  Attribute %s does not match expected value %s.\n",
                                 $cfg,
                                 $this->getTestDescription(
+                                    $parser,
                                     $iterator,
                                     $input,
                                     $expectedValue,
@@ -285,6 +289,7 @@ class ParserTestBed extends TestCase
                         "%s\n%s\n\n  Iterator position mismatch: %d. Expected: %d\n",
                         $cfg,
                         $this->getTestDescription(
+                            $parser,
                             $iterator,
                             $input,
                             $expectedValue,
@@ -419,6 +424,7 @@ class ParserTestBed extends TestCase
      * @return string                           formatted test description
      */
     public function getTestDescription(
+        $parser,
         $iterator,
         $input,
         $expectedValue,
@@ -433,14 +439,14 @@ class ParserTestBed extends TestCase
         $expectedIteratorPos = 'n/a'
     ) {
         $nextInput = '';
-        $iterator->try();
+        $parser->try();
         for ($i = 0; $i < 20; $i++) {
             if ($iterator->valid()) {
                 $nextInput .= $iterator->current();
                 $iterator->next();
             }
         }
-        $iterator->reject();
+        $parser->reject();
         $expectedAttribute = $expectedAttribute !== null ?
             gettype($expectedAttribute) === 'object' ? get_class($expectedAttribute)
             : $expectedAttribute : 'n/a';

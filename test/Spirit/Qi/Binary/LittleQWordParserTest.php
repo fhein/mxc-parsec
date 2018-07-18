@@ -22,7 +22,9 @@ class LittleQWordParserTest extends ParserTestBed
     public function testLittleQWordParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(LittleQWordParser::class, $expectedValue);
-        $parser = $this->pm->build(LittleQWordParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(LittleQWordParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

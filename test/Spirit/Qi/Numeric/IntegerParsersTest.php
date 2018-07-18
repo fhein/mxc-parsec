@@ -43,10 +43,10 @@ class IntegerParsersTest extends ParserTestBed
     ) {
         $cfg = $this->getParserConfig($cParser, $configuration);
         $parser = $this->pm->build($cParser, $configuration);
-        $configuration[1] = $configuration[1] ?? 1;
-        $configuration[2] = $configuration[2] ?? 0;
+        $configuration[2] = $configuration[2] ?? 1;
+        $configuration[3] = $configuration[3] ?? 0;
 
-        $expectedValue = $expectedAttribute = $configuration[0] ?? null;
+        $expectedValue = $expectedAttribute = $configuration[1] ?? null;
 
         $this->doTest(
             $cfg,
@@ -60,6 +60,7 @@ class IntegerParsersTest extends ParserTestBed
 
     public function intParserDataProvider()
     {
+        $uid = 'test';
         $scenarios = [
             [
                 // policies for which this scenario applies
@@ -80,8 +81,8 @@ class IntegerParsersTest extends ParserTestBed
                 // which values to expect in this scenario
                 // null: all values
                 'configurations' => [
-                    [],
-                    [123],
+                    [$uid],
+                    [$uid, 123],
                 ],
                 // expected parsing result
                 'expectedResult' => false,
@@ -96,8 +97,8 @@ class IntegerParsersTest extends ParserTestBed
                     '123'
                 ],
                 'configurations' => [
-                    [],
-                    [123],
+                    [$uid],
+                    [$uid, 123],
                 ],
                 'expectedResult' => true,
                 // expected raw attribute value (only necessary if
@@ -113,8 +114,8 @@ class IntegerParsersTest extends ParserTestBed
                     UIntParser::class,
                 ],
                 'configurations' => [
-                    [],
-                    [ 12 ],
+                    [$uid],
+                    [ $uid, 12 ],
                 ],
                 'input' => [
                     '+12 3',
@@ -128,8 +129,8 @@ class IntegerParsersTest extends ParserTestBed
                     IntParser::class,
                 ],
                 'configurations' => [
-                    [],
-                    [ -12 ]
+                    [$uid],
+                    [ $uid, -12 ]
                 ],
                 'input' => [
                     '-12 3',
@@ -145,8 +146,8 @@ class IntegerParsersTest extends ParserTestBed
                     '-123',
                 ],
                 'configurations' => [
-                    [],
-                    [-123],
+                    [$uid],
+                    [$uid, -123],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => -123,
@@ -169,7 +170,7 @@ class IntegerParsersTest extends ParserTestBed
                     '-12 3'
                 ],
                 'configurations' => [
-                    [456],
+                    [$uid, 456],
                 ],
                 'expectedResult' => false,
             ],
@@ -185,9 +186,9 @@ class IntegerParsersTest extends ParserTestBed
                     '-12 3',
                 ],
                 'configurations' => [
-                    [],
-                    [-123],
-                    [456]
+                    [$uid],
+                    [$uid, -123],
+                    [$uid, 456]
                 ],
                 'expectedResult' => false,
             ],
@@ -202,9 +203,9 @@ class IntegerParsersTest extends ParserTestBed
                     '+12 3',
                 ],
                 'configurations' => [
-                    [],
-                    [123],
-                    [456],
+                    [$uid],
+                    [$uid, 123],
+                    [$uid, 456],
                 ],
                 'expectedResult' => false,
             ],
@@ -216,8 +217,8 @@ class IntegerParsersTest extends ParserTestBed
                     '1a2b',
                 ],
                 'configurations' => [
-                    [],
-                    [hexdec('1a2b')],
+                    [$uid],
+                    [$uid, hexdec('1a2b')],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => hexdec('1a2b')
@@ -230,8 +231,8 @@ class IntegerParsersTest extends ParserTestBed
                     '123',
                 ],
                 'configurations' => [
-                    [],
-                    [octdec('123')],
+                    [$uid],
+                    [$uid, octdec('123')],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => octdec('123')
@@ -244,8 +245,8 @@ class IntegerParsersTest extends ParserTestBed
                     '110110110',
                 ],
                 'configurations' => [
-                    [],
-                    [bindec('110110110')],
+                    [$uid],
+                    [$uid, bindec('110110110')],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => bindec('110110110')
@@ -260,7 +261,7 @@ class IntegerParsersTest extends ParserTestBed
                     '+12345',
                 ],
                 'configurations' => [
-                    [null, 3, 5],
+                    [$uid, null, 3, 5],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => null
@@ -274,7 +275,7 @@ class IntegerParsersTest extends ParserTestBed
                     '+123456'
                 ],
                 'configurations' => [
-                    [null, 3, 5 ],
+                    [$uid, null, 3, 5 ],
                 ],
                 'expectedResult' => false,
             ],
@@ -291,7 +292,7 @@ class IntegerParsersTest extends ParserTestBed
                     '+123'
                 ],
                 'configurations' => [
-                    [ null, 3, 5 ]
+                    [ $uid, null, 3, 5 ]
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => null
@@ -307,7 +308,7 @@ class IntegerParsersTest extends ParserTestBed
                     '+12'
                 ],
                 'configurations' => [
-                    [ null, 3, 5 ]
+                    [ $uid, null, 3, 5 ]
                 ],
                 'minDigits' => 3,
                 'maxDigits' => 5,
@@ -327,7 +328,7 @@ class IntegerParsersTest extends ParserTestBed
                     '110',
                 ],
                 'configurations' => [
-                    [null, 3, 5],
+                    [$uid, null, 3, 5],
                 ],
                 'expectedResult' => true,
                 'expectedAttribute' => null
@@ -351,7 +352,7 @@ class IntegerParsersTest extends ParserTestBed
                     '111111'
                 ],
                 'configurations' => [
-                    [null, 3, 5],
+                    [$uid, null, 3, 5],
                 ],
                 'expectedResult' => false,
             ],

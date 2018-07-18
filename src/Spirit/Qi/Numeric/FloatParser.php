@@ -15,6 +15,7 @@ class FloatParser extends PreSkipper
         parent::__construct($domain, $uid);
         $this->symbols = new SymbolsParser(
             $domain,
+            $uid,
             ['NAN' => NAN, '-NAN' => -NAN, 'INF' => INF, '-INF' => INF, '+NAN' => NAN, '+INF' => INF]
         );
     }

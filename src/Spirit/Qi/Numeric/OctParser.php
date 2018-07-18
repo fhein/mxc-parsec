@@ -8,8 +8,8 @@ use Mxc\Parsec\Qi\Numeric\Detail\OctIntPolicy;
 class OctParser extends Integer
 {
     public function __construct(
-        string $uid,
         Domain $domain,
+        string $uid,
         int $expectedValue = null,
         int $minDigits = 1,
         int $maxDigits = 0,

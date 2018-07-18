@@ -1,22 +1,22 @@
 <?php
 
+// todo: This needs to be reworked because of new rule reference semantics
+
 namespace Mxc\Test\Parsec\Qi\NonTerminal;
 
 use Mxc\Parsec\Qi\Auxiliary\LitParser;
 use Mxc\Parsec\Qi\Auxiliary\RuleReference;
 use Mxc\Parsec\Qi\Char\CharSetParser;
-use Mxc\Parsec\Qi\Char\SpaceParser;
 use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\NonTerminal\Grammar;
 use Mxc\Parsec\Qi\NonTerminal\Rule;
-use Mxc\Parsec\Qi\Operator\DifferenceOperator;
 use Mxc\Parsec\Qi\Operator\ListOperator;
 use Mxc\Parsec\Qi\Operator\SequenceOperator;
 use Mxc\Test\Parsec\ParserTestBed;
-use Mxc\Parsec\Qi\Operator\PlusOperator;
+use Mxc\Parsec\Qi\Operator\KleenePlusOperator;
 use Mxc\Parsec\Qi\Directive\LexemeDirective;
 
-class GrammarTest extends ParserTestBed
+class Grammar extends ParserTestBed
 {
     protected function getParserConfig(string $parser, string $name, string $startRule)
     {
@@ -36,22 +36,27 @@ class GrammarTest extends ParserTestBed
         $identifier = $this->pm->build(
             LexemeDirective::class,
             [
+                'test',
                 $this->pm->build(
                     SequenceOperator::class,
                     [
+                        'test',
                         [
                             $this->pm->build(
                                 CharSetParser::class,
                                 [
+                                    'test',
                                     'A-Za-z_',
                                 ]
                             ),
                             $this->pm->build(
-                                PlusOperator::class,
+                                KleenePlusOperator::class,
                                 [
+                                    'test',
                                     $this->pm->build(
                                         CharSetParser::class,
                                         [
+                                            'test',
                                             'A-Za-z0-9_',
                                         ]
                                     )
@@ -67,6 +72,7 @@ class GrammarTest extends ParserTestBed
         $rule1 = $this->pm->build(
             Rule::class,
             [
+                'test',
                 'identifier',
                 $identifier,
                 'string'
@@ -76,15 +82,18 @@ class GrammarTest extends ParserTestBed
         $identifierList = $this->pm->build(
             ListOperator::class,
             [
+                'test',
                 $this->pm->build(
                     RuleReference::class,
                     [
+                        'test',
                         'identifier'
                     ]
                 ),
                 $this->pm->build(
                     LitParser::class,
                     [
+                        'test',
                         ','
                     ]
                 )
@@ -94,6 +103,7 @@ class GrammarTest extends ParserTestBed
         $rule2 = $this->pm->build(
             Rule::class,
             [
+                'test',
                 'identifier_list',
                 $identifierList,
                 'array'
@@ -103,8 +113,9 @@ class GrammarTest extends ParserTestBed
         return $this->pm->build(
             Grammar::class,
             [
+                'test',
                 'grammar',
-                [ $rule1, $rule2 ],
+                [ 'test', $rule1, $rule2 ],
                 'identifier_list'
             ]
         );

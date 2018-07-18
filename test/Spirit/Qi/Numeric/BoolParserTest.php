@@ -30,7 +30,8 @@ class BoolParserTest extends ParserTestBed
         $expectedAttribute
     ) {
         $cfg = $this->getParserConfig(BoolParser::class, $policy);
-        $parser = $this->pm->build(BoolParser::class, [ new $policy() ]);
+        $uid = 'test';
+        $parser = $this->pm->build(BoolParser::class, [ $uid, new $policy() ]);
 
         $this->doTest(
             $cfg,

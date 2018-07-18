@@ -8,8 +8,8 @@ use Mxc\Parsec\Qi\Numeric\Detail\DecimalUIntPolicy;
 class UIntParser extends Integer
 {
     public function __construct(
-        string $uid,
         Domain $domain,
+        string $uid,
         int $expectedValue = null,
         int $minDigits = 1,
         int $maxDigits = 0,
@@ -17,8 +17,8 @@ class UIntParser extends Integer
         int $maxValue = null
     ) {
         parent::__construct(
-            $uid,
             $domain,
+            $uid,
             new DecimalUIntPolicy(),
             $expectedValue,
             $minDigits,

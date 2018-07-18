@@ -21,7 +21,8 @@ class EpsParserTest extends ParserTestBed
     public function testEpsParser()
     {
         $cfg = $this->getParserConfig(EpsParser::class);
-        $parser = $this->pm->build(EpsParser::class);
+        $uid = 'test';
+        $parser = $this->pm->build(EpsParser::class, [ $uid ]);
         $this->doTest(
             $cfg,               // test configuration description
             $parser,            // parser to test
@@ -41,7 +42,7 @@ class EpsParserTest extends ParserTestBed
         };
 
         $cfg = $this->getParserConfig(EpsParser::class, $callable);
-        $parser = $this->pm->build(EpsParser::class, [ $callable ]);
+        $parser = $this->pm->build(EpsParser::class, [ $uid, $callable ]);
         $this->doTest(
             $cfg,               // test configuration description
             $parser,            // parser to test

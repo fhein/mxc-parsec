@@ -25,8 +25,10 @@ class AdvanceParserTest extends ParserTestBed
         int $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(AdvanceParser::class);
+        $uid = 'test';
+
         $pf = new ParserFactory();
-        $parser = $pf($this->pm, AdvanceParser::class, [ $advance ]);
+        $parser = $pf($this->pm, AdvanceParser::class, [ $uid, $advance ]);
 
         $this->doTest(
             $cfg,                   // test configuration description

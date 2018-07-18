@@ -30,8 +30,9 @@ class PermutationOperatorTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $firstMock = new MockParserDoParse($domain, $result1);
         $secondMock = new MockParserDoParse($domain, $result2);
+        $uid = 'test';
 
-        $operator = $this->pm->build(PermutationOperator::class, [ [ $firstMock, $secondMock ] ]);
+        $operator = $this->pm->build(PermutationOperator::class, [ $uid, [ $firstMock, $secondMock ] ]);
 
         $this->doTest(
             $cfg,                       // test configuration description

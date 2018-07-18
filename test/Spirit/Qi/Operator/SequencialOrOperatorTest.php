@@ -23,14 +23,15 @@ class SequentialOrOperatorTest extends ParserTestBed
     public function testSequentialOrOperator(string $input, $expectedResult, $attributes = null)
     {
         $cfg = $this->getParserConfig(SequentialOrOperator::class);
+        $uid = 'test';
 
         $unused = new Unused();
         for ($i = 0; $i < 5; $i++) {
-            $p[$i] = $this->pm->build(CharParser::class, [strval($i + 1)]);
+            $p[$i] = $this->pm->build(CharParser::class, [$uid, strval($i + 1)]);
             $expectedAttribute[$i] = new Optional($attributes[$i] ?? $unused);
         }
 
-        $operator = $this->pm->build(SequentialOrOperator::class, [[ $p[0], $p[1], $p[2], $p[3], $p[4]]]);
+        $operator = $this->pm->build(SequentialOrOperator::class, [$uid, [ $p[0], $p[1], $p[2], $p[3], $p[4]]]);
 
         $this->doTest(
             $cfg,                       // test configuration description

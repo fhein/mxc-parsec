@@ -25,10 +25,10 @@ class OmitDirectiveTest extends ParserTestBed
         $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(OmitDirective::class);
-
+        $uid = 'test';
         $domain = $this->pm->get(Domain::class);
         $mock = new MockPreSkipperMatchingAllButCaret($domain);
-        $directive = new OmitDirective($domain, $mock);
+        $directive = new OmitDirective($domain, $uid, $mock);
 
         $this->doTest(
             $cfg,                       // test configuration description

@@ -25,10 +25,11 @@ class MatchesDirectiveTest extends ParserTestBed
         $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(MatchesDirective::class);
+        $uid = 'test';
 
         $domain = $this->pm->get(Domain::class);
         $mock = new MockPreSkipperMatchingAllButCaret($domain);
-        $directive = new MatchesDirective($domain, $mock);
+        $directive = new MatchesDirective($domain, $uid, $mock);
 
         $this->doTest(
             $cfg,                       // test configuration description

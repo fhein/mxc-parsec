@@ -22,7 +22,9 @@ class LittleDWordParserTest extends ParserTestBed
     public function testLittleDWordParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(LittleDWordParser::class, $expectedValue);
-        $parser = $this->pm->build(LittleDWordParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(LittleDWordParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

@@ -31,7 +31,9 @@ class CharClassParserTest extends ParserTestBed
         $expectedAttribute = null
     ) {
         $cfg = $this->getParserConfig(CharClassParser::class, $charClass, $negate);
-        $parser = $this->pm->build(CharClassParser::class, [ $charClass, $negate ]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(CharClassParser::class, [ $uid, $charClass, $negate ]);
 
         $this->doTest(
             $cfg,               // test configuration description

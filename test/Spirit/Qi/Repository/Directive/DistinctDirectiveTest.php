@@ -25,11 +25,12 @@ class DistinctDirectiveTest extends ParserTestBed
         string $expectedAttribute = null
     ) {
             $cfg = $this->getParserConfig(DistinctDirective::class);
+            $uid = 'test';
 
             $domain = $this->pm->get(Domain::class);
-            $string = new StringParser($domain, 'Description');
-            $tail = new CharSetParser($domain, 'a-z_');
-            $directive = new DistinctDirective($domain, $tail, $string);
+            $string = new StringParser($domain, $uid, 'Description');
+            $tail = new CharSetParser($domain, $uid, 'a-z_');
+            $directive = new DistinctDirective($domain, $uid, $tail, $string);
 
             $this->doTest(
                 $cfg,                   // test configuration description

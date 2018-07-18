@@ -22,7 +22,9 @@ class QWordParserTest extends ParserTestBed
     public function testQWordParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(QWordParser::class, $expectedValue);
-        $parser = $this->pm->build(QWordParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(QWordParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

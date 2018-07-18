@@ -34,8 +34,9 @@ class ListOperatorTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $firstMock = new MockParserNResult($domain, $test[1], $test[0]);
         $secondMock = new MockParserNResult($domain, $test[3], $test[2]);
+        $uid = 'test';
 
-        $operator = $this->pm->build(ListOperator::class, [ $firstMock, $secondMock ]);
+        $operator = $this->pm->build(ListOperator::class, [ $uid, $firstMock, $secondMock ]);
 
         $this->doTest(
             $cfg,                       // test configuration description

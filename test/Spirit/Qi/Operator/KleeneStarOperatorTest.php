@@ -30,8 +30,9 @@ class KleeneStarOperatorTest extends ParserTestBed
 
         $domain = $this->pm->get(Domain::class);
         $mock = new MockParserNResult($domain, $test[1], $test[0]);
+        $uid = 'test';
 
-        $operator = $this->pm->build(KleeneStarOperator::class, [ $mock ]);
+        $operator = $this->pm->build(KleeneStarOperator::class, [ $uid, $mock ]);
 
         $this->doTest(
             $cfg,                       // test configuration description

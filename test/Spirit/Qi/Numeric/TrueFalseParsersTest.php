@@ -24,7 +24,8 @@ class TrueFalseParsersTest extends ParserTestBed
         $expectedAttribute = null
     ) {
         $cfg = $this->getParserConfig($class);
-        $parser = $this->pm->build($class);
+        $uid = 'test';
+        $parser = $this->pm->build($class, [$uid]);
 
         $this->doTest(
             $cfg,

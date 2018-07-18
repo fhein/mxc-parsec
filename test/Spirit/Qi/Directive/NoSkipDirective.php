@@ -26,10 +26,11 @@ class NoSkipDirectiveTest extends ParserTestBed
         $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(NoSkipDirective::class);
+        $uid = 'test';
 
         $domain = $this->pm->get(Domain::class);
         $mock = new MockPreSkipperMatchingAllButCaret($domain);
-        $directive = new NoSkipDirective($domain, $mock);
+        $directive = new NoSkipDirective($domain, $uid, $mock);
 
         $this->doTest(
             $cfg,                       // test configuration description

@@ -31,8 +31,9 @@ class NotPredicateTest extends ParserTestBed
 
         $domain = $this->pm->get(Domain::class);
         $mock = new MockParserDoParse($domain, $test[0]);
+        $uid = 'test';
 
-        $operator = $this->pm->build(NotPredicate::class, [ $mock ]);
+        $operator = $this->pm->build(NotPredicate::class, [ $uid, $mock ]);
 
         $this->doTest(
             $cfg,                       // test configuration description

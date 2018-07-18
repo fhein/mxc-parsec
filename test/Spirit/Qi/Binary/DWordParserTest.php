@@ -22,7 +22,9 @@ class DWordParserTest extends ParserTestBed
     public function testDWordParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(DWordParser::class, $expectedValue);
-        $parser = $this->pm->build(DWordParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(DWordParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

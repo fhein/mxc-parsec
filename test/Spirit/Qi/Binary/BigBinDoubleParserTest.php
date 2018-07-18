@@ -22,7 +22,8 @@ class BigBinDoubleParserTest extends ParserTestBed
     public function testBigBinDoubleParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(BigBinDoubleParser::class, $expectedValue);
-        $parser = $this->pm->build(BigBinDoubleParser::class, [ $expectedValue ]);
+        $uid = 'test';
+        $parser = $this->pm->build(BigBinDoubleParser::class, [ $uid, $expectedValue ]);
 
         $this->doTest(
             $cfg,               // test configuration description

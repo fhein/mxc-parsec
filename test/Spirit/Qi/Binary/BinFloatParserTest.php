@@ -22,7 +22,9 @@ class BinFloatParserTest extends ParserTestBed
     public function testBinFloatParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(BinFloatParser::class, $expectedValue);
-        $parser = $this->pm->build(BinFloatParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(BinFloatParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

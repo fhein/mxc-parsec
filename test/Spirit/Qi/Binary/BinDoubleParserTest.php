@@ -22,7 +22,9 @@ class BinDoubleParserTest extends ParserTestBed
     public function testBinDoubleParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(BinDoubleParser::class, $expectedValue);
-        $parser = $this->pm->build(BinDoubleParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(BinDoubleParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

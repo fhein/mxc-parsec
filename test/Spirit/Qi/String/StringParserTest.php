@@ -22,7 +22,9 @@ class StringParserTest extends ParserTestBed
     public function testStringParser($input, $expectedValue, $expectedResult, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(StringParser::class, $expectedValue);
-        $parser = $this->pm->build(StringParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(StringParser::class, [$uid, $expectedValue]);
 
         $this->doTest($cfg, $parser, $input, $expectedResult, $expectedValue, $expectedAttribute);
     }

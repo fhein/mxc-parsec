@@ -22,7 +22,9 @@ class LittleBinFloatParserTest extends ParserTestBed
     public function testLittleBinFloatParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(LittleBinFloatParser::class, $expectedValue);
-        $parser = $this->pm->build(LittleBinFloatParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(LittleBinFloatParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

@@ -23,7 +23,8 @@ class EolParserTest extends ParserTestBed
     {
 
         $cfg = $this->getParserConfig(EolParser::class);
-        $parser = $this->pm->build(EolParser::class);
+        $uid = 'test';
+        $parser = $this->pm->build(EolParser::class, [ $uid ]);
 
         $this->doTest(
             $cfg,               // test configuration description

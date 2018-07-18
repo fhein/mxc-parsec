@@ -28,7 +28,9 @@ class SymbolsParserTest extends ParserTestBed
         $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(SymbolsParser::class, $setup);
-        $parser = $this->pm->build(SymbolsParser::class, [ $setup ]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(SymbolsParser::class, [ $uid, $setup ]);
 
         $this->doTest(
             $cfg,
@@ -52,7 +54,9 @@ class SymbolsParserTest extends ParserTestBed
         $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(SymbolsParser::class, $setup);
-        $parser = $this->pm->build(SymbolsParser::class);
+        $uid = 'test';
+
+        $parser = $this->pm->build(SymbolsParser::class, [$uid]);
 
         foreach ($setup as $symbol => $value) {
             $parser->add($symbol, $value);

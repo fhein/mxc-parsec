@@ -8,7 +8,7 @@ class MockParserDoParse extends Parser implements MockParserInterface
 {
     public function __construct(Domain $domain, $result = true, $attribute = null)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, 'test');
         $this->attribute = $attribute;
         $this->result = $result;
     }

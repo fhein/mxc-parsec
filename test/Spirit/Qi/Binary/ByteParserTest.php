@@ -21,7 +21,9 @@ class ByteParserTest extends ParserTestBed
     public function testByteParser()
     {
         $cfg = $this->getParserConfig(ByteParser::class, 1);
-        $parser = $this->pm->build(ByteParser::class, [1]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(ByteParser::class, [$uid, 1]);
 
         $input = "\x01";
         $this->doTest(

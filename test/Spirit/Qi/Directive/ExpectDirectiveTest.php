@@ -35,16 +35,17 @@ class ExpectDirectiveTest extends ParserTestBed
         string $exception = null
     ) {
         $cfg = $this->getParserConfig(ExpectDirective::class, $mockBase, $mockMember, $mockResult, $exception);
+        $uid = 'test';
         $mock = $this->getMockBuilder($mockBase)
             ->setMethods([$mockMember])
-            ->setConstructorArgs([ $this->pm->get(Domain::class)])
+            ->setConstructorArgs([ $this->pm->get(Domain::class), $uid])
             ->getMock();
 
         $mock->expects($this->any())
             ->method($mockMember)
             ->willReturn($mockResult);
 
-        $directive = $this->pm->build(ExpectDirective::class, [ $mock ]);
+        $directive = $this->pm->build(ExpectDirective::class, [ $uid, $mock ]);
 
         if ($exception !== null) {
             self::expectException($exception);

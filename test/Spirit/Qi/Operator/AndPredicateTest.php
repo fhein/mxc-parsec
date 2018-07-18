@@ -32,8 +32,9 @@ class AndPredicateTest extends ParserTestBed
 
         $domain = $this->pm->get(Domain::class);
         $mock = new MockParserDoParse($domain, $test[0]);
+        $uid = 'test';
 
-        $operator = $this->pm->build(AndPredicate::class, [ $mock ]);
+        $operator = $this->pm->build(AndPredicate::class, [ $uid, $mock ]);
 
         $this->doTest(
             $cfg,                       // test configuration description

@@ -20,11 +20,12 @@ class AttrParserTest extends ParserTestBed
 
     public function testAttrParser()
     {
+        $uid = 'test';
         $input = 'abc';
         $expectedValue = 1;
 
         $cfg = $this->getParserConfig(AttrParser::class, $expectedValue);
-        $parser = $this->pm->build(AttrParser::class, [ $expectedValue ]);
+        $parser = $this->pm->build(AttrParser::class, [ $uid, 'integer', $expectedValue ]);
 
         $this->doTest(
             $cfg,               // test configuration description

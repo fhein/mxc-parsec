@@ -22,7 +22,9 @@ class WordParserTest extends ParserTestBed
     public function testWordParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(WordParser::class, $expectedValue);
-        $parser = $this->pm->build(WordParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(WordParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

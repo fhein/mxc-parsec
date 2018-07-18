@@ -38,8 +38,9 @@ class LazyParserTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $options[] = $domain;
         $pf = new ParserFactory();
+        $uid = 'test';
 
-        $parser = $pf($this->pm, LazyParser::class, [ $parserDefinition ]);
+        $parser = $pf($this->pm, LazyParser::class, [ $uid, $parserDefinition ]);
 
         if (! class_exists($parserDefinition[0])) {
             self::expectException(InvalidArgumentException::class);
@@ -57,11 +58,12 @@ class LazyParserTest extends ParserTestBed
 
     public function lazyParserDataProvider()
     {
+        $uid = 'test';
         $tests = [
-            [ 'c', [ CharParser::class, ['c']], true, 'c' ],
-            [ '123', [ IntParser::class, [null, 1,2]], false ],
-            [ '12 3', [ IntParser::class, [null, 1,2]], true, 12 ],
-            [ '12 3', [ 'IntParser', [null, 1,2]] ],
+            [ 'c', [ CharParser::class, [$uid, 'c']], true, 'c' ],
+            [ '123', [ IntParser::class, [$uid, null, 1,2]], false ],
+            [ '12 3', [ IntParser::class, [$uid, null, 1,2]], true, 12 ],
+            [ '12 3', [ 'IntParser', [$uid, null, 1,2]] ],
         ];
         return $tests;
     }

@@ -30,8 +30,8 @@ class AlternativeOperatorTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $firstMock = new MockParserDoParse($domain, $result1);
         $secondMock = new MockParserDoParse($domain, $result2);
-
-        $operator = $this->pm->build(AlternativeOperator::class, [ [ $firstMock, $secondMock ] ]);
+        $uid = 'test';
+        $operator = $this->pm->build(AlternativeOperator::class, [ $uid, [ $firstMock, $secondMock ] ]);
 
         $this->doTest(
             $cfg,                       // test configuration description

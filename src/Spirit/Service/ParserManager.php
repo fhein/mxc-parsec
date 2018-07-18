@@ -46,6 +46,7 @@ use Mxc\Parsec\Qi\Char\SpaceParser;
 use Mxc\Parsec\Qi\Char\UpperParser;
 use Mxc\Parsec\Qi\Char\XDigitParser;
 use Mxc\Parsec\Qi\Directive\AsStringDirective;
+use Mxc\Parsec\Qi\Directive\AsIntDirective;
 use Mxc\Parsec\Qi\Directive\ExpectDirective;
 use Mxc\Parsec\Qi\Directive\HoldDirective;
 use Mxc\Parsec\Qi\Directive\LexemeDirective;
@@ -172,6 +173,7 @@ class ParserManager extends ServiceManager
         RepeatDirective::class          => ParserFactory::class,
         SkipDirective::class            => ParserFactory::class,
         AsStringDirective::class        => ParserFactory::class,
+        AsIntDirective::class           => ParserFactory::class,
         // nonterminal
         Rule::class                     => ParserFactory::class,
         RuleReference::class            => ParserFactory::class,
@@ -282,6 +284,7 @@ class ParserManager extends ServiceManager
         'repeat'            => RepeatDirective::class,
         'skip'              => SkipDirective::class,
         'as_string'         => AsStringDirective::class,
+        'as_int'            => AsIntDirective::class,
         'rule'              => Rule::class,
         'grammar'           => Grammar::class,
         'bin'               => BinaryParser::class,

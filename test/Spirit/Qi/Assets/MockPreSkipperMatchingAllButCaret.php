@@ -4,23 +4,26 @@ namespace Mxc\Test\Parsec\Qi\Assets;
 use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Char\CharParser;
 use Mxc\Parsec\Qi\Operator\DifferenceOperator;
-use Mxc\Parsec\Qi\Operator\PlusOperator;
+use Mxc\Parsec\Qi\Operator\KleenePlusOperator;
 use Mxc\Parsec\Qi\PreSkipper;
 
 class MockPreSkipperMatchingAllButCaret extends PreSkipper
 {
     public function __construct(Domain $domain)
     {
-        parent::__construct($domain);
+        parent::__construct($domain, 'test');
 
-        $this->parser = new PlusOperator(
+        $this->parser = new KleenePlusOperator(
             $domain,
+            'test',
             new DifferenceOperator(
                 $domain,
+                'test',
                 new CharParser(
-                    $domain
+                    $domain,
+                    'test'
                 ),
-                new CharParser($domain, '^')
+                new CharParser($domain, 'test', '^')
             )
         );
     }

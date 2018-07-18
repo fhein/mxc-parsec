@@ -17,7 +17,7 @@ class MockPrimitiveParserString extends PrimitiveParser
 
     public function doParse($skipper)
     {
-        $s = new StringParser($this->domain, $this->expectedValue);
+        $s = new StringParser($this->domain, 'test', $this->expectedValue);
         if ($s->doParse($skipper)) {
             $this->attribute = $s->getAttribute();
             return true;

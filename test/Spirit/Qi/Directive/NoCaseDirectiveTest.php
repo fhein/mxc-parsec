@@ -27,10 +27,11 @@ class NoCaseDirectiveTest extends ParserTestBed
         $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(NoCaseDirective::class);
+        $uid = 'test';
 
         $domain = $this->pm->get(Domain::class);
-        $csp = new CharSetParser($domain, 'a-z');
-        $directive = new NoCaseDirective($domain, $csp);
+        $csp = new CharSetParser($domain, $uid, 'a-z');
+        $directive = new NoCaseDirective($domain, $uid, $csp);
 
         $this->doTest(
             $cfg,                       // test configuration description

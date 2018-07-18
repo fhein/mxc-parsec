@@ -25,10 +25,11 @@ class LexemeDirectiveTest extends ParserTestBed
         $expectedIteratorPos = null
     ) {
         $cfg = $this->getParserConfig(LexemeDirective::class);
+        $uid = 'test';
 
         $domain = $this->pm->get(Domain::class);
         $mock = new MockPreSkipperMatchingAllButCaret($domain);
-        $directive = new LexemeDirective($domain, $mock);
+        $directive = new LexemeDirective($domain, $uid, $mock);
 
         $this->doTest(
             $cfg,                   // test configuration description

@@ -19,9 +19,9 @@ class EoiParserTest extends ParserTestBed
 
     public function testEoiParser()
     {
-
+        $uid = 'test';
         $cfg = $this->getParserConfig(EoiParser::class);
-        $parser = $this->pm->build(EoiParser::class);
+        $parser = $this->pm->build(EoiParser::class, [ $uid ]);
 
         $this->doTest(
             $cfg,               // test configuration description

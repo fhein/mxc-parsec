@@ -31,8 +31,9 @@ class ExpectOperatorTest extends ParserTestBed
         $domain = $this->pm->get(Domain::class);
         $firstMock = new MockParserDoParse($domain, $result1);
         $secondMock = new MockParserDoParse($domain, $result2);
+        $uid = 'test';
 
-        $operator = $this->pm->build(ExpectOperator::class, [ [ $firstMock, $secondMock ] ]);
+        $operator = $this->pm->build(ExpectOperator::class, [ $uid, [ $firstMock, $secondMock ] ]);
 
         if (is_string($result)) {
             self::expectException(ExpectationFailedException::class);

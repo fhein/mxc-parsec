@@ -22,7 +22,9 @@ class BigWordParserTest extends ParserTestBed
     public function testBigWordParser($input, $expectedResult, $expectedValue = null, $expectedAttribute = null)
     {
         $cfg = $this->getParserConfig(BigWordParser::class, $expectedValue);
-        $parser = $this->pm->build(BigWordParser::class, [$expectedValue]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(BigWordParser::class, [$uid, $expectedValue]);
 
         $this->doTest(
             $cfg,               // test configuration description

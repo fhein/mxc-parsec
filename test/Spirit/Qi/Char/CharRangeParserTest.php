@@ -32,7 +32,9 @@ class CharRangeParserTest extends ParserTestBed
         $expectedAttribute = null
     ) {
         $cfg = $this->getParserConfig(CharRangeParser::class, $min, $max, $negate);
-        $parser = $this->pm->build(CharRangeParser::class, [ $min, $max, $negate ]);
+        $uid = 'test';
+
+        $parser = $this->pm->build(CharRangeParser::class, [ $uid, $min, $max, $negate ]);
 
         $this->doTest(
             $cfg,               // test configuration description

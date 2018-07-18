@@ -22,8 +22,8 @@ class Integer extends PreSkipper
     protected $notmax;
 
     public function __construct(
-        string $uid,
         Domain $domain,
+        string $uid,
         IntegerPolicy $policy,
         int $expectedValue = null,
         int $minDigits = 1,
@@ -51,8 +51,8 @@ class Integer extends PreSkipper
         };
 
         $this->policy = $policy;
-        $this->digitsParser = new CharsetParser($domain, $policy->getDigits());
-        $this->signsParser = new CharsetParser($domain, $policy->getSigns());
+        $this->digitsParser = new CharsetParser($domain, $uid, $policy->getDigits());
+        $this->signsParser = new CharsetParser($domain, $uid, $policy->getSigns());
         $this->toDecimal = $policy->getToDecimal();
     }
 
