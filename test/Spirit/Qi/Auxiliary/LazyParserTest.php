@@ -2,7 +2,6 @@
 
 namespace Mxc\Test\Parsec\Qi\Auxiliary;
 
-use function array_merge;
 use Mxc\Test\Parsec\ParserTestBed;
 use Mxc\Parsec\Qi\Auxiliary\LazyParser;
 use Mxc\Parsec\Qi\Char\CharParser;

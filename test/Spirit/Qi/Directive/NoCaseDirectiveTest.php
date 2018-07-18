@@ -5,7 +5,6 @@ namespace Mxc\Test\Parsec\Qi\Char;
 use Mxc\Parsec\Qi\Domain;
 use Mxc\Parsec\Qi\Directive\NoCaseDirective;
 use Mxc\Test\Parsec\ParserTestBed;
-use Mxc\Test\Parsec\Qi\Assets\MockPreSkipperMatchingAllButCaret;
 use Mxc\Parsec\Qi\Char\CharSetParser;
 
 class NoCaseDirectiveTest extends ParserTestBed

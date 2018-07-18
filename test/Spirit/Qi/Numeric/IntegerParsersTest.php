@@ -8,10 +8,6 @@ use Mxc\Parsec\Qi\Numeric\IntParser;
 use Mxc\Parsec\Qi\Numeric\OctParser;
 use Mxc\Parsec\Qi\Numeric\UIntParser;
 use Mxc\Test\Parsec\ParserTestBed;
-use Mxc\Parsec\Qi\Numeric\LongParser;
-use Mxc\Parsec\Qi\Numeric\ULongParser;
-use Mxc\Parsec\Qi\Numeric\LongLongParser;
-use Mxc\Parsec\Qi\Numeric\ULongLongParser;
 
 class IntegerParsersTest extends ParserTestBed
 {
