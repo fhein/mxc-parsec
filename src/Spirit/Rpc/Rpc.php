@@ -45,7 +45,7 @@ class Rpc
         $pm = new ParserManager();
         $pb = $pm->get(ParserBuilder::class);
         $pb->setDefinitions($parser);
-        $rule = $pb->getRule($start);
+        $rule = $pb->getParser($start);
         $this->setInput($input);
         $rule->setSource($input, $selectionStart, $selectionEnd);
 

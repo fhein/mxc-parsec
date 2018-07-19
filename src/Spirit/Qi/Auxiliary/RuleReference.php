@@ -10,7 +10,7 @@ class RuleReference extends DelegatingParser
     protected $name = null;
     protected $ruleId = null;
 
-    public function __construct(Domain $domain, string $uid, string $name, int $ruleId = 0)
+    public function __construct(Domain $domain, string $uid, string $name, string $ruleId)
     {
         $this->domain = $domain;
         $this->uid = $uid;
@@ -22,19 +22,7 @@ class RuleReference extends DelegatingParser
     public function getSubject()
     {
         if (! $this->subject) {
-            $this->subject = $this->domain->getRule($this->name);
-            // // Allthough rule references can get created in any
-            // // context, parsing of rule references is only allowed
-            // // in a valid grammar context
-            // // The next line will throw if not in a valid context
-            // $grammar = $this->domain->getContext();
-            // // if grammar does not know requested rule by name ...
-            // if (! $grammar->hasRule($this->name)) {
-            //     // ... get it from domain's rulepool by ruleId ...
-            //     // ... and add it to grammar by name
-            //     $grammar->addRule($this->domain->getRule($this->ruleId()));
-            // }
-            // $this->subject = $grammar->getRule($this->name);
+            $this->subject = $this->domain->getParser($this->ruleId);
         }
         return $this->subject;
     }

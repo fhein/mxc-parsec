@@ -4,3 +4,4 @@
 /vendor/
 .vscode/launch.json
 /.vscode/
+/deployment.properties

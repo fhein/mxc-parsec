@@ -58,10 +58,10 @@ class Domain extends NamedObject
         return $this->parserBuilder->setDefinitions($definitions);
     }
 
-    public function getRule(string $definition)
-    {
-        return $this->parserBuilder->getRule($definition);
-    }
+//     public function getRule(string $definition)
+//     {
+//         return $this->parserBuilder->getRule($definition);
+//     }
 
     public function __debugInfo()
     {

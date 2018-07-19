@@ -1,5 +1,8 @@
 <?php
 
+// Was used by ParserBuilder. Obsolete now.
+// We switched to Blockly's block ids.
+
 namespace Mxc\Parsec\Support;
 
 class Uuid

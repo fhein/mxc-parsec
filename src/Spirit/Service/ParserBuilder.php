@@ -3,7 +3,6 @@
 namespace Mxc\Parsec\Service;
 
 use Zend\ServiceManager\ServiceManager;
-use Mxc\Parsec\Support\Uuid;
 
 class ParserBuilder extends ServiceManager
 {
@@ -22,11 +21,11 @@ class ParserBuilder extends ServiceManager
 
     public function setDefinitions($definitions)
     {
-        $this->definitions = $definitions;
-        $this->getRootUuid();
         $this->setAllowOverride(true);
-        $this->createParserMap($definitions);
-//        var_dump($this->definitions);
+        foreach ($definitions as $definition) {
+            $this->registerParser($definition);
+        }
+        $this->setAllowOverride(false);
     }
 
     public function getDefinitions()
@@ -34,28 +33,9 @@ class ParserBuilder extends ServiceManager
         return $this->definitions;
     }
 
-    protected function prepareOptions(array $options)
-    {
-        $dependencies = [];
-        foreach ($options as $key => $option) {
-            if (is_array($option)) {
-                $options[$key] = $this->registerParser($option) ?? $this->prepareOptions($option);
-            }
-        }
-        return $options;
-    }
-
     public function getParser($name)
     {
         return $this->get($this->definitions[$name]);
-    }
-
-    public function getRule($name)
-    {
-//         var_dump($this->rules);
-//         var_dump($this->rules[$name]);
-//         var_dump($name);
-        return $this->get($this->definitions[$this->rules[$name]]);
     }
 
     protected function registerParser(array $definition)
@@ -72,26 +52,20 @@ class ParserBuilder extends ServiceManager
             $options = $this->prepareOptions($options);
 
             $value = json_encode([$definition[0], $options]);
-            $key = Uuid::v5($this->rootId, $value);
-            $this->definitions[$key] = $value;
-//            $this->factories[$key] = ParserJsonFactory::class;
-            return $key;
+            // first value of $options is Blockly's block id
+            $this->definitions[$options[0]] = $value;
+            return $options[0];
         }
     }
 
-    protected function createParserMap(array $options)
+    protected function prepareOptions(array $options)
     {
-        foreach ($options as $name => $definition) {
-            $this->rules[$name] = $this->registerParser($definition);
+        $dependencies = [];
+        foreach ($options as $key => $option) {
+            if (is_array($option)) {
+                $options[$key] = $this->registerParser($option) ?? $this->prepareOptions($option);
+            }
         }
-        $this->setService('rules', $this->rules);
-    }
-
-    protected function getRootUuid()
-    {
-        $this->rootId = Uuid::v5(
-            '00000000-0000-0000-0000-000000000000',
-            'maxence business consulting gmbh'
-        );
+        return $options;
     }
 }
