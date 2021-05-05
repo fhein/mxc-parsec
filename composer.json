@@ -27,7 +27,7 @@
 		"phpunit/phpunit" : "^6.4.4",
 		"phpbench/phpbench" : "dev-master",
 		"zendframework/zend-coding-standard" : "~1.0",
-		"mikey179/vfsStream" : "^1.6.4"
+		"mikey179/vfsstream" : "^1.6.4"
 	},
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
