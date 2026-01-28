@@ -23,7 +23,7 @@
 	},
 	"require-dev" : {
 		"ext-phar" : "*",
-		"phpunit/phpunit" : "^6.4.4",
+		"phpunit/phpunit" : "^8.5.52",
 		"phpbench/phpbench" : "dev-master",
 		"zendframework/zend-coding-standard" : "~1.0",
 		"mikey179/vfsstream" : "^1.6.4"
